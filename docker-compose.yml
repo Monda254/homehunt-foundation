@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: homehunt-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: local_dev_secret_password
+      POSTGRES_DB: homehunt
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d homehunt"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - homehunt-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: homehunt-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - homehunt-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: homehunt-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - APP_ENV=development
+      - APP_NAME=HomeHunt
+      - API_VERSION=v1
+      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:local_dev_secret_password@postgres:5432/homehunt
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=local_dev_secret_jwt_key_to_be_overridden_in_prod
+      - CORS_ORIGINS=http://localhost:8080,http://localhost:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - homehunt-net
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  homehunt-net:
+    driver: bridge
