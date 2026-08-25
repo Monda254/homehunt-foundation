@@ -8,6 +8,8 @@
  * Holding LANDLORD does NOT imply access to every property.
  */
 
+import { AppError, ERROR_CODES } from "../errors/api-error";
+
 export const APP_ROLES = [
   "tenant",
   "landlord",
@@ -33,6 +35,133 @@ export const ROLE_LABELS: Record<AppRole, string> = {
 export const ADMIN_ROLES: readonly AppRole[] = ["admin", "super_admin"];
 export const LISTING_MANAGER_ROLES: readonly AppRole[] = ["landlord", "agent", "property_manager"];
 
+export const APP_PERMISSIONS = [
+  "USER_VIEW_SELF",
+  "USER_UPDATE_SELF",
+  "USER_CHANGE_PASSWORD",
+  "PROFILE_VIEW_SELF",
+  "PROFILE_UPDATE_SELF",
+  "SESSION_VIEW_SELF",
+  "SESSION_REVOKE_SELF",
+  "ADMIN_VIEW_USERS",
+  "ADMIN_SUSPEND_USER",
+  "ADMIN_ASSIGN_ROLE",
+  "ADMIN_REMOVE_ROLE",
+  "PROPERTY_CREATE",
+  "PROPERTY_VIEW",
+  "PROPERTY_UPDATE",
+  "PROPERTY_ARCHIVE",
+  "LISTING_CREATE",
+  "LISTING_UPDATE",
+  "LISTING_PUBLISH",
+] as const;
+
+export type AppPermission = (typeof APP_PERMISSIONS)[number];
+
+export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
+  tenant: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+  ],
+  landlord: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+    "PROPERTY_CREATE",
+    "PROPERTY_VIEW",
+    "PROPERTY_UPDATE",
+    "PROPERTY_ARCHIVE",
+    "LISTING_CREATE",
+    "LISTING_UPDATE",
+    "LISTING_PUBLISH",
+  ],
+  agent: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+    "PROPERTY_CREATE",
+    "PROPERTY_VIEW",
+    "PROPERTY_UPDATE",
+    "PROPERTY_ARCHIVE",
+    "LISTING_CREATE",
+    "LISTING_UPDATE",
+    "LISTING_PUBLISH",
+  ],
+  property_manager: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+    "PROPERTY_CREATE",
+    "PROPERTY_VIEW",
+    "PROPERTY_UPDATE",
+    "PROPERTY_ARCHIVE",
+    "LISTING_CREATE",
+    "LISTING_UPDATE",
+    "LISTING_PUBLISH",
+  ],
+  verifier: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+    "PROPERTY_VIEW",
+  ],
+  admin: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+    "ADMIN_VIEW_USERS",
+    "ADMIN_SUSPEND_USER",
+    "ADMIN_ASSIGN_ROLE",
+    "ADMIN_REMOVE_ROLE",
+    "PROPERTY_VIEW",
+  ],
+  super_admin: [
+    "USER_VIEW_SELF",
+    "USER_UPDATE_SELF",
+    "USER_CHANGE_PASSWORD",
+    "PROFILE_VIEW_SELF",
+    "PROFILE_UPDATE_SELF",
+    "SESSION_VIEW_SELF",
+    "SESSION_REVOKE_SELF",
+    "ADMIN_VIEW_USERS",
+    "ADMIN_SUSPEND_USER",
+    "ADMIN_ASSIGN_ROLE",
+    "ADMIN_REMOVE_ROLE",
+    "PROPERTY_CREATE",
+    "PROPERTY_VIEW",
+    "PROPERTY_UPDATE",
+    "PROPERTY_ARCHIVE",
+    "LISTING_CREATE",
+    "LISTING_UPDATE",
+    "LISTING_PUBLISH",
+  ],
+};
+
 export function isAppRole(value: string): value is AppRole {
   return (APP_ROLES as readonly string[]).includes(value);
 }
@@ -51,6 +180,23 @@ export function isPlatformAdmin(roles: readonly AppRole[]): boolean {
 
 export function canManageListings(roles: readonly AppRole[]): boolean {
   return hasAnyRole(roles, LISTING_MANAGER_ROLES) || isPlatformAdmin(roles);
+}
+
+export function hasPermission(roles: readonly AppRole[], permission: AppPermission): boolean {
+  return roles.some((role) => ROLE_PERMISSIONS[role]?.includes(permission));
+}
+
+export function hasAnyPermission(
+  roles: readonly AppRole[],
+  permissions: readonly AppPermission[],
+): boolean {
+  return permissions.some((permission) => hasPermission(roles, permission));
+}
+
+export function requirePermission(roles: readonly AppRole[], permission: AppPermission): void {
+  if (!hasPermission(roles, permission)) {
+    throw new AppError(ERROR_CODES.FORBIDDEN, `Missing required permission: ${permission}`);
+  }
 }
 
 /**

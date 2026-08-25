@@ -13,19 +13,27 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as ViewingsRouteImport } from './routes/viewings'
+import { Route as HomesIdRouteImport } from './routes/homes.$id'
+import { Route as ListingsIndexRouteImport } from './routes/listings.index'
+import { Route as ListingsIdRouteImport } from './routes/listings.$id'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
+import { Route as PropertiesNewRouteImport } from './routes/properties.new'
 import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiV1HealthDatabaseRouteImport } from './routes/api/v1/health.database'
+import { Route as PropertiesPropertyIdUnitsUnitIdRouteImport } from './routes/properties.$propertyId.units.$unitId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,6 +53,11 @@ const ApplicationsRoute = ApplicationsRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -72,6 +85,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SavedRoute = SavedRouteImport.update({
   id: '/saved',
   path: '/saved',
@@ -82,9 +100,29 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ViewingsRoute = ViewingsRouteImport.update({
   id: '/viewings',
   path: '/viewings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomesIdRoute = HomesIdRouteImport.update({
+  id: '/homes/$id',
+  path: '/homes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsIndexRoute = ListingsIndexRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsIdRoute = ListingsIdRouteImport.update({
+  id: '/listings/$id',
+  path: '/listings/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
@@ -95,6 +133,11 @@ const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
   id: '/properties/$id',
   path: '/properties/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertiesNewRoute = PropertiesNewRouteImport.update({
+  id: '/properties/new',
+  path: '/properties/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
@@ -112,44 +155,66 @@ const ApiV1HealthDatabaseRoute = ApiV1HealthDatabaseRouteImport.update({
   path: '/database',
   getParentRoute: () => ApiV1HealthRoute,
 } as any)
+const PropertiesPropertyIdUnitsUnitIdRoute =
+  PropertiesPropertyIdUnitsUnitIdRouteImport.update({
+    id: '/properties/$propertyId/units/$unitId',
+    path: '/properties/$propertyId/units/$unitId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/applications': typeof ApplicationsRoute
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
+  '/homes/$id': typeof HomesIdRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/properties/new': typeof PropertiesNewRoute
+  '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
+  '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/applications': typeof ApplicationsRoute
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
+  '/homes/$id': typeof HomesIdRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/properties/new': typeof PropertiesNewRoute
+  '/listings': typeof ListingsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
+  '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -157,19 +222,27 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/applications': typeof ApplicationsRoute
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
+  '/homes/$id': typeof HomesIdRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/properties/new': typeof PropertiesNewRoute
+  '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
+  '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -178,57 +251,81 @@ export interface FileRouteTypes {
     | '/admin'
     | '/applications'
     | '/dashboard'
+    | '/forgot-password'
     | '/login'
     | '/map'
     | '/messages'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/verify-email'
     | '/viewings'
+    | '/homes/$id'
+    | '/listings/$id'
     | '/properties/$id'
+    | '/properties/new'
+    | '/listings/'
     | '/properties/'
     | '/api/v1/health'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
+    | '/properties/$propertyId/units/$unitId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/applications'
     | '/dashboard'
+    | '/forgot-password'
     | '/login'
     | '/map'
     | '/messages'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/verify-email'
     | '/viewings'
+    | '/homes/$id'
+    | '/listings/$id'
     | '/properties/$id'
+    | '/properties/new'
+    | '/listings'
     | '/properties'
     | '/api/v1/health'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
+    | '/properties/$propertyId/units/$unitId'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/applications'
     | '/dashboard'
+    | '/forgot-password'
     | '/login'
     | '/map'
     | '/messages'
     | '/profile'
     | '/register'
+    | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/verify-email'
     | '/viewings'
+    | '/homes/$id'
+    | '/listings/$id'
     | '/properties/$id'
+    | '/properties/new'
+    | '/listings/'
     | '/properties/'
     | '/api/v1/health'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
+    | '/properties/$propertyId/units/$unitId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -236,18 +333,26 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   ApplicationsRoute: typeof ApplicationsRoute
   DashboardRoute: typeof DashboardRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   MapRoute: typeof MapRoute
   MessagesRoute: typeof MessagesRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SavedRoute: typeof SavedRoute
   SettingsRoute: typeof SettingsRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
   ViewingsRoute: typeof ViewingsRoute
+  HomesIdRoute: typeof HomesIdRoute
+  ListingsIdRoute: typeof ListingsIdRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
+  PropertiesNewRoute: typeof PropertiesNewRoute
+  ListingsIndexRoute: typeof ListingsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiV1HealthRoute: typeof ApiV1HealthRouteWithChildren
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
+  PropertiesPropertyIdUnitsUnitIdRoute: typeof PropertiesPropertyIdUnitsUnitIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -278,6 +383,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -315,6 +427,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/saved': {
       id: '/saved'
       path: '/saved'
@@ -329,11 +448,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/viewings': {
       id: '/viewings'
       path: '/viewings'
       fullPath: '/viewings'
       preLoaderRoute: typeof ViewingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/homes/$id': {
+      id: '/homes/$id'
+      path: '/homes/$id'
+      fullPath: '/homes/$id'
+      preLoaderRoute: typeof HomesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/': {
+      id: '/listings/'
+      path: '/listings'
+      fullPath: '/listings/'
+      preLoaderRoute: typeof ListingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/$id': {
+      id: '/listings/$id'
+      path: '/listings/$id'
+      fullPath: '/listings/$id'
+      preLoaderRoute: typeof ListingsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties/': {
@@ -348,6 +495,13 @@ declare module '@tanstack/react-router' {
       path: '/properties/$id'
       fullPath: '/properties/$id'
       preLoaderRoute: typeof PropertiesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/properties/new': {
+      id: '/properties/new'
+      path: '/properties/new'
+      fullPath: '/properties/new'
+      preLoaderRoute: typeof PropertiesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/v1/health': {
@@ -371,6 +525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1HealthDatabaseRouteImport
       parentRoute: typeof ApiV1HealthRoute
     }
+    '/properties/$propertyId/units/$unitId': {
+      id: '/properties/$propertyId/units/$unitId'
+      path: '/properties/$propertyId/units/$unitId'
+      fullPath: '/properties/$propertyId/units/$unitId'
+      preLoaderRoute: typeof PropertiesPropertyIdUnitsUnitIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -391,18 +552,26 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   ApplicationsRoute: ApplicationsRoute,
   DashboardRoute: DashboardRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   MapRoute: MapRoute,
   MessagesRoute: MessagesRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SavedRoute: SavedRoute,
   SettingsRoute: SettingsRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
   ViewingsRoute: ViewingsRoute,
+  HomesIdRoute: HomesIdRoute,
+  ListingsIdRoute: ListingsIdRoute,
   PropertiesIdRoute: PropertiesIdRoute,
+  PropertiesNewRoute: PropertiesNewRoute,
+  ListingsIndexRoute: ListingsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiV1HealthRoute: ApiV1HealthRouteWithChildren,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
+  PropertiesPropertyIdUnitsUnitIdRoute: PropertiesPropertyIdUnitsUnitIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

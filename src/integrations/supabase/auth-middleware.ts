@@ -94,11 +94,40 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
       throw new Error("Unauthorized: No user ID found in token");
     }
 
+    const userId = data.claims.sub;
+
+    // Server-side security checks: session revocation & account suspension
+    const crypto = await import("crypto");
+    const { supabaseAdmin } = await import("./client.server");
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+    const [profileResult, sessionResult] = await Promise.all([
+      supabaseAdmin.from("profiles").select("status").eq("id", userId).maybeSingle(),
+      supabaseAdmin
+        .from("sessions")
+        .select("revoked_at")
+        .eq("session_token_hash", tokenHash)
+        .maybeSingle(),
+    ]);
+
+    if (profileResult.data) {
+      const status = profileResult.data.status;
+      if (status === "SUSPENDED" || status === "LOCKED" || status === "DEACTIVATED") {
+        throw new Error(`Unauthorized: Account is ${status}`);
+      }
+    }
+
+    if (sessionResult.data && sessionResult.data.revoked_at) {
+      throw new Error("Unauthorized: Session has been revoked");
+    }
+
     return next({
       context: {
         supabase,
-        userId: data.claims.sub,
+        userId,
         claims: data.claims,
+        token,
+        tokenHash,
       },
     });
   },

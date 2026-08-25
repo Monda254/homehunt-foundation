@@ -1,5 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useAuth } from "@/features/identity/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { getPublicListings } from "@/features/properties/properties.functions";
+import { ListingCard, type ListingCardData } from "@/components/PropertyCard";
 import {
   Search,
   MapPin,
@@ -25,6 +29,12 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { isAuthenticated, logout } = useAuth();
+
+  const { data: listings, isLoading } = useQuery({
+    queryKey: ["public-listings"],
+    queryFn: () => getPublicListings(),
+  });
 
   // Search state
   const [location, setLocation] = useState("Kilimani, Nairobi");
@@ -81,18 +91,37 @@ function Index() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
-            <button
-              onClick={() => openPhaseNotice("User Account")}
-              className="text-sm font-medium text-muted-foreground hover:text-primary"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => openPhaseNotice("User Account Registration")}
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/95 hover:shadow-md hover:translate-y-[-1px] active:translate-y-[0px]"
-            >
-              Create Account
-            </button>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-sm font-medium text-muted-foreground hover:text-primary"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => logout()}
+                  className="inline-flex items-center justify-center rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-foreground border border-border shadow-sm transition-all hover:bg-secondary/80 hover:translate-y-[-1px] active:translate-y-[0px] cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-muted-foreground hover:text-primary"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/95 hover:shadow-md hover:translate-y-[-1px] active:translate-y-[0px]"
+                >
+                  Create Account
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -149,24 +178,43 @@ function Index() {
               </button>
             </div>
             <div className="flex flex-col gap-3 pt-2">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPhaseNotice("User Account");
-                }}
-                className="w-full rounded-lg border border-border py-2.5 text-center font-medium text-muted-foreground hover:bg-secondary"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPhaseNotice("User Account Registration");
-                }}
-                className="w-full rounded-lg bg-primary py-2.5 text-center font-semibold text-primary-foreground shadow"
-              >
-                Create Account
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full rounded-lg border border-border py-2.5 text-center font-medium text-muted-foreground hover:bg-secondary"
+                  >
+                    Go to Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="w-full rounded-lg bg-destructive py-2.5 text-center font-semibold text-destructive-foreground shadow cursor-pointer"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full rounded-lg border border-border py-2.5 text-center font-medium text-muted-foreground hover:bg-secondary"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full rounded-lg bg-primary py-2.5 text-center font-semibold text-primary-foreground shadow"
+                  >
+                    Create Account
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -403,6 +451,43 @@ function Index() {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Discovery Listings Grid */}
+      <section className="py-16 sm:py-24">
+        <div className="container-page space-y-8">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
+              Discover Verified Homes
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              Explore actual rental assets uploaded directly by checked landlords and agents. Zero
+              upfront viewing fees.
+            </p>
+          </div>
+
+          {isLoading ? (
+            <div className="flex h-40 items-center justify-center">
+              <span className="text-xs text-muted-foreground font-semibold">
+                Loading listings...
+              </span>
+            </div>
+          ) : listings && listings.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {listings.map((list) => (
+                <ListingCard key={list.id} listing={list as unknown as ListingCardData} />
+              ))}
+            </div>
+          ) : (
+            <div className="surface-card p-12 text-center max-w-md mx-auto border border-dashed border-border/80">
+              <Building className="h-8 w-8 text-accent mx-auto mb-3" />
+              <p className="text-sm font-semibold text-foreground">No active rentals right now</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Check back later or register as a landlord to post a listing draft.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
