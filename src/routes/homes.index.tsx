@@ -144,6 +144,7 @@ function HomesDiscoveryPage() {
       });
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const isFav = favorites?.some((f: any) => f.listingId === listingId) || false;
     toggleFavoriteMutation.mutate({ listingId, isFav });
   };
@@ -413,6 +414,7 @@ function HomesDiscoveryPage() {
             <div className="space-y-8">
               <div className="grid gap-6 sm:grid-cols-2">
                 {searchResponse.items.map((listing) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const isFav = favorites?.some((f: any) => f.listingId === listing.id) || false;
                   return (
                     <SearchListingCard

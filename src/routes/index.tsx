@@ -104,7 +104,9 @@ function Index() {
       search: {
         q,
         county,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         propertyType: propertyType as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         unitType: unitType as any,
         bedrooms,
         minPrice,

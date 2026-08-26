@@ -1,9 +1,12 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { SearchFilters } from "./search.types";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabaseAdmin as any;
+
 export class ListingSearchRepository {
   async search(filters: SearchFilters) {
-    let query = (supabaseAdmin as any).from("listings_search_view").select("*", { count: "exact" });
+    let query = db.from("listings_search_view").select("*", { count: "exact" });
 
     // 1. Enforce public visibility constraints
     query = query.eq("listing_status", "PUBLISHED");

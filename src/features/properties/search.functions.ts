@@ -6,6 +6,8 @@ import { ListingSearchService } from "./search.service";
 import { z } from "zod";
 
 const searchService = new ListingSearchService();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabaseAdmin as any;
 
 // =============================================================
 // Public Search Operations
@@ -66,7 +68,7 @@ export const logSearchAnalytics = createServerFn({ method: "POST" })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (context as any)?.userId || null;
     try {
-      await (supabaseAdmin as any).from("search_analytics_events").insert({
+      await db.from("search_analytics_events").insert({
         user_id: userId,
         event_type: data.eventType,
         payload: data.payload,
@@ -93,7 +95,7 @@ export const createSavedSearch = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { userId } = context;
 
-    const { data: saved, error } = await (supabaseAdmin as any)
+    const { data: saved, error } = await db
       .from("saved_searches")
       .insert({
         user_id: userId,
@@ -115,7 +117,7 @@ export const getSavedSearches = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { userId } = context;
 
-    const { data, error } = await (supabaseAdmin as any)
+    const { data, error } = await db
       .from("saved_searches")
       .select("*")
       .eq("user_id", userId)
@@ -134,11 +136,7 @@ export const deleteSavedSearch = createServerFn({ method: "POST" })
   .handler(async ({ data: id, context }) => {
     const { userId } = context;
 
-    const { error } = await (supabaseAdmin as any)
-      .from("saved_searches")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", userId);
+    const { error } = await db.from("saved_searches").delete().eq("id", id).eq("user_id", userId);
 
     if (error) {
       throw new AppError(ERROR_CODES.BAD_REQUEST, error.message);
@@ -157,7 +155,7 @@ export const addFavorite = createServerFn({ method: "POST" })
   .handler(async ({ data: listingId, context }) => {
     const { userId } = context;
 
-    const { error } = await (supabaseAdmin as any).from("favorites").insert({
+    const { error } = await db.from("favorites").insert({
       user_id: userId,
       listing_id: listingId,
     });
@@ -175,7 +173,7 @@ export const removeFavorite = createServerFn({ method: "POST" })
   .handler(async ({ data: listingId, context }) => {
     const { userId } = context;
 
-    const { error } = await (supabaseAdmin as any)
+    const { error } = await db
       .from("favorites")
       .delete()
       .eq("user_id", userId)
@@ -193,7 +191,7 @@ export const getFavorites = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { userId } = context;
 
-    const { data, error } = await (supabaseAdmin as any)
+    const { data, error } = await db
       .from("favorites")
       .select(
         `
@@ -228,6 +226,7 @@ export const getFavorites = createServerFn({ method: "GET" })
     }
 
     // Resolve primary images for each favorite listing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const listingIds = (data || []).map((f: any) => f.listing_id);
     const { data: mediaRows } = await supabaseAdmin
       .from("property_media")
