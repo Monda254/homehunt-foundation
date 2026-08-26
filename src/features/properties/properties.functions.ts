@@ -286,7 +286,8 @@ const fnCreateProperty = createServerFn({ method: "POST" })
     return { success: true, propertyId: prop.id };
   });
 
-export const createProperty = (data: z.infer<typeof CreatePropertySchema>) => fnCreateProperty({ data });
+export const createProperty = (data: z.infer<typeof CreatePropertySchema>) =>
+  fnCreateProperty({ data });
 
 const fnGetProperty = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -422,7 +423,8 @@ const fnUpdateProperty = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-export const updateProperty = (data: z.infer<typeof UpdatePropertySchema>) => fnUpdateProperty({ data });
+export const updateProperty = (data: z.infer<typeof UpdatePropertySchema>) =>
+  fnUpdateProperty({ data });
 
 const fnArchiveProperty = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -738,7 +740,8 @@ const fnCreateListing = createServerFn({ method: "POST" })
     return { success: true, listingId: listing.id };
   });
 
-export const createListing = (data: z.infer<typeof CreateListingSchema>) => fnCreateListing({ data });
+export const createListing = (data: z.infer<typeof CreateListingSchema>) =>
+  fnCreateListing({ data });
 
 const fnGetListing = createServerFn({ method: "GET" })
   .validator(z.string().uuid())
@@ -859,7 +862,8 @@ const fnUpdateListing = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-export const updateListing = (data: z.infer<typeof UpdateListingSchema>) => fnUpdateListing({ data });
+export const updateListing = (data: z.infer<typeof UpdateListingSchema>) =>
+  fnUpdateListing({ data });
 
 const fnPublishListing = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -1087,7 +1091,8 @@ const fnAddPropertyMedia = createServerFn({ method: "POST" })
     return { success: true, mediaId: media.id };
   });
 
-export const addPropertyMedia = (data: z.infer<typeof AddMediaSchema>) => fnAddPropertyMedia({ data });
+export const addPropertyMedia = (data: z.infer<typeof AddMediaSchema>) =>
+  fnAddPropertyMedia({ data });
 
 const fnRemovePropertyMedia = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -1107,7 +1112,12 @@ const fnRemovePropertyMedia = createServerFn({ method: "POST" })
       throw new AppError(ERROR_CODES.NOT_FOUND, "Media not found.");
     }
 
-    const authorized = await canUpdateProperty(userId, roles, media.property_id || "", supabaseAdmin);
+    const authorized = await canUpdateProperty(
+      userId,
+      roles,
+      media.property_id || "",
+      supabaseAdmin,
+    );
     if (!authorized) {
       throw new AppError(
         ERROR_CODES.FORBIDDEN,
@@ -1191,7 +1201,8 @@ const fnAddPropertyParty = createServerFn({ method: "POST" })
     return { success: true, partyId: party.id };
   });
 
-export const addPropertyParty = (data: z.infer<typeof AddPartySchema>) => fnAddPropertyParty({ data });
+export const addPropertyParty = (data: z.infer<typeof AddPartySchema>) =>
+  fnAddPropertyParty({ data });
 
 const fnRemovePropertyParty = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

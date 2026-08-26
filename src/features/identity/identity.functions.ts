@@ -1366,14 +1366,23 @@ const fnAdminManageRole = createServerFn({ method: "POST" })
 export const register = (data: z.infer<typeof RegisterSchema>) => fnRegister({ data });
 export const login = (data: z.infer<typeof LoginSchema>) => fnLogin({ data });
 export const verifyEmail = (data: z.infer<typeof VerifyEmailSchema>) => fnVerifyEmail({ data });
-export const resendVerification = (data: z.infer<typeof ResendVerificationSchema>) => fnResendVerification({ data });
-export const requestPasswordReset = (data: z.infer<typeof RequestPasswordResetSchema>) => fnRequestPasswordReset({ data });
-export const resetPassword = (data: z.infer<typeof ResetPasswordSchema>) => fnResetPassword({ data });
-export const changePassword = (data: z.infer<typeof ChangePasswordSchema>) => fnChangePassword({ data });
-export const updateMyProfile = (data: z.infer<typeof UpdateProfileSchema>) => fnUpdateMyProfile({ data });
+export const resendVerification = (data: z.infer<typeof ResendVerificationSchema>) =>
+  fnResendVerification({ data });
+export const requestPasswordReset = (data: z.infer<typeof RequestPasswordResetSchema>) =>
+  fnRequestPasswordReset({ data });
+export const resetPassword = (data: z.infer<typeof ResetPasswordSchema>) =>
+  fnResetPassword({ data });
+export const changePassword = (data: z.infer<typeof ChangePasswordSchema>) =>
+  fnChangePassword({ data });
+export const updateMyProfile = (data: z.infer<typeof UpdateProfileSchema>) =>
+  fnUpdateMyProfile({ data });
 export const revokeSession = (data: { sessionId: string }) => fnRevokeSession({ data });
-export const adminListUsers = (data: z.infer<typeof AdminListUsersSchema>) => fnAdminListUsers({ data });
+export const adminListUsers = (data: z.infer<typeof AdminListUsersSchema>) =>
+  fnAdminListUsers({ data });
 export const adminGetUser = (data: { userId: string }) => fnAdminGetUser({ data });
-export const adminSuspendUser = (data: z.infer<typeof AdminSuspendSchema>) => fnAdminSuspendUser({ data });
-export const adminReactivateUser = (data: z.infer<typeof AdminReactivateSchema>) => fnAdminReactivateUser({ data });
-export const adminManageRole = (data: z.infer<typeof AdminManageRoleSchema>) => fnAdminManageRole({ data });
+export const adminSuspendUser = (data: z.infer<typeof AdminSuspendSchema>) =>
+  fnAdminSuspendUser({ data });
+export const adminReactivateUser = (data: z.infer<typeof AdminReactivateSchema>) =>
+  fnAdminReactivateUser({ data });
+export const adminManageRole = (data: z.infer<typeof AdminManageRoleSchema>) =>
+  fnAdminManageRole({ data });

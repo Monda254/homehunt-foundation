@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/features/identity/AuthContext";
 import { useQuery } from "@tanstack/react-query";
@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const { isAuthenticated, logout } = useAuth();
@@ -40,6 +41,81 @@ function Index() {
   const [location, setLocation] = useState("Kilimani, Nairobi");
   const [propType, setPropType] = useState("2 Bedroom Apartment");
   const [budget, setBudget] = useState("35,000 - 50,000");
+
+  const handleSearch = () => {
+    let county: string | undefined;
+    let q: string | undefined;
+    if (location === "Kilimani, Nairobi") {
+      county = "Nairobi";
+      q = "Kilimani";
+    } else if (location === "Westlands, Nairobi") {
+      county = "Nairobi";
+      q = "Westlands";
+    } else if (location === "Kileleshwa, Nairobi") {
+      county = "Nairobi";
+      q = "Kileleshwa";
+    } else if (location === "Syokimau, Machakos") {
+      county = "Machakos";
+      q = "Syokimau";
+    } else if (location === "Nyali, Mombasa") {
+      county = "Mombasa";
+      q = "Nyali";
+    }
+
+    let propertyType: string | undefined;
+    let unitType: string | undefined;
+    let bedrooms: number | undefined;
+    if (propType === "Bedsitter") {
+      propertyType = "BEDSITTER";
+      unitType = "BEDSITTER";
+    } else if (propType === "1 Bedroom Apartment") {
+      propertyType = "APARTMENT";
+      bedrooms = 1;
+    } else if (propType === "2 Bedroom Apartment") {
+      propertyType = "APARTMENT";
+      bedrooms = 2;
+    } else if (propType === "3 Bedroom Apartment") {
+      propertyType = "APARTMENT";
+      bedrooms = 3;
+    } else if (propType === "Townhouse") {
+      propertyType = "TOWNHOUSE";
+    }
+
+    let minPrice: number | undefined;
+    let maxPrice: number | undefined;
+    if (budget === "10,000 - 15,000") {
+      minPrice = 10000;
+      maxPrice = 15000;
+    } else if (budget === "15,000 - 25,000") {
+      minPrice = 15000;
+      maxPrice = 25000;
+    } else if (budget === "25,000 - 35,000") {
+      minPrice = 25000;
+      maxPrice = 35000;
+    } else if (budget === "35,000 - 50,000") {
+      minPrice = 35000;
+      maxPrice = 50000;
+    } else if (budget === "50,000+") {
+      minPrice = 50000;
+    }
+
+    navigate({
+      to: "/homes",
+      search: {
+        q,
+        county,
+        propertyType: propertyType as any,
+        unitType: unitType as any,
+        bedrooms,
+        minPrice,
+        maxPrice,
+        sort: "RECOMMENDED",
+        page: 1,
+        limit: 20,
+        amenities: [],
+      },
+    });
+  };
 
   const openPhaseNotice = (featureName: string) => {
     setActiveModal(featureName);
@@ -296,7 +372,7 @@ function Index() {
               </div>
 
               <button
-                onClick={() => openPhaseNotice(`Search for ${propType} in ${location}`)}
+                onClick={handleSearch}
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/95 hover:shadow-lg active:scale-[0.99]"
               >
                 <Search className="h-5 w-5" /> Search Available Properties

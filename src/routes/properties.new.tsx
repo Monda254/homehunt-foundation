@@ -59,6 +59,7 @@ function NewPropertyComponent() {
   const createMutation = useMutation({
     mutationFn: () =>
       createProperty({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         propertyType: propertyType as any,
         name,
         description: description || undefined,

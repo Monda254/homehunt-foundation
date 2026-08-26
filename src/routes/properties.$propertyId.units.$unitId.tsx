@@ -59,11 +59,13 @@ function UnitDetailsComponent() {
       updateUnit({
         id: unitId,
         unitNumber,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         unitType: unitType as any,
         floor: floor ? parseInt(floor) : undefined,
         bedrooms: parseInt(bedrooms),
         bathrooms: parseInt(bathrooms),
         area: area ? parseFloat(area) : undefined,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         status: status as any,
         description: description || undefined,
         amenities: [],

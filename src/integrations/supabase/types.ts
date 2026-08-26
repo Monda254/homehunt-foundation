@@ -613,7 +613,8 @@ export type Database = {
       is_platform_admin: { Args: { _user_id: string }; Returns: boolean };
     };
     Enums: {
-      app_role: "tenant" | "landlord" | "agent" | "property_manager" | "verifier" | "admin" | "super_admin";
+      app_role:
+        "tenant" | "landlord" | "agent" | "property_manager" | "verifier" | "admin" | "super_admin";
       account_status: "ACTIVE" | "SUSPENDED" | "PENDING_VERIFICATION" | "DEACTIVATED" | "LOCKED";
       user_status: "ACTIVE" | "SUSPENDED" | "PENDING_VERIFICATION";
       property_status: "DRAFT" | "ACTIVE" | "INACTIVE" | "ARCHIVED";
@@ -629,7 +630,14 @@ export type Database = {
         | "ROOM"
         | "SHARED_ACCOMMODATION"
         | "OTHER";
-      unit_status: "DRAFT" | "AVAILABLE" | "RESERVED" | "OCCUPIED" | "MAINTENANCE" | "UNAVAILABLE" | "ARCHIVED";
+      unit_status:
+        | "DRAFT"
+        | "AVAILABLE"
+        | "RESERVED"
+        | "OCCUPIED"
+        | "MAINTENANCE"
+        | "UNAVAILABLE"
+        | "ARCHIVED";
       unit_type:
         | "BEDSITTER"
         | "STUDIO"
@@ -686,7 +694,8 @@ export type Tables<
     : never;
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaTableNameOrOptions extends
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -709,7 +718,8 @@ export type TablesInsert<
     : never;
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaTableNameOrOptions extends
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -732,7 +742,8 @@ export type TablesUpdate<
     : never;
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaEnumNameOrOptions extends
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -748,8 +759,7 @@ export type Enums<
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -766,7 +776,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["tenant", "landlord", "agent", "property_manager", "verifier", "admin", "super_admin"],
+      app_role: [
+        "tenant",
+        "landlord",
+        "agent",
+        "property_manager",
+        "verifier",
+        "admin",
+        "super_admin",
+      ],
       account_status: ["ACTIVE", "SUSPENDED", "PENDING_VERIFICATION", "DEACTIVATED", "LOCKED"],
       user_status: ["ACTIVE", "SUSPENDED", "PENDING_VERIFICATION"],
       property_status: ["DRAFT", "ACTIVE", "INACTIVE", "ARCHIVED"],
@@ -783,7 +801,15 @@ export const Constants = {
         "SHARED_ACCOMMODATION",
         "OTHER",
       ],
-      unit_status: ["DRAFT", "AVAILABLE", "RESERVED", "OCCUPIED", "MAINTENANCE", "UNAVAILABLE", "ARCHIVED"],
+      unit_status: [
+        "DRAFT",
+        "AVAILABLE",
+        "RESERVED",
+        "OCCUPIED",
+        "MAINTENANCE",
+        "UNAVAILABLE",
+        "ARCHIVED",
+      ],
       unit_type: [
         "BEDSITTER",
         "STUDIO",

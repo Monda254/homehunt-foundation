@@ -44,13 +44,11 @@ The long-term platform will allow users to:
 
 IMPORTANT:
 
-We are NOT implementing the entire platform in this phase.
-
 We are currently implementing:
 
-PHASE 0 — FOUNDATION & PROJECT SETUP.
+PHASE 3 — DISCOVERY & SEARCH.
 
-Do not implement future phases unless a future requirement is necessary to establish the foundation.
+Phase 0, 1, 2, and 3 are fully operational. Do not implement future phases unless a future requirement is necessary to establish the foundation.
 
 ==================================================
 

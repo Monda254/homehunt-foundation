@@ -59,9 +59,11 @@ function ListingDetailsComponent() {
         title,
         description: description || undefined,
         price: parseFloat(price),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         billingPeriod: billingPeriod as any,
         depositAmount: depositAmount ? parseFloat(depositAmount) : undefined,
         availabilityDate,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         status: status as any,
       }),
     onSuccess: () => {
@@ -127,7 +129,8 @@ function ListingDetailsComponent() {
               {details.listing.title}
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Ref Property: {(details.listing as any).properties?.name || "Physical Property Reference"}
+              Ref Property: {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {(details.listing as any).properties?.name || "Physical Property Reference"}
             </p>
           </div>
 

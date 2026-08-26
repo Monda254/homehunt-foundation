@@ -24,6 +24,7 @@ import { Route as SavedRouteImport } from './routes/saved'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as ViewingsRouteImport } from './routes/viewings'
+import { Route as HomesIndexRouteImport } from './routes/homes.index'
 import { Route as HomesIdRouteImport } from './routes/homes.$id'
 import { Route as ListingsIndexRouteImport } from './routes/listings.index'
 import { Route as ListingsIdRouteImport } from './routes/listings.$id'
@@ -110,6 +111,11 @@ const ViewingsRoute = ViewingsRouteImport.update({
   path: '/viewings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomesIndexRoute = HomesIndexRouteImport.update({
+  id: '/homes/',
+  path: '/homes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomesIdRoute = HomesIdRouteImport.update({
   id: '/homes/$id',
   path: '/homes/$id',
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/properties/new': typeof PropertiesNewRoute
+  '/homes/': typeof HomesIndexRoute
   '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/properties/new': typeof PropertiesNewRoute
+  '/homes': typeof HomesIndexRoute
   '/listings': typeof ListingsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/properties/new': typeof PropertiesNewRoute
+  '/homes/': typeof HomesIndexRoute
   '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
@@ -266,6 +275,7 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/properties/new'
+    | '/homes/'
     | '/listings/'
     | '/properties/'
     | '/api/v1/health'
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/properties/new'
+    | '/homes'
     | '/listings'
     | '/properties'
     | '/api/v1/health'
@@ -320,6 +331,7 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/properties/new'
+    | '/homes/'
     | '/listings/'
     | '/properties/'
     | '/api/v1/health'
@@ -348,6 +360,7 @@ export interface RootRouteChildren {
   ListingsIdRoute: typeof ListingsIdRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
   PropertiesNewRoute: typeof PropertiesNewRoute
+  HomesIndexRoute: typeof HomesIndexRoute
   ListingsIndexRoute: typeof ListingsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiV1HealthRoute: typeof ApiV1HealthRouteWithChildren
@@ -462,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ViewingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/homes/': {
+      id: '/homes/'
+      path: '/homes'
+      fullPath: '/homes/'
+      preLoaderRoute: typeof HomesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/homes/$id': {
       id: '/homes/$id'
       path: '/homes/$id'
@@ -567,6 +587,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListingsIdRoute: ListingsIdRoute,
   PropertiesIdRoute: PropertiesIdRoute,
   PropertiesNewRoute: PropertiesNewRoute,
+  HomesIndexRoute: HomesIndexRoute,
   ListingsIndexRoute: ListingsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiV1HealthRoute: ApiV1HealthRouteWithChildren,

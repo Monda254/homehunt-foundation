@@ -151,6 +151,7 @@ function PropertyDetailsComponent() {
       createUnit({
         propertyId,
         unitNumber,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         unitType: unitType as any,
         floor: floor ? parseInt(floor) : undefined,
         bedrooms: parseInt(bedrooms),
@@ -191,6 +192,7 @@ function PropertyDetailsComponent() {
         title: listingTitle,
         description: listingDescription || undefined,
         price: parseFloat(price),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         billingPeriod: billingPeriod as any,
         depositAmount: depositAmount ? parseFloat(depositAmount) : undefined,
         availabilityDate,
@@ -262,6 +264,7 @@ function PropertyDetailsComponent() {
       addPropertyParty({
         propertyId,
         userId: partyUserId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         relationshipType: partyType as any,
         status: "ACTIVE",
       }),
