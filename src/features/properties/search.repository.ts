@@ -1,8 +1,8 @@
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { supabase } from "@/integrations/supabase/client";
 import type { SearchFilters } from "./search.types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = supabaseAdmin as any;
+const db = supabase as any;
 
 export class ListingSearchRepository {
   async search(filters: SearchFilters) {
@@ -129,12 +129,14 @@ export class ListingSearchRepository {
     };
   }
 
-  async getLocations(q: string) {
+  async getLocations(
+    q: string,
+  ): Promise<Array<{ county: string; town: string; neighborhood: string | null }>> {
     // Dynamic structured location auto-suggestions (distinct county/town combos)
     const escaped = q.trim().replace(/[\\%_]/g, "\\$&");
     const term = `%${escaped}%`;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await db
       .from("properties")
       .select("county, town, neighborhood")
       .eq("status", "ACTIVE")
@@ -142,22 +144,25 @@ export class ListingSearchRepository {
       .limit(10);
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as Array<{ county: string; town: string; neighborhood: string | null }>;
   }
 
   async getReferenceData() {
     // Retrieve distinct counties, towns, amenities dynamically for filter selects
     const [propertiesRes, amenitiesRes] = await Promise.all([
-      supabaseAdmin.from("properties").select("county, town").eq("status", "ACTIVE"),
-      supabaseAdmin.from("property_amenities").select("amenity"),
+      db.from("properties").select("county, town").eq("status", "ACTIVE"),
+      db.from("property_amenities").select("amenity"),
     ]);
 
     if (propertiesRes.error) throw propertiesRes.error;
     if (amenitiesRes.error) throw amenitiesRes.error;
 
-    const counties = Array.from(new Set(propertiesRes.data.map((p) => p.county)));
-    const towns = Array.from(new Set(propertiesRes.data.map((p) => p.town)));
-    const amenities = Array.from(new Set(amenitiesRes.data.map((a) => a.amenity)));
+    const propertiesData = (propertiesRes.data || []) as Array<{ county: string; town: string }>;
+    const amenitiesData = (amenitiesRes.data || []) as Array<{ amenity: string }>;
+
+    const counties = Array.from(new Set(propertiesData.map((p) => p.county)));
+    const towns = Array.from(new Set(propertiesData.map((p) => p.town)));
+    const amenities = Array.from(new Set(amenitiesData.map((a) => a.amenity)));
 
     return {
       counties,
