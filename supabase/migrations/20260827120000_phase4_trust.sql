@@ -423,6 +423,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.moderation_appeals TO authenticat
 GRANT ALL ON public.moderation_appeals TO service_role;
 
 -- 14. Update listings_search_view to support trust & freshness DTO mapping
+DROP VIEW IF EXISTS public.listings_search_view;
 CREATE OR REPLACE VIEW public.listings_search_view AS
 SELECT
   l.id AS listing_id,
