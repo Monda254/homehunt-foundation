@@ -19,15 +19,20 @@ END;
 $$;
 
 -- ---------- roles ----------
-CREATE TYPE public.app_role AS ENUM (
-  'tenant',
-  'landlord',
-  'agent',
-  'property_manager',
-  'verifier',
-  'admin',
-  'super_admin'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'app_role') THEN
+    CREATE TYPE public.app_role AS ENUM (
+      'tenant',
+      'landlord',
+      'agent',
+      'property_manager',
+      'verifier',
+      'admin',
+      'super_admin'
+    );
+  END IF;
+END$$;
 
 -- ---------- profiles ----------
 CREATE TABLE public.profiles (
