@@ -54,6 +54,11 @@ export class ListingSearchService {
         area: item.area ? Number(item.area) : null,
         propertyAmenities: item.property_amenities || [],
         primaryImageUrl: item.primary_image_url,
+        propertyVerificationStatus: item.property_verification_status || "UNVERIFIED",
+        listingVerificationStatus: item.listing_verification_status || "UNVERIFIED",
+        freshnessStatus: item.listing_freshness_status || "CURRENT",
+        ownerIdentityVerified: item.owner_identity_verified || false,
+        ownerAgentVerified: item.owner_agent_verified || false,
       };
     });
 

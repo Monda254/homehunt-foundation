@@ -1,39 +1,47 @@
-# Search Result Ranking Specification
+# Housing Matching Engine — Scoring & Ranking Algorithm
 
-HomeHunt supports standard deterministic sorting algorithms to order search results.
+This document defines the formulas, weights, and scoring criteria used to compute the 0-100 compatibility rating for housing recommendations.
 
-## Implemented Sorting Algorithms
+---
 
-1. **Recommended (Default)**
-   - Orders listings by `published_at DESC` (newest first). Falls back to `created_at DESC` for listings without a published timestamp.
+## 1. Weight Priorities
+Scoring is normalized according to the user's priority weights:
+* `CRITICAL`: 40 points
+* `HIGH`: 25 points
+* `MEDIUM`: 15 points
+* `LOW`: 10 points
 
-2. **Newest Listings**
-   - Explicitly orders by `published_at DESC` with fallback to `created_at DESC`.
+---
 
-3. **Price: Low to High**
-   - Orders listings by the numeric `price ASC`. Tiebreaker defaults to `published_at DESC`.
+## 2. Dimension Calculations
 
-4. **Price: High to Low**
-   - Orders listings by the numeric `price DESC`. Tiebreaker defaults to `published_at DESC`.
+### Budget Score (0.0 to 1.0)
+* If `price <= target_budget`: score = 1.0.
+* If `price > target_budget` and `price <= max_budget`:
+  $$\text{score} = 1.0 - \frac{\text{price} - \text{target\_budget}}{\text{max\_budget} - \text{target\_budget}}$$
+* If `price > max_budget`: score = 0.0.
 
-5. **Availability Date**
-   - Orders listings by `availability_date ASC` (earliest move-in date first).
+### Location Score (0.0 to 1.0)
+* Exact estate match: score = 1.0.
+* Neighborhood match: score = 0.9.
+* Town match: score = 0.6.
+* County match: score = 0.2.
+* Otherwise: score = 0.0.
 
-## Future AI & Personalized Ranking
+### Bedroom Fit (0.0 to 1.0)
+* Exact count match: score = 1.0.
+* Rule MIN and count is higher: score = 0.8.
+* Otherwise: score = 0.0.
 
-Subsequent phases of HomeHunt will introduce personalized discovery and listing quality scores. The architecture supports injecting these features directly into the DTO mapper:
+### Amenities Score (0.0 to 1.0)
+* All MUST-HAVE amenities must be satisfied.
+* Score is computed as a fraction of preferred/optional amenities present:
+  $$\text{score} = 0.7 + 0.3 \times \frac{\text{satisfied\_preferred\_amenities}}{\text{total\_preferred\_amenities}}$$
 
-1. **User Preference Vector Matching**
-   - Store user preferences (locations, budget, layout) as a structured configuration.
-   - Use cosine similarity or SQL joins to compute match weights.
+---
 
-2. **Listing Quality Scores**
-   - Calculate quality weights based on:
-     - Verified status (+20% weight)
-     - High-resolution media presence (+10% weight)
-     - Landlord response rate (+15% weight)
-     - Profile completion score (+10% weight)
-     - Freshness (decay factor based on days since `published_at`)
-
-3. **Trust Signals Placeholder**
-   - Visual badges ("Verified Landlord", "Property Checked") have pre-arranged slots in the `SearchListingCard` markup. They will render once Phase 4 (verification workflows) goes live.
+## 3. Trust & Freshness Bonuses
+A maximum of 5 bonus points are added after base scoring:
+* **Verified (Property or Listing)**: +3 points.
+* **Freshness (CURRENT)**: +2 points.
+* Total final score is capped at 100.

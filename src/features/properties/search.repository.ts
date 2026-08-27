@@ -51,6 +51,11 @@ export class ListingSearchRepository {
       query = query.eq("unit_type", filters.unitType);
     }
 
+    // 5.b Verified Only Filter
+    if (filters.verifiedOnly) {
+      query = query.eq("property_verification_status", "VERIFIED");
+    }
+
     // 6. Bedrooms & Bathrooms (GTE filtering)
     if (filters.bedrooms !== undefined) {
       query = query.gte("bedrooms", filters.bedrooms);

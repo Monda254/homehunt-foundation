@@ -41,6 +41,7 @@ export const SearchListingsSchema = z.object({
   bathrooms: z.coerce.number().nonnegative().optional(),
   amenities: z.array(z.string()).default([]),
   availabilityDate: z.string().optional(),
+  verifiedOnly: z.preprocess((val) => val === "true" || val === true, z.boolean()).optional(),
   bounds: z
     .object({
       north: z.coerce.number(),
@@ -90,6 +91,11 @@ export interface ListingSearchResult {
   area: number | null;
   propertyAmenities: string[];
   primaryImageUrl: string | null;
+  propertyVerificationStatus: string;
+  listingVerificationStatus: string;
+  freshnessStatus: string;
+  ownerIdentityVerified: boolean;
+  ownerAgentVerified: boolean;
 }
 
 export interface SearchListingsResponse {

@@ -18,10 +18,12 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RecommendationsRouteImport } from './routes/recommendations'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TrustRouteImport } from './routes/trust'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as ViewingsRouteImport } from './routes/viewings'
 import { Route as HomesIndexRouteImport } from './routes/homes.index'
@@ -81,6 +83,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecommendationsRoute = RecommendationsRouteImport.update({
+  id: '/recommendations',
+  path: '/recommendations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -99,6 +106,11 @@ const SavedRoute = SavedRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrustRoute = TrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -178,10 +190,12 @@ export interface FileRoutesByFullPath {
   '/map': typeof MapRoute
   '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
+  '/recommendations': typeof RecommendationsRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
   '/homes/$id': typeof HomesIdRoute
@@ -206,10 +220,12 @@ export interface FileRoutesByTo {
   '/map': typeof MapRoute
   '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
+  '/recommendations': typeof RecommendationsRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
   '/homes/$id': typeof HomesIdRoute
@@ -235,10 +251,12 @@ export interface FileRoutesById {
   '/map': typeof MapRoute
   '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
+  '/recommendations': typeof RecommendationsRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
   '/homes/$id': typeof HomesIdRoute
@@ -265,10 +283,12 @@ export interface FileRouteTypes {
     | '/map'
     | '/messages'
     | '/profile'
+    | '/recommendations'
     | '/register'
     | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/trust'
     | '/verify-email'
     | '/viewings'
     | '/homes/$id'
@@ -293,10 +313,12 @@ export interface FileRouteTypes {
     | '/map'
     | '/messages'
     | '/profile'
+    | '/recommendations'
     | '/register'
     | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/trust'
     | '/verify-email'
     | '/viewings'
     | '/homes/$id'
@@ -321,10 +343,12 @@ export interface FileRouteTypes {
     | '/map'
     | '/messages'
     | '/profile'
+    | '/recommendations'
     | '/register'
     | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/trust'
     | '/verify-email'
     | '/viewings'
     | '/homes/$id'
@@ -350,10 +374,12 @@ export interface RootRouteChildren {
   MapRoute: typeof MapRoute
   MessagesRoute: typeof MessagesRoute
   ProfileRoute: typeof ProfileRoute
+  RecommendationsRoute: typeof RecommendationsRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SavedRoute: typeof SavedRoute
   SettingsRoute: typeof SettingsRoute
+  TrustRoute: typeof TrustRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   ViewingsRoute: typeof ViewingsRoute
   HomesIdRoute: typeof HomesIdRoute
@@ -433,6 +459,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recommendations': {
+      id: '/recommendations'
+      path: '/recommendations'
+      fullPath: '/recommendations'
+      preLoaderRoute: typeof RecommendationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -459,6 +492,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trust': {
+      id: '/trust'
+      path: '/trust'
+      fullPath: '/trust'
+      preLoaderRoute: typeof TrustRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verify-email': {
@@ -577,10 +617,12 @@ const rootRouteChildren: RootRouteChildren = {
   MapRoute: MapRoute,
   MessagesRoute: MessagesRoute,
   ProfileRoute: ProfileRoute,
+  RecommendationsRoute: RecommendationsRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SavedRoute: SavedRoute,
   SettingsRoute: SettingsRoute,
+  TrustRoute: TrustRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   ViewingsRoute: ViewingsRoute,
   HomesIdRoute: HomesIdRoute,

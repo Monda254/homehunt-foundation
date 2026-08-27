@@ -1135,6 +1135,8 @@ const fnAdminGetUser = createServerFn({ method: "GET" })
       county: profile.county,
       town: profile.town,
       status: profile.status,
+      identityVerified: (profile as any).identity_verified || false,
+      agentVerified: (profile as any).agent_verified || false,
       onboardingCompleted: profile.onboarding_completed,
       createdAt: profile.created_at,
       lastLoginAt: profile.last_login_at,

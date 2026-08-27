@@ -323,6 +323,12 @@ function HomesDiscoveryPage() {
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mr-2">
               {searchResponse?.total || 0} listings found
             </span>
+            {searchParams.verifiedOnly && (
+              <FilterChip
+                label="Verified Properties Only"
+                onRemove={() => updateFilters({ verifiedOnly: undefined })}
+              />
+            )}
             {searchParams.county && (
               <FilterChip
                 label={`County: ${searchParams.county}`}
@@ -687,6 +693,24 @@ function HomesDiscoveryPage() {
                 </div>
               </div>
 
+              {/* Trust/Verification Filter */}
+              <div className="space-y-3 pt-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Trust & Verification
+                </label>
+                <div>
+                  <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={searchParams.verifiedOnly || false}
+                      onChange={(e) => updateFilters({ verifiedOnly: e.target.checked || undefined })}
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary focus:ring-2"
+                    />
+                    <span>Verified Properties Only</span>
+                  </label>
+                </div>
+              </div>
+
               {/* Amenities checkboxes */}
               <div className="space-y-3 pt-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -796,10 +820,15 @@ function SearchListingCard({
             </span>
           </div>
         )}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3 flex gap-1.5">
           <span className="text-[10px] font-bold uppercase tracking-wider text-background bg-foreground/80 backdrop-blur-sm px-2.5 py-1 rounded-lg">
             {listing.propertyType.replace("_", " ")}
           </span>
+          {listing.propertyVerificationStatus === "VERIFIED" && (
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-verified px-2.5 py-1 rounded-lg flex items-center gap-0.5 shadow-sm">
+              ✓ Verified
+            </span>
+          )}
         </div>
 
         {/* Favorite Button */}

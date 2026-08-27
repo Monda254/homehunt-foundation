@@ -19,6 +19,7 @@ import {
   Clock,
   AlertCircle,
   Building,
+  Compass,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -53,6 +54,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         ]
       : []),
     { label: "Map Search", to: "/map", icon: Map },
+    { label: "Recommended Matches", to: "/recommendations", icon: Compass },
     { label: "Saved Homes", to: "/saved", icon: Bookmark },
     { label: "Applications", to: "/applications", icon: FolderKanban },
     { label: "Viewings", to: "/viewings", icon: CalendarDays },

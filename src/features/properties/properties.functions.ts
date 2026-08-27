@@ -764,8 +764,8 @@ const fnGetListing = createServerFn({ method: "GET" })
       throw new AppError(ERROR_CODES.NOT_FOUND, "Listing not found.");
     }
 
-    // Retrieve associated media and shared amenities
-    const [mediaRes, amenitiesRes] = await Promise.all([
+    // Retrieve associated media, shared amenities, and owner's profile verification status
+    const [mediaRes, amenitiesRes, ownerProfileRes] = await Promise.all([
       supabaseAdmin
         .from("property_media")
         .select("*")
@@ -775,12 +775,18 @@ const fnGetListing = createServerFn({ method: "GET" })
         .from("property_amenities")
         .select("amenity")
         .eq("property_id", listing.property_id),
+      supabaseAdmin
+        .from("profiles")
+        .select("identity_verified, agent_verified")
+        .eq("id", (listing.properties as any)?.owner_user_id || "")
+        .maybeSingle(),
     ]);
 
     if (listing.properties) {
-      (listing.properties as unknown as { amenity_list: string[] }).amenity_list = (
-        amenitiesRes.data || []
-      ).map((r) => r.amenity);
+      const propData = listing.properties as any;
+      propData.amenity_list = (amenitiesRes.data || []).map((r) => r.amenity);
+      propData.owner_identity_verified = (ownerProfileRes.data as any)?.identity_verified || false;
+      propData.owner_agent_verified = (ownerProfileRes.data as any)?.agent_verified || false;
     }
 
     return {
