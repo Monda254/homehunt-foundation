@@ -3,13 +3,18 @@
 -- =============================================================
 
 -- 1. Create account_status enum type
-CREATE TYPE public.account_status AS ENUM (
-  'PENDING_VERIFICATION',
-  'ACTIVE',
-  'SUSPENDED',
-  'DEACTIVATED',
-  'LOCKED'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_status') THEN
+    CREATE TYPE public.account_status AS ENUM (
+      'PENDING_VERIFICATION',
+      'ACTIVE',
+      'SUSPENDED',
+      'DEACTIVATED',
+      'LOCKED'
+    );
+  END IF;
+END$$;
 
 -- 2. Alter profiles to support Phase 1 fields
 ALTER TABLE public.profiles 
@@ -34,7 +39,7 @@ ALTER TABLE public.profiles
   ADD CONSTRAINT profiles_language_length CHECK (char_length(preferred_language) <= 10);
 
 -- 3. Create permissions table
-CREATE TABLE public.permissions (
+CREATE TABLE IF NOT EXISTS public.permissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT UNIQUE NOT NULL,
   description TEXT,
@@ -51,7 +56,7 @@ CREATE POLICY "permissions_select_authenticated"
   USING (true);
 
 -- 4. Create role_permissions table
-CREATE TABLE public.role_permissions (
+CREATE TABLE IF NOT EXISTS public.role_permissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   role public.app_role NOT NULL,
   permission_name TEXT NOT NULL REFERENCES public.permissions(name) ON DELETE CASCADE,
@@ -68,7 +73,7 @@ CREATE POLICY "role_permissions_select_authenticated"
   USING (true);
 
 -- 5. Create verification_tokens table (for email verification)
-CREATE TABLE public.verification_tokens (
+CREATE TABLE IF NOT EXISTS public.verification_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   token_hash TEXT NOT NULL,
@@ -88,7 +93,7 @@ CREATE POLICY "verification_tokens_select_admin"
   USING (public.is_platform_admin(auth.uid()));
 
 -- 6. Create password_reset_tokens table
-CREATE TABLE public.password_reset_tokens (
+CREATE TABLE IF NOT EXISTS public.password_reset_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   token_hash TEXT NOT NULL,
@@ -108,7 +113,7 @@ CREATE POLICY "password_reset_tokens_select_admin"
   USING (public.is_platform_admin(auth.uid()));
 
 -- 7. Create sessions table
-CREATE TABLE public.sessions (
+CREATE TABLE IF NOT EXISTS public.sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   session_token_hash TEXT NOT NULL UNIQUE,
@@ -228,7 +233,7 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER on_auth_user_updated
+CREATE OR REPLACE TRIGGER on_auth_user_updated
   AFTER UPDATE ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_user_update();
 

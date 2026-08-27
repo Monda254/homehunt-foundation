@@ -3,92 +3,115 @@
 -- =============================================================
 
 -- 1. Create enum types
-CREATE TYPE public.property_status AS ENUM (
-  'DRAFT',
-  'ACTIVE',
-  'INACTIVE',
-  'ARCHIVED'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'property_status') THEN
+    CREATE TYPE public.property_status AS ENUM (
+      'DRAFT',
+      'ACTIVE',
+      'INACTIVE',
+      'ARCHIVED'
+    );
+  END IF;
 
-CREATE TYPE public.property_type AS ENUM (
-  'APARTMENT',
-  'HOUSE',
-  'BEDSITTER',
-  'STUDIO',
-  'MAISONETTE',
-  'TOWNHOUSE',
-  'VILLA',
-  'BUNGALOW',
-  'ROOM',
-  'SHARED_ACCOMMODATION',
-  'OTHER'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'property_type') THEN
+    CREATE TYPE public.property_type AS ENUM (
+      'APARTMENT',
+      'HOUSE',
+      'BEDSITTER',
+      'STUDIO',
+      'MAISONETTE',
+      'TOWNHOUSE',
+      'VILLA',
+      'BUNGALOW',
+      'ROOM',
+      'SHARED_ACCOMMODATION',
+      'OTHER'
+    );
+  END IF;
 
-CREATE TYPE public.unit_status AS ENUM (
-  'DRAFT',
-  'AVAILABLE',
-  'RESERVED',
-  'OCCUPIED',
-  'MAINTENANCE',
-  'UNAVAILABLE',
-  'ARCHIVED'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'unit_status') THEN
+    CREATE TYPE public.unit_status AS ENUM (
+      'DRAFT',
+      'AVAILABLE',
+      'RESERVED',
+      'OCCUPIED',
+      'MAINTENANCE',
+      'UNAVAILABLE',
+      'ARCHIVED'
+    );
+  END IF;
 
-CREATE TYPE public.unit_type AS ENUM (
-  'BEDSITTER',
-  'STUDIO',
-  'ONE_BEDROOM',
-  'TWO_BEDROOM',
-  'THREE_BEDROOM',
-  'FOUR_PLUS_BEDROOM',
-  'ROOM',
-  'SHARED',
-  'HOUSE',
-  'OTHER'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'unit_type') THEN
+    CREATE TYPE public.unit_type AS ENUM (
+      'BEDSITTER',
+      'STUDIO',
+      'ONE_BEDROOM',
+      'TWO_BEDROOM',
+      'THREE_BEDROOM',
+      'FOUR_PLUS_BEDROOM',
+      'ROOM',
+      'SHARED',
+      'HOUSE',
+      'OTHER'
+    );
+  END IF;
 
-CREATE TYPE public.listing_status AS ENUM (
-  'DRAFT',
-  'PENDING_REVIEW',
-  'PUBLISHED',
-  'PAUSED',
-  'EXPIRED',
-  'ARCHIVED'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'listing_status') THEN
+    CREATE TYPE public.listing_status AS ENUM (
+      'DRAFT',
+      'PENDING_REVIEW',
+      'PUBLISHED',
+      'PAUSED',
+      'EXPIRED',
+      'ARCHIVED'
+    );
+  END IF;
 
-CREATE TYPE public.listing_type AS ENUM (
-  'FOR_RENT',
-  'FOR_SALE'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'listing_type') THEN
+    CREATE TYPE public.listing_type AS ENUM (
+      'FOR_RENT',
+      'FOR_SALE'
+    );
+  END IF;
 
-CREATE TYPE public.billing_period AS ENUM (
-  'MONTHLY',
-  'WEEKLY',
-  'DAILY',
-  'YEARLY'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'billing_period') THEN
+    CREATE TYPE public.billing_period AS ENUM (
+      'MONTHLY',
+      'WEEKLY',
+      'DAILY',
+      'YEARLY'
+    );
+  END IF;
 
-CREATE TYPE public.relationship_type AS ENUM (
-  'OWNER',
-  'AGENT',
-  'PROPERTY_MANAGER'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'relationship_type') THEN
+    CREATE TYPE public.relationship_type AS ENUM (
+      'OWNER',
+      'AGENT',
+      'PROPERTY_MANAGER'
+    );
+  END IF;
 
-CREATE TYPE public.relationship_status AS ENUM (
-  'ACTIVE',
-  'PENDING',
-  'REVOKED'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'relationship_status') THEN
+    CREATE TYPE public.relationship_status AS ENUM (
+      'ACTIVE',
+      'PENDING',
+      'REVOKED'
+    );
+  END IF;
 
-CREATE TYPE public.media_type AS ENUM (
-  'IMAGE',
-  'VIDEO',
-  'FLOOR_PLAN',
-  'DOCUMENT'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'media_type') THEN
+    CREATE TYPE public.media_type AS ENUM (
+      'IMAGE',
+      'VIDEO',
+      'FLOOR_PLAN',
+      'DOCUMENT'
+    );
+  END IF;
+END$$;
 
 -- 2. Create properties table
-CREATE TABLE public.properties (
+CREATE TABLE IF NOT EXISTS public.properties (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_type public.property_type NOT NULL,
   name TEXT NOT NULL,
@@ -125,7 +148,7 @@ CREATE INDEX properties_type_idx ON public.properties (property_type);
 CREATE INDEX properties_county_town_idx ON public.properties (county, town);
 
 -- 3. Create buildings table
-CREATE TABLE public.buildings (
+CREATE TABLE IF NOT EXISTS public.buildings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
@@ -141,7 +164,7 @@ CREATE TABLE public.buildings (
 CREATE INDEX buildings_property_idx ON public.buildings (property_id);
 
 -- 4. Create units table
-CREATE TABLE public.units (
+CREATE TABLE IF NOT EXISTS public.units (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   building_id UUID REFERENCES public.buildings(id) ON DELETE CASCADE,
@@ -172,7 +195,7 @@ CREATE INDEX units_building_idx ON public.units (building_id);
 CREATE INDEX units_status_idx ON public.units (status);
 
 -- 5. Create property_amenities table (normalized many-to-many)
-CREATE TABLE public.property_amenities (
+CREATE TABLE IF NOT EXISTS public.property_amenities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   amenity TEXT NOT NULL,
@@ -181,7 +204,7 @@ CREATE TABLE public.property_amenities (
 );
 
 -- 6. Create unit_amenities table
-CREATE TABLE public.unit_amenities (
+CREATE TABLE IF NOT EXISTS public.unit_amenities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   unit_id UUID NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
   amenity TEXT NOT NULL,
@@ -190,7 +213,7 @@ CREATE TABLE public.unit_amenities (
 );
 
 -- 7. Create property_parties table
-CREATE TABLE public.property_parties (
+CREATE TABLE IF NOT EXISTS public.property_parties (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -205,7 +228,7 @@ CREATE TABLE public.property_parties (
 CREATE INDEX property_parties_property_user_idx ON public.property_parties (property_id, user_id);
 
 -- 8. Create listings table
-CREATE TABLE public.listings (
+CREATE TABLE IF NOT EXISTS public.listings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   unit_id UUID REFERENCES public.units(id) ON DELETE CASCADE,
@@ -236,7 +259,7 @@ CREATE INDEX listings_price_idx ON public.listings (price);
 CREATE INDEX listings_availability_idx ON public.listings (availability_date);
 
 -- 9. Create property_media table
-CREATE TABLE public.property_media (
+CREATE TABLE IF NOT EXISTS public.property_media (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID REFERENCES public.properties(id) ON DELETE CASCADE,
   unit_id UUID REFERENCES public.units(id) ON DELETE CASCADE,

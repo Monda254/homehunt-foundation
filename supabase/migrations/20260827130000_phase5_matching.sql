@@ -110,12 +110,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER set_user_preferences_updated_at
+CREATE OR REPLACE TRIGGER set_user_preferences_updated_at
   BEFORE UPDATE ON public.user_preferences
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_update_timestamp();
 
-CREATE TRIGGER set_saved_searches_updated_at
+CREATE OR REPLACE TRIGGER set_saved_searches_updated_at
   BEFORE UPDATE ON public.saved_searches
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_update_timestamp();

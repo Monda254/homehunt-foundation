@@ -35,7 +35,7 @@ BEGIN
 END$$;
 
 -- ---------- profiles ----------
-CREATE TABLE public.profiles (
+CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT,
   phone_number TEXT,
@@ -53,12 +53,12 @@ GRANT ALL ON public.profiles TO service_role;
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
-CREATE TRIGGER profiles_set_updated_at
+CREATE OR REPLACE TRIGGER profiles_set_updated_at
 BEFORE UPDATE ON public.profiles
 FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 -- ---------- user_roles ----------
-CREATE TABLE public.user_roles (
+CREATE TABLE IF NOT EXISTS public.user_roles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   role public.app_role NOT NULL,
@@ -135,7 +135,7 @@ ON public.user_roles FOR SELECT TO authenticated
 USING (user_id = auth.uid() OR public.is_platform_admin(auth.uid()));
 
 -- ---------- audit_logs ----------
-CREATE TABLE public.audit_logs (
+CREATE TABLE IF NOT EXISTS public.audit_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   actor_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   action TEXT NOT NULL,
@@ -188,6 +188,6 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER on_auth_user_created
+CREATE OR REPLACE TRIGGER on_auth_user_created
 AFTER INSERT ON auth.users
 FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
