@@ -35,7 +35,7 @@ BEGIN
 END$$;
 
 -- ---------- profiles ----------
-CREATE TABLE public.profiles (
+CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT,
   phone_number TEXT,
@@ -53,12 +53,12 @@ GRANT ALL ON public.profiles TO service_role;
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
-CREATE TRIGGER profiles_set_updated_at
+CREATE OR REPLACE TRIGGER profiles_set_updated_at
 BEFORE UPDATE ON public.profiles
 FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 -- ---------- user_roles ----------
-CREATE TABLE public.user_roles (
+CREATE TABLE IF NOT EXISTS public.user_roles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   role public.app_role NOT NULL,
@@ -135,7 +135,7 @@ ON public.user_roles FOR SELECT TO authenticated
 USING (user_id = auth.uid() OR public.is_platform_admin(auth.uid()));
 
 -- ---------- audit_logs ----------
-CREATE TABLE public.audit_logs (
+CREATE TABLE IF NOT EXISTS public.audit_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   actor_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   action TEXT NOT NULL,
@@ -188,7 +188,7 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER on_auth_user_created
+CREATE OR REPLACE TRIGGER on_auth_user_created
 AFTER INSERT ON auth.users
 FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();-- Trigger-only functions must not be callable through the API at all.
 REVOKE ALL ON FUNCTION public.set_updated_at() FROM PUBLIC, anon, authenticated;
@@ -242,7 +242,7 @@ ALTER TABLE public.profiles
   ADD CONSTRAINT profiles_language_length CHECK (char_length(preferred_language) <= 10);
 
 -- 3. Create permissions table
-CREATE TABLE public.permissions (
+CREATE TABLE IF NOT EXISTS public.permissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT UNIQUE NOT NULL,
   description TEXT,
@@ -259,7 +259,7 @@ CREATE POLICY "permissions_select_authenticated"
   USING (true);
 
 -- 4. Create role_permissions table
-CREATE TABLE public.role_permissions (
+CREATE TABLE IF NOT EXISTS public.role_permissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   role public.app_role NOT NULL,
   permission_name TEXT NOT NULL REFERENCES public.permissions(name) ON DELETE CASCADE,
@@ -276,7 +276,7 @@ CREATE POLICY "role_permissions_select_authenticated"
   USING (true);
 
 -- 5. Create verification_tokens table (for email verification)
-CREATE TABLE public.verification_tokens (
+CREATE TABLE IF NOT EXISTS public.verification_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   token_hash TEXT NOT NULL,
@@ -296,7 +296,7 @@ CREATE POLICY "verification_tokens_select_admin"
   USING (public.is_platform_admin(auth.uid()));
 
 -- 6. Create password_reset_tokens table
-CREATE TABLE public.password_reset_tokens (
+CREATE TABLE IF NOT EXISTS public.password_reset_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   token_hash TEXT NOT NULL,
@@ -316,7 +316,7 @@ CREATE POLICY "password_reset_tokens_select_admin"
   USING (public.is_platform_admin(auth.uid()));
 
 -- 7. Create sessions table
-CREATE TABLE public.sessions (
+CREATE TABLE IF NOT EXISTS public.sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   session_token_hash TEXT NOT NULL UNIQUE,
@@ -436,7 +436,7 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER on_auth_user_updated
+CREATE OR REPLACE TRIGGER on_auth_user_updated
   AFTER UPDATE ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_user_update();
 
@@ -690,7 +690,7 @@ BEGIN
 END$$;
 
 -- 2. Create properties table
-CREATE TABLE public.properties (
+CREATE TABLE IF NOT EXISTS public.properties (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_type public.property_type NOT NULL,
   name TEXT NOT NULL,
@@ -727,7 +727,7 @@ CREATE INDEX properties_type_idx ON public.properties (property_type);
 CREATE INDEX properties_county_town_idx ON public.properties (county, town);
 
 -- 3. Create buildings table
-CREATE TABLE public.buildings (
+CREATE TABLE IF NOT EXISTS public.buildings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
@@ -743,7 +743,7 @@ CREATE TABLE public.buildings (
 CREATE INDEX buildings_property_idx ON public.buildings (property_id);
 
 -- 4. Create units table
-CREATE TABLE public.units (
+CREATE TABLE IF NOT EXISTS public.units (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   building_id UUID REFERENCES public.buildings(id) ON DELETE CASCADE,
@@ -774,7 +774,7 @@ CREATE INDEX units_building_idx ON public.units (building_id);
 CREATE INDEX units_status_idx ON public.units (status);
 
 -- 5. Create property_amenities table (normalized many-to-many)
-CREATE TABLE public.property_amenities (
+CREATE TABLE IF NOT EXISTS public.property_amenities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   amenity TEXT NOT NULL,
@@ -783,7 +783,7 @@ CREATE TABLE public.property_amenities (
 );
 
 -- 6. Create unit_amenities table
-CREATE TABLE public.unit_amenities (
+CREATE TABLE IF NOT EXISTS public.unit_amenities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   unit_id UUID NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
   amenity TEXT NOT NULL,
@@ -792,7 +792,7 @@ CREATE TABLE public.unit_amenities (
 );
 
 -- 7. Create property_parties table
-CREATE TABLE public.property_parties (
+CREATE TABLE IF NOT EXISTS public.property_parties (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -807,7 +807,7 @@ CREATE TABLE public.property_parties (
 CREATE INDEX property_parties_property_user_idx ON public.property_parties (property_id, user_id);
 
 -- 8. Create listings table
-CREATE TABLE public.listings (
+CREATE TABLE IF NOT EXISTS public.listings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.properties(id) ON DELETE CASCADE,
   unit_id UUID REFERENCES public.units(id) ON DELETE CASCADE,
@@ -838,7 +838,7 @@ CREATE INDEX listings_price_idx ON public.listings (price);
 CREATE INDEX listings_availability_idx ON public.listings (availability_date);
 
 -- 9. Create property_media table
-CREATE TABLE public.property_media (
+CREATE TABLE IF NOT EXISTS public.property_media (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID REFERENCES public.properties(id) ON DELETE CASCADE,
   unit_id UUID REFERENCES public.units(id) ON DELETE CASCADE,
@@ -1832,12 +1832,12 @@ CREATE POLICY "Users can update their own history" ON public.recommendation_hist
   FOR UPDATE USING (auth.uid() = user_id);
 
 -- Triggers
-CREATE TRIGGER set_user_preferences_updated_at
+CREATE OR REPLACE TRIGGER set_user_preferences_updated_at
   BEFORE UPDATE ON public.user_preferences
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_update_timestamp();
 
-CREATE TRIGGER set_saved_searches_updated_at
+CREATE OR REPLACE TRIGGER set_saved_searches_updated_at
   BEFORE UPDATE ON public.saved_searches
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_update_timestamp();
