@@ -19,15 +19,20 @@ END;
 $$;
 
 -- ---------- roles ----------
-CREATE TYPE public.app_role AS ENUM (
-  'tenant',
-  'landlord',
-  'agent',
-  'property_manager',
-  'verifier',
-  'admin',
-  'super_admin'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'app_role') THEN
+    CREATE TYPE public.app_role AS ENUM (
+      'tenant',
+      'landlord',
+      'agent',
+      'property_manager',
+      'verifier',
+      'admin',
+      'super_admin'
+    );
+  END IF;
+END$$;
 
 -- ---------- profiles ----------
 CREATE TABLE public.profiles (
@@ -201,13 +206,18 @@ GRANT EXECUTE ON FUNCTION public.current_user_roles() TO authenticated, service_
 -- =============================================================
 
 -- 1. Create account_status enum type
-CREATE TYPE public.account_status AS ENUM (
-  'PENDING_VERIFICATION',
-  'ACTIVE',
-  'SUSPENDED',
-  'DEACTIVATED',
-  'LOCKED'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_status') THEN
+    CREATE TYPE public.account_status AS ENUM (
+      'PENDING_VERIFICATION',
+      'ACTIVE',
+      'SUSPENDED',
+      'DEACTIVATED',
+      'LOCKED'
+    );
+  END IF;
+END$$;
 
 -- 2. Alter profiles to support Phase 1 fields
 ALTER TABLE public.profiles 
@@ -572,89 +582,112 @@ ON CONFLICT (role, permission_name) DO NOTHING;
 -- =============================================================
 
 -- 1. Create enum types
-CREATE TYPE public.property_status AS ENUM (
-  'DRAFT',
-  'ACTIVE',
-  'INACTIVE',
-  'ARCHIVED'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'property_status') THEN
+    CREATE TYPE public.property_status AS ENUM (
+      'DRAFT',
+      'ACTIVE',
+      'INACTIVE',
+      'ARCHIVED'
+    );
+  END IF;
 
-CREATE TYPE public.property_type AS ENUM (
-  'APARTMENT',
-  'HOUSE',
-  'BEDSITTER',
-  'STUDIO',
-  'MAISONETTE',
-  'TOWNHOUSE',
-  'VILLA',
-  'BUNGALOW',
-  'ROOM',
-  'SHARED_ACCOMMODATION',
-  'OTHER'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'property_type') THEN
+    CREATE TYPE public.property_type AS ENUM (
+      'APARTMENT',
+      'HOUSE',
+      'BEDSITTER',
+      'STUDIO',
+      'MAISONETTE',
+      'TOWNHOUSE',
+      'VILLA',
+      'BUNGALOW',
+      'ROOM',
+      'SHARED_ACCOMMODATION',
+      'OTHER'
+    );
+  END IF;
 
-CREATE TYPE public.unit_status AS ENUM (
-  'DRAFT',
-  'AVAILABLE',
-  'RESERVED',
-  'OCCUPIED',
-  'MAINTENANCE',
-  'UNAVAILABLE',
-  'ARCHIVED'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'unit_status') THEN
+    CREATE TYPE public.unit_status AS ENUM (
+      'DRAFT',
+      'AVAILABLE',
+      'RESERVED',
+      'OCCUPIED',
+      'MAINTENANCE',
+      'UNAVAILABLE',
+      'ARCHIVED'
+    );
+  END IF;
 
-CREATE TYPE public.unit_type AS ENUM (
-  'BEDSITTER',
-  'STUDIO',
-  'ONE_BEDROOM',
-  'TWO_BEDROOM',
-  'THREE_BEDROOM',
-  'FOUR_PLUS_BEDROOM',
-  'ROOM',
-  'SHARED',
-  'HOUSE',
-  'OTHER'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'unit_type') THEN
+    CREATE TYPE public.unit_type AS ENUM (
+      'BEDSITTER',
+      'STUDIO',
+      'ONE_BEDROOM',
+      'TWO_BEDROOM',
+      'THREE_BEDROOM',
+      'FOUR_PLUS_BEDROOM',
+      'ROOM',
+      'SHARED',
+      'HOUSE',
+      'OTHER'
+    );
+  END IF;
 
-CREATE TYPE public.listing_status AS ENUM (
-  'DRAFT',
-  'PENDING_REVIEW',
-  'PUBLISHED',
-  'PAUSED',
-  'EXPIRED',
-  'ARCHIVED'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'listing_status') THEN
+    CREATE TYPE public.listing_status AS ENUM (
+      'DRAFT',
+      'PENDING_REVIEW',
+      'PUBLISHED',
+      'PAUSED',
+      'EXPIRED',
+      'ARCHIVED'
+    );
+  END IF;
 
-CREATE TYPE public.listing_type AS ENUM (
-  'FOR_RENT',
-  'FOR_SALE'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'listing_type') THEN
+    CREATE TYPE public.listing_type AS ENUM (
+      'FOR_RENT',
+      'FOR_SALE'
+    );
+  END IF;
 
-CREATE TYPE public.billing_period AS ENUM (
-  'MONTHLY',
-  'WEEKLY',
-  'DAILY',
-  'YEARLY'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'billing_period') THEN
+    CREATE TYPE public.billing_period AS ENUM (
+      'MONTHLY',
+      'WEEKLY',
+      'DAILY',
+      'YEARLY'
+    );
+  END IF;
 
-CREATE TYPE public.relationship_type AS ENUM (
-  'OWNER',
-  'AGENT',
-  'PROPERTY_MANAGER'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'relationship_type') THEN
+    CREATE TYPE public.relationship_type AS ENUM (
+      'OWNER',
+      'AGENT',
+      'PROPERTY_MANAGER'
+    );
+  END IF;
 
-CREATE TYPE public.relationship_status AS ENUM (
-  'ACTIVE',
-  'PENDING',
-  'REVOKED'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'relationship_status') THEN
+    CREATE TYPE public.relationship_status AS ENUM (
+      'ACTIVE',
+      'PENDING',
+      'REVOKED'
+    );
+  END IF;
 
-CREATE TYPE public.media_type AS ENUM (
-  'IMAGE',
-  'VIDEO',
-  'FLOOR_PLAN',
-  'DOCUMENT'
-);
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'media_type') THEN
+    CREATE TYPE public.media_type AS ENUM (
+      'IMAGE',
+      'VIDEO',
+      'FLOOR_PLAN',
+      'DOCUMENT'
+    );
+  END IF;
+END$$;
 
 -- 2. Create properties table
 CREATE TABLE public.properties (
