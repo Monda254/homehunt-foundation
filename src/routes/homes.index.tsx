@@ -703,7 +703,9 @@ function HomesDiscoveryPage() {
                     <input
                       type="checkbox"
                       checked={searchParams.verifiedOnly || false}
-                      onChange={(e) => updateFilters({ verifiedOnly: e.target.checked || undefined })}
+                      onChange={(e) =>
+                        updateFilters({ verifiedOnly: e.target.checked || undefined })
+                      }
                       className="h-4 w-4 rounded border-border text-primary focus:ring-primary focus:ring-2"
                     />
                     <span>Verified Properties Only</span>

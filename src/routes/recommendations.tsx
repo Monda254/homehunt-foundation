@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -50,7 +51,9 @@ function RecommendationsPage() {
   const [preferredLocations, setPreferredLocations] = useState<any[]>([]);
 
   const [amenityInput, setAmenityInput] = useState("");
-  const [amenityPriority, setAmenityPriority] = useState<"MUST_HAVE" | "PREFERRED" | "OPTIONAL">("PREFERRED");
+  const [amenityPriority, setAmenityPriority] = useState<"MUST_HAVE" | "PREFERRED" | "OPTIONAL">(
+    "PREFERRED",
+  );
   const [preferredAmenities, setPreferredAmenities] = useState<any[]>([]);
 
   // Priority Weights
@@ -87,9 +90,9 @@ function RecommendationsPage() {
       setMaxBudget(prefs.maxBudget || 45000);
       setPropertyTypes(prefs.propertyTypes || ["APARTMENT"]);
       setBedrooms(prefs.bedrooms || 2);
-      setBedroomsRule(prefs.bedroomsRule as any || "MIN");
+      setBedroomsRule((prefs.bedroomsRule as any) || "MIN");
       setBathrooms(prefs.bathrooms || 1);
-      setBathroomsRule(prefs.bathroomsRule as any || "MIN");
+      setBathroomsRule((prefs.bathroomsRule as any) || "MIN");
       setPreferredLocations(prefs.preferredLocations || []);
       setPreferredAmenities(prefs.amenities || []);
 
@@ -104,8 +107,7 @@ function RecommendationsPage() {
 
       // Check if preferences are completely unconfigured to prompt onboarding
       const hasConfig =
-        !!prefs.maxBudget ||
-        (prefs.preferredLocations && prefs.preferredLocations.length > 0);
+        !!prefs.maxBudget || (prefs.preferredLocations && prefs.preferredLocations.length > 0);
       if (!hasConfig && onboardingStep === null) {
         setOnboardingStep(1);
       }
@@ -130,7 +132,10 @@ function RecommendationsPage() {
   });
 
   const feedbackMutation = useMutation({
-    mutationFn: (feedback: { listingId: string; type: "LIKE" | "SAVE" | "DISLIKE" | "HIDE" | "NOT_RELEVANT" }) =>
+    mutationFn: (feedback: {
+      listingId: string;
+      type: "LIKE" | "SAVE" | "DISLIKE" | "HIDE" | "NOT_RELEVANT";
+    }) =>
       submitRecommendationFeedback({
         listingId: feedback.listingId,
         feedbackType: feedback.type,
@@ -243,7 +248,9 @@ function RecommendationsPage() {
         <div className="flex h-[60vh] items-center justify-center">
           <div className="text-center space-y-3">
             <Loader2 className="h-8 w-8 text-primary animate-spin mx-auto" />
-            <p className="text-xs text-muted-foreground font-semibold">Generating housing matches...</p>
+            <p className="text-xs text-muted-foreground font-semibold">
+              Generating housing matches...
+            </p>
           </div>
         </div>
       </DashboardLayout>
@@ -268,11 +275,17 @@ function RecommendationsPage() {
 
           {onboardingStep === 1 && (
             <div className="space-y-4">
-              <h2 className="font-display font-bold text-lg text-foreground">Where do you want to live?</h2>
-              <p className="text-xs text-muted-foreground">Select preferred county and town in Kenya:</p>
+              <h2 className="font-display font-bold text-lg text-foreground">
+                Where do you want to live?
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Select preferred county and town in Kenya:
+              </p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">County</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">
+                    County
+                  </label>
                   <select
                     value={countyInput}
                     onChange={(e) => setCountyInput(e.target.value)}
@@ -286,7 +299,9 @@ function RecommendationsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">Town (Optional)</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">
+                    Town (Optional)
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g. Kilimani, Nyeri Town"
@@ -311,10 +326,14 @@ function RecommendationsPage() {
 
           {onboardingStep === 2 && (
             <div className="space-y-4">
-              <h2 className="font-display font-bold text-lg text-foreground">What is your monthly budget?</h2>
+              <h2 className="font-display font-bold text-lg text-foreground">
+                What is your monthly budget?
+              </h2>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">Target Budget (KES)</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">
+                    Target Budget (KES)
+                  </label>
                   <input
                     type="number"
                     value={prefBudget}
@@ -323,7 +342,9 @@ function RecommendationsPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">Absolute Ceiling (KES)</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">
+                    Absolute Ceiling (KES)
+                  </label>
                   <input
                     type="number"
                     value={maxBudget}
@@ -353,10 +374,14 @@ function RecommendationsPage() {
 
           {onboardingStep === 3 && (
             <div className="space-y-4">
-              <h2 className="font-display font-bold text-lg text-foreground">Rooms & Property Type</h2>
+              <h2 className="font-display font-bold text-lg text-foreground">
+                Rooms & Property Type
+              </h2>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">Preferred Bedrooms</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">
+                    Preferred Bedrooms
+                  </label>
                   <input
                     type="number"
                     value={bedrooms}
@@ -365,7 +390,9 @@ function RecommendationsPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">Property Type</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block mb-1">
+                    Property Type
+                  </label>
                   <div className="flex gap-1.5 flex-wrap">
                     {["APARTMENT", "HOUSE", "STUDIO", "BEDSITTER"].map((t) => (
                       <button
@@ -405,7 +432,9 @@ function RecommendationsPage() {
 
           {onboardingStep === 4 && (
             <div className="space-y-4">
-              <h2 className="font-display font-bold text-lg text-foreground">Select priority preferences</h2>
+              <h2 className="font-display font-bold text-lg text-foreground">
+                Select priority preferences
+              </h2>
               <div className="space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-muted-foreground">Budget Priority</span>
@@ -459,7 +488,9 @@ function RecommendationsPage() {
 
   // Group recommendations by categories
   const items = recommendations?.items || [];
-  const bestMatches = items.filter((x: any) => x.category === "BEST_MATCH" || x.category === "STRONG_MATCH");
+  const bestMatches = items.filter(
+    (x: any) => x.category === "BEST_MATCH" || x.category === "STRONG_MATCH",
+  );
   const goodMatches = items.filter((x: any) => x.category === "GOOD_MATCH");
   const closeMatches = items.filter((x: any) => x.category === "CLOSE_MATCH");
 
@@ -762,14 +793,19 @@ function RecommendationsPage() {
                   key={item.listing.id}
                   item={item}
                   onInspect={() => setExplainedMatch(item)}
-                  onSave={() => feedbackMutation.mutate({ listingId: item.listing.id, type: "SAVE" })}
-                  onHide={() => feedbackMutation.mutate({ listingId: item.listing.id, type: "HIDE" })}
+                  onSave={() =>
+                    feedbackMutation.mutate({ listingId: item.listing.id, type: "SAVE" })
+                  }
+                  onHide={() =>
+                    feedbackMutation.mutate({ listingId: item.listing.id, type: "HIDE" })
+                  }
                 />
               ))}
             </div>
           ) : (
             <div className="p-8 bg-secondary/15 border border-dashed rounded-2xl text-center text-muted-foreground/60 text-xs">
-              No strong housing matches found within your current constraints. Try adjusting your preferences.
+              No strong housing matches found within your current constraints. Try adjusting your
+              preferences.
             </div>
           )}
         </section>
@@ -788,8 +824,12 @@ function RecommendationsPage() {
                   key={item.listing.id}
                   item={item}
                   onInspect={() => setExplainedMatch(item)}
-                  onSave={() => feedbackMutation.mutate({ listingId: item.listing.id, type: "SAVE" })}
-                  onHide={() => feedbackMutation.mutate({ listingId: item.listing.id, type: "HIDE" })}
+                  onSave={() =>
+                    feedbackMutation.mutate({ listingId: item.listing.id, type: "SAVE" })
+                  }
+                  onHide={() =>
+                    feedbackMutation.mutate({ listingId: item.listing.id, type: "HIDE" })
+                  }
                 />
               ))}
             </div>
@@ -806,7 +846,8 @@ function RecommendationsPage() {
               <h2 className="font-display font-bold text-lg text-foreground">Close Matches</h2>
             </div>
             <p className="text-[10px] text-muted-foreground leading-relaxed -mt-3">
-              Listings that slightly exceed budget limits or lack non-critical parameters but are nearby:
+              Listings that slightly exceed budget limits or lack non-critical parameters but are
+              nearby:
             </p>
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
               {closeMatches.map((item: any) => (
@@ -814,8 +855,12 @@ function RecommendationsPage() {
                   key={item.listing.id}
                   item={item}
                   onInspect={() => setExplainedMatch(item)}
-                  onSave={() => feedbackMutation.mutate({ listingId: item.listing.id, type: "SAVE" })}
-                  onHide={() => feedbackMutation.mutate({ listingId: item.listing.id, type: "HIDE" })}
+                  onSave={() =>
+                    feedbackMutation.mutate({ listingId: item.listing.id, type: "SAVE" })
+                  }
+                  onHide={() =>
+                    feedbackMutation.mutate({ listingId: item.listing.id, type: "HIDE" })
+                  }
                 />
               ))}
             </div>
@@ -828,7 +873,8 @@ function RecommendationsPage() {
             <ShieldAlert className="h-10 w-10 text-muted-foreground mx-auto" />
             <h3 className="font-display font-bold text-sm text-foreground">No matches found</h3>
             <p className="text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-              We couldn't locate listings matching your filters. Try relaxing your budget limits, lowering room constraints, or selecting adjacent locations.
+              We couldn't locate listings matching your filters. Try relaxing your budget limits,
+              lowering room constraints, or selecting adjacent locations.
             </p>
           </div>
         )}
@@ -878,7 +924,8 @@ function RecommendationsPage() {
             </div>
 
             <div className="p-3 bg-secondary/35 border rounded-xl text-[10px] text-muted-foreground leading-normal">
-              <strong>Matching Disclaimer:</strong> Scores are suggestions based on metadata. Renters should inspect properties and confirm caretaker status physically.
+              <strong>Matching Disclaimer:</strong> Scores are suggestions based on metadata.
+              Renters should inspect properties and confirm caretaker status physically.
             </div>
           </div>
         </div>
@@ -906,7 +953,11 @@ function MatchCard({ item, onInspect, onSave, onHide }: MatchCardProps) {
       {/* Listing Photo */}
       <div className="aspect-[16/10] bg-secondary/30 relative overflow-hidden">
         {listing.primaryImageUrl ? (
-          <img src={listing.primaryImageUrl} alt={listing.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+          <img
+            src={listing.primaryImageUrl}
+            alt={listing.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground/35">
             <Home className="h-10 w-10" />

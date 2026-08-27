@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
@@ -84,9 +85,7 @@ const fnSubmitVerificationRequest = createServerFn({ method: "POST" })
       submitted_by: userId,
     }));
 
-    const { error: evErr } = await supabaseAdmin
-      .from("verification_evidence")
-      .insert(evidenceRows);
+    const { error: evErr } = await supabaseAdmin.from("verification_evidence").insert(evidenceRows);
 
     if (evErr) {
       // Cleanup to prevent orphaned verification record
@@ -422,7 +421,10 @@ const fnSubmitPropertyClaim = createServerFn({ method: "POST" })
     if (verErr || !ver) {
       // Rollback claim record
       await supabaseAdmin.from("property_claims").delete().eq("id", claim.id);
-      throw new AppError(ERROR_CODES.BAD_REQUEST, "Failed to create ownership verification request.");
+      throw new AppError(
+        ERROR_CODES.BAD_REQUEST,
+        "Failed to create ownership verification request.",
+      );
     }
 
     // Insert evidence documents
@@ -534,7 +536,10 @@ const fnResolvePropertyClaim = createServerFn({ method: "POST" })
           reviewed_at: now,
           reviewed_by: userId,
           rejection_reason: data.rejectionReason || null,
-          expires_at: data.action === "APPROVE" ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() : null,
+          expires_at:
+            data.action === "APPROVE"
+              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+              : null,
           updated_at: now,
         })
         .eq("id", ver.id);
@@ -555,14 +560,18 @@ const fnResolvePropertyClaim = createServerFn({ method: "POST" })
 
     // If approved, add user to property_parties as OWNER (active) or update existing relationship
     if (data.action === "APPROVE") {
-      await supabaseAdmin.from("property_parties").insert({
-        property_id: claim.property_id,
-        user_id: claim.user_id,
-        relationship_type: "OWNER",
-        status: "ACTIVE",
-      }).onConflict("(property_id, user_id, relationship_type)").doUpdate({
-        set: { status: "ACTIVE", updated_at: now }
-      });
+      await supabaseAdmin
+        .from("property_parties")
+        .insert({
+          property_id: claim.property_id,
+          user_id: claim.user_id,
+          relationship_type: "OWNER",
+          status: "ACTIVE",
+        })
+        .onConflict("(property_id, user_id, relationship_type)")
+        .doUpdate({
+          set: { status: "ACTIVE", updated_at: now },
+        });
     }
 
     await recordAuditEvent({
@@ -621,7 +630,10 @@ const fnReportListing = createServerFn({ method: "POST" })
       .single();
 
     if (error || !report) {
-      throw new AppError(ERROR_CODES.BAD_REQUEST, error?.message || "Failed to submit listing report.");
+      throw new AppError(
+        ERROR_CODES.BAD_REQUEST,
+        error?.message || "Failed to submit listing report.",
+      );
     }
 
     // Automated Risk Detection:
@@ -700,7 +712,12 @@ const fnResolveListingReport = createServerFn({ method: "POST" })
     }
 
     const now = new Date().toISOString();
-    const reportStatus = data.action === "RESOLVE" ? "RESOLVED" : data.action === "ESCALATE" ? "ESCALATED" : "DISMISSED";
+    const reportStatus =
+      data.action === "RESOLVE"
+        ? "RESOLVED"
+        : data.action === "ESCALATE"
+          ? "ESCALATED"
+          : "DISMISSED";
 
     await supabaseAdmin
       .from("listing_reports")
@@ -914,11 +931,20 @@ const fnResolveModerationAppeal = createServerFn({ method: "POST" })
 
         if (ver) {
           if (ver.subject_type === "USER") {
-            await supabaseAdmin.from("profiles").update({ identity_verified: true }).eq("id", ver.subject_id);
+            await supabaseAdmin
+              .from("profiles")
+              .update({ identity_verified: true })
+              .eq("id", ver.subject_id);
           } else if (ver.subject_type === "PROPERTY") {
-            await supabaseAdmin.from("properties").update({ verification_status: "VERIFIED" }).eq("id", ver.subject_id);
+            await supabaseAdmin
+              .from("properties")
+              .update({ verification_status: "VERIFIED" })
+              .eq("id", ver.subject_id);
           } else if (ver.subject_type === "LISTING") {
-            await supabaseAdmin.from("listings").update({ verification_status: "VERIFIED" }).eq("id", ver.subject_id);
+            await supabaseAdmin
+              .from("listings")
+              .update({ verification_status: "VERIFIED" })
+              .eq("id", ver.subject_id);
           }
         }
       } else if (appeal.target_type === "LISTING_SUSPENSION") {
@@ -1055,8 +1081,7 @@ const fnGetSecureEvidenceUrl = createServerFn({ method: "POST" })
     // Ensure authorized reviewer or the owner of the document
     const folderOwner = storageReference.split("/")[0];
     const isOwner = folderOwner === userId;
-    const isReviewer =
-      public_is_reviewer(roles) || isPlatformAdmin(roles);
+    const isReviewer = public_is_reviewer(roles) || isPlatformAdmin(roles);
 
     if (!isOwner && !isReviewer) {
       throw new AppError(

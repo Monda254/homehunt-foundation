@@ -51,12 +51,7 @@ export type RiskStatus = (typeof RISK_STATUSES)[number];
 export const CLAIM_STATUSES = ["PENDING", "APPROVED", "REJECTED", "WITHDRAWN"] as const;
 export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
 
-export const APPEAL_STATUSES = [
-  "APPEAL_SUBMITTED",
-  "UNDER_REVIEW",
-  "UPHELD",
-  "REVERSED",
-] as const;
+export const APPEAL_STATUSES = ["APPEAL_SUBMITTED", "UNDER_REVIEW", "UPHELD", "REVERSED"] as const;
 export type AppealStatus = (typeof APPEAL_STATUSES)[number];
 
 // Zod Validation Schemas

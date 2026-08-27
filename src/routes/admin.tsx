@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -250,7 +251,11 @@ function AdminComponent() {
 
   // Listing report resolve
   const resolveReportMutation = useMutation({
-    mutationFn: (variables: { id: string; action: "RESOLVE" | "DISMISS" | "ESCALATE"; resolution?: string }) =>
+    mutationFn: (variables: {
+      id: string;
+      action: "RESOLVE" | "DISMISS" | "ESCALATE";
+      resolution?: string;
+    }) =>
       resolveListingReport({
         id: variables.id,
         action: variables.action,
@@ -338,10 +343,13 @@ function AdminComponent() {
   };
 
   // Calculated factual metrics (dashboard dashboard metrics)
-  const pendingVerificationsCount = (verifications as any)?.filter?.((v: any) => v.status === "PENDING")?.length || 0;
-  const pendingClaimsCount = (claims as any)?.filter?.((c: any) => c.status === "PENDING")?.length || 0;
+  const pendingVerificationsCount =
+    (verifications as any)?.filter?.((v: any) => v.status === "PENDING")?.length || 0;
+  const pendingClaimsCount =
+    (claims as any)?.filter?.((c: any) => c.status === "PENDING")?.length || 0;
   const openReportsCount = (reports as any)?.filter?.((r: any) => r.status === "OPEN")?.length || 0;
-  const activeAppealsCount = (appeals as any)?.filter?.((a: any) => a.status === "APPEAL_SUBMITTED")?.length || 0;
+  const activeAppealsCount =
+    (appeals as any)?.filter?.((a: any) => a.status === "APPEAL_SUBMITTED")?.length || 0;
 
   return (
     <DashboardLayout>
@@ -349,9 +357,12 @@ function AdminComponent() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="font-display text-2xl font-bold text-foreground">Platform Administration</h1>
+            <h1 className="font-display text-2xl font-bold text-foreground">
+              Platform Administration
+            </h1>
             <p className="text-sm text-muted-foreground">
-              Monitor registered accounts, verification requests, property claims, reports, risk signals, and appeals.
+              Monitor registered accounts, verification requests, property claims, reports, risk
+              signals, and appeals.
             </p>
           </div>
           <button
@@ -793,13 +804,23 @@ function AdminComponent() {
                                 {item.status === "OPEN" && (
                                   <>
                                     <button
-                                      onClick={() => resolveRiskFlagMutation.mutate({ id: item.id, status: "RESOLVED" })}
+                                      onClick={() =>
+                                        resolveRiskFlagMutation.mutate({
+                                          id: item.id,
+                                          status: "RESOLVED",
+                                        })
+                                      }
                                       className="text-verified font-bold hover:underline text-xs cursor-pointer"
                                     >
                                       Resolve
                                     </button>
                                     <button
-                                      onClick={() => resolveRiskFlagMutation.mutate({ id: item.id, status: "DISMISSED" })}
+                                      onClick={() =>
+                                        resolveRiskFlagMutation.mutate({
+                                          id: item.id,
+                                          status: "DISMISSED",
+                                        })
+                                      }
                                       className="text-muted-foreground font-bold hover:underline text-xs cursor-pointer"
                                     >
                                       Dismiss
@@ -985,7 +1006,9 @@ function AdminComponent() {
           <div className="fixed inset-0 z-50 flex justify-end bg-background/50 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="w-full max-w-lg bg-card border-l border-border h-full flex flex-col p-6 overflow-y-auto animate-in slide-in-from-right duration-200">
               <div className="flex justify-between items-center pb-4 border-b border-border mb-6">
-                <h3 className="font-display font-bold text-lg text-foreground">User Detail Inspector</h3>
+                <h3 className="font-display font-bold text-lg text-foreground">
+                  User Detail Inspector
+                </h3>
                 <button
                   onClick={() => {
                     setSelectedUserId(null);
@@ -1018,11 +1041,15 @@ function AdminComponent() {
                   <div className="p-4 rounded-xl bg-secondary/30 border border-border space-y-2 text-xs">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Account Status</span>
-                      <span className="font-bold uppercase text-primary">{selectedUser.status}</span>
+                      <span className="font-bold uppercase text-primary">
+                        {selectedUser.status}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">User Phone</span>
-                      <span className="font-semibold text-foreground">{selectedUser.phoneNumber || "None"}</span>
+                      <span className="font-semibold text-foreground">
+                        {selectedUser.phoneNumber || "None"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Identity Verified</span>
@@ -1162,7 +1189,9 @@ function AdminComponent() {
                 <div className="grid grid-cols-2 gap-2 p-3 bg-secondary/20 rounded-xl">
                   <div>
                     <span className="text-muted-foreground font-semibold">Verification Type:</span>
-                    <p className="font-bold text-foreground">{selectedVerification.verification_type}</p>
+                    <p className="font-bold text-foreground">
+                      {selectedVerification.verification_type}
+                    </p>
                   </div>
                   <div>
                     <span className="text-muted-foreground font-semibold">Subject Type:</span>
@@ -1170,7 +1199,9 @@ function AdminComponent() {
                   </div>
                   <div className="col-span-2">
                     <span className="text-muted-foreground font-semibold">Subject ID:</span>
-                    <p className="font-mono text-[10px] break-all">{selectedVerification.subject_id}</p>
+                    <p className="font-mono text-[10px] break-all">
+                      {selectedVerification.subject_id}
+                    </p>
                   </div>
                 </div>
 
@@ -1205,7 +1236,8 @@ function AdminComponent() {
                 {/* Display signed private doc URL */}
                 {isSigning && (
                   <div className="flex gap-2 items-center text-primary font-bold text-[10px]">
-                    <Loader2 className="h-3 w-3 animate-spin" /> Retrieving secure temporary download link...
+                    <Loader2 className="h-3 w-3 animate-spin" /> Retrieving secure temporary
+                    download link...
                   </div>
                 )}
 
@@ -1218,7 +1250,8 @@ function AdminComponent() {
                       rel="noopener noreferrer"
                       className="text-primary hover:underline font-semibold break-all inline-flex items-center gap-1 text-[10px]"
                     >
-                      Click to inspect document (Valid for 15 mins) <ArrowUpRight className="h-3.5 w-3.5" />
+                      Click to inspect document (Valid for 15 mins){" "}
+                      <ArrowUpRight className="h-3.5 w-3.5" />
                     </a>
                   </div>
                 )}
@@ -1338,7 +1371,8 @@ function AdminComponent() {
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed text-[11px]">
-                  Approved claims will automatically register the appellant as an active owner party relationship with write access to property details and listings units management.
+                  Approved claims will automatically register the appellant as an active owner party
+                  relationship with write access to property details and listings units management.
                 </p>
 
                 {selectedClaim.status === "PENDING" && (
@@ -1503,7 +1537,9 @@ function AdminComponent() {
                   </p>
                   <p>
                     <span className="text-muted-foreground font-semibold">Target Action:</span>{" "}
-                    <strong>{selectedAppeal.target_type} ({selectedAppeal.target_id})</strong>
+                    <strong>
+                      {selectedAppeal.target_type} ({selectedAppeal.target_id})
+                    </strong>
                   </p>
                 </div>
 

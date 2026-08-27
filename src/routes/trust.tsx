@@ -45,7 +45,8 @@ function TrustCenterComponent() {
             HomeHunt Trust Center
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Find. Verify. Move In. Learn about our verification models, security practices, and safety instructions for renting in Kenya.
+            Find. Verify. Move In. Learn about our verification models, security practices, and
+            safety instructions for renting in Kenya.
           </p>
         </div>
       </section>
@@ -58,7 +59,10 @@ function TrustCenterComponent() {
             <Compass className="h-6 w-6 text-primary" /> Our Trust & Verification Model
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            HomeHunt operates a transparent, evidence-based verification layer. We never collapse different types of trust into a single score. Instead, we verify credentials and properties across separate dimensions so you know exactly what is backed by real evidence.
+            HomeHunt operates a transparent, evidence-based verification layer. We never collapse
+            different types of trust into a single score. Instead, we verify credentials and
+            properties across separate dimensions so you know exactly what is backed by real
+            evidence.
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -68,7 +72,8 @@ function TrustCenterComponent() {
               </span>
               <h3 className="font-display font-bold text-base text-foreground">Verified Users</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                We review government-issued identification uploads privately to ensure that the user representing themselves on the platform matches their real legal identity.
+                We review government-issued identification uploads privately to ensure that the user
+                representing themselves on the platform matches their real legal identity.
               </p>
             </div>
 
@@ -76,9 +81,12 @@ function TrustCenterComponent() {
               <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-verified/10 text-verified border border-verified/20 uppercase">
                 Property Verification
               </span>
-              <h3 className="font-display font-bold text-base text-foreground">Verified Property</h3>
+              <h3 className="font-display font-bold text-base text-foreground">
+                Verified Property
+              </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Property ownership or management authority is confirmed through title deed reviews, utility bill matching, and landmark existence checks in the local context.
+                Property ownership or management authority is confirmed through title deed reviews,
+                utility bill matching, and landmark existence checks in the local context.
               </p>
             </div>
 
@@ -86,9 +94,13 @@ function TrustCenterComponent() {
               <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-verified/10 text-verified border border-verified/20 uppercase">
                 Agent / Manager Verification
               </span>
-              <h3 className="font-display font-bold text-base text-foreground">Verified Landlord/Agent</h3>
+              <h3 className="font-display font-bold text-base text-foreground">
+                Verified Landlord/Agent
+              </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Agents, landlords, or caretakers claiming professional status must submit valid licensing, business verification, or property ownership documents before being marked verified.
+                Agents, landlords, or caretakers claiming professional status must submit valid
+                licensing, business verification, or property ownership documents before being
+                marked verified.
               </p>
             </div>
 
@@ -96,9 +108,12 @@ function TrustCenterComponent() {
               <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-verified/10 text-verified border border-verified/20 uppercase">
                 Listing Freshness
               </span>
-              <h3 className="font-display font-bold text-base text-foreground">Availability Confirmed</h3>
+              <h3 className="font-display font-bold text-base text-foreground">
+                Availability Confirmed
+              </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                We track last confirmed availability timestamps. Owners must regularly re-validate that pricing is current and properties remain available.
+                We track last confirmed availability timestamps. Owners must regularly re-validate
+                that pricing is current and properties remain available.
               </p>
             </div>
           </div>
@@ -108,14 +123,21 @@ function TrustCenterComponent() {
         <section className="bg-secondary/40 border border-border/80 p-6 rounded-2xl space-y-4">
           <div className="flex gap-2 items-center text-accent">
             <ShieldAlert className="h-5 w-5 shrink-0" />
-            <h3 className="font-display font-bold text-base text-foreground">Legal & Compliance Boundary</h3>
+            <h3 className="font-display font-bold text-base text-foreground">
+              Legal & Compliance Boundary
+            </h3>
           </div>
           <div className="text-xs text-muted-foreground space-y-3 leading-relaxed">
             <p>
-              HomeHunt verifies specified documents and records submitted by owners or users. We do <strong>NOT</strong> provide government certifications, safety guarantees, or financial insurance.
+              HomeHunt verifies specified documents and records submitted by owners or users. We do{" "}
+              <strong>NOT</strong> provide government certifications, safety guarantees, or
+              financial insurance.
             </p>
             <p>
-              A verified property means HomeHunt has checked ownership or existence records. It does not eliminate transaction risks entirely. Users must practice normal diligence, inspect properties in person before signing agreements, and verify identities physically.
+              A verified property means HomeHunt has checked ownership or existence records. It does
+              not eliminate transaction risks entirely. Users must practice normal diligence,
+              inspect properties in person before signing agreements, and verify identities
+              physically.
             </p>
           </div>
         </section>
@@ -126,7 +148,9 @@ function TrustCenterComponent() {
             <AlertTriangle className="h-6 w-6 text-accent" /> Safety & Fraud Prevention Guidance
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Rental searching in Kenya involves unique challenges, including fake agents, duplicate listings, and advance deposit scams. Follow these essential safety guidelines to protect yourself:
+            Rental searching in Kenya involves unique challenges, including fake agents, duplicate
+            listings, and advance deposit scams. Follow these essential safety guidelines to protect
+            yourself:
           </p>
 
           <div className="space-y-4">
@@ -135,9 +159,13 @@ function TrustCenterComponent() {
                 <AlertOctagon className="h-5 w-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-semibold text-foreground text-sm">Never Send Deposits Before Physical Viewing</h4>
+                <h4 className="font-semibold text-foreground text-sm">
+                  Never Send Deposits Before Physical Viewing
+                </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Be extremely cautious of agents asking for "booking fees" or "commitment fees" via MPesa before you physically visit the property. Legit property managers will show you the unit first.
+                  Be extremely cautious of agents asking for "booking fees" or "commitment fees" via
+                  MPesa before you physically visit the property. Legit property managers will show
+                  you the unit first.
                 </p>
               </div>
             </div>
@@ -147,9 +175,13 @@ function TrustCenterComponent() {
                 <Users className="h-5 w-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-semibold text-foreground text-sm">Beware of Off-Platform WhatsApp Requests</h4>
+                <h4 className="font-semibold text-foreground text-sm">
+                  Beware of Off-Platform WhatsApp Requests
+                </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  While we support WhatsApp and phone communication, always cross-check prices and details against the official HomeHunt listing. If an agent tries to change the price or terms via chat, report them immediately.
+                  While we support WhatsApp and phone communication, always cross-check prices and
+                  details against the official HomeHunt listing. If an agent tries to change the
+                  price or terms via chat, report them immediately.
                 </p>
               </div>
             </div>
@@ -159,9 +191,13 @@ function TrustCenterComponent() {
                 <Info className="h-5 w-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-semibold text-foreground text-sm">Verify Landlords & Caretakers Physically</h4>
+                <h4 className="font-semibold text-foreground text-sm">
+                  Verify Landlords & Caretakers Physically
+                </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  When visiting the estate or property, ask local caretakers or neighbors to confirm that the person presenting themselves has the legal right to lease units on that property.
+                  When visiting the estate or property, ask local caretakers or neighbors to confirm
+                  that the person presenting themselves has the legal right to lease units on that
+                  property.
                 </p>
               </div>
             </div>
@@ -175,7 +211,10 @@ function TrustCenterComponent() {
               <ShieldAlert className="h-5 w-5 text-destructive" /> Reporting Suspicious Listings
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Every public listing includes a <strong>"Report this listing"</strong> button. If you spot wrong pricing, duplicate photos, misleading locations, or suspicious deposit requests, file a report. We process reports via our moderation queue and flag high-risk agents.
+              Every public listing includes a <strong>"Report this listing"</strong> button. If you
+              spot wrong pricing, duplicate photos, misleading locations, or suspicious deposit
+              requests, file a report. We process reports via our moderation queue and flag
+              high-risk agents.
             </p>
           </div>
 
@@ -184,7 +223,9 @@ function TrustCenterComponent() {
               <Lock className="h-5 w-5 text-primary" /> Privacy & Document Security
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Identity documents, utility bills, and title deeds submitted for verification are stored securely in encrypted private buckets. We never expose them to public searches, other landlords, or tenants. Only authorized reviewers have temporary access.
+              Identity documents, utility bills, and title deeds submitted for verification are
+              stored securely in encrypted private buckets. We never expose them to public searches,
+              other landlords, or tenants. Only authorized reviewers have temporary access.
             </p>
           </div>
         </section>

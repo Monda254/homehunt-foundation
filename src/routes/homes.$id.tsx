@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getListing } from "@/features/properties/properties.functions";
@@ -391,7 +392,9 @@ function PublicListingDetailComponent() {
                 <AlertTriangle className="h-4 w-4 text-yellow-600" /> Financial Safety Advisory
               </h4>
               <p>
-                <strong>Never send money before physical viewing.</strong> Be extremely cautious of requests for "booking fees" or deposits prior to inspecting the property. HomeHunt does not facilitate or guarantee transactions.
+                <strong>Never send money before physical viewing.</strong> Be extremely cautious of
+                requests for "booking fees" or deposits prior to inspecting the property. HomeHunt
+                does not facilitate or guarantee transactions.
               </p>
             </div>
           </div>
@@ -431,7 +434,8 @@ function PublicListingDetailComponent() {
 
               {/* Safety warning around WhatsApp redirection */}
               <div className="p-3 bg-secondary/30 rounded-xl border border-border text-[10px] text-muted-foreground leading-relaxed">
-                If the owner redirects you to <strong>WhatsApp</strong>, verify their identity and do not make payments before viewing the location.
+                If the owner redirects you to <strong>WhatsApp</strong>, verify their identity and
+                do not make payments before viewing the location.
               </div>
 
               <div className="space-y-2 pt-2">
@@ -524,7 +528,9 @@ function PublicListingDetailComponent() {
                   <option value="WRONG_LOCATION">Incorrect geographic location</option>
                   <option value="MISLEADING_PHOTOS">Misleading property photos</option>
                   <option value="DUPLICATE_LISTING">Duplicate listing</option>
-                  <option value="SUSPICIOUS_PAYMENT_REQUEST">Suspicious advance payment requested</option>
+                  <option value="SUSPICIOUS_PAYMENT_REQUEST">
+                    Suspicious advance payment requested
+                  </option>
                   <option value="IMPERSONATION">Impersonating landlord/agent</option>
                   <option value="OTHER">Other listing issues</option>
                 </select>
@@ -550,9 +556,7 @@ function PublicListingDetailComponent() {
                   disabled={submitReportMutation.isPending}
                   className="px-4 py-2 bg-destructive text-destructive-foreground text-xs font-semibold rounded-lg hover:bg-destructive/95 cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
                 >
-                  {submitReportMutation.isPending && (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  )}
+                  {submitReportMutation.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
                   Submit Report
                 </button>
                 <button

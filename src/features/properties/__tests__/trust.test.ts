@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock @tanstack/react-start server function wrapper to execute handlers directly
@@ -102,7 +103,9 @@ vi.mock("@/integrations/supabase/auth-middleware", () => {
 vi.mock("@/core/audit/audit.server", () => {
   return {
     recordAuditEvent: vi.fn().mockResolvedValue(true),
-    auditMetadataFromRequest: vi.fn().mockReturnValue({ ipAddress: "127.0.0.1", userAgent: "Vitest" }),
+    auditMetadataFromRequest: vi
+      .fn()
+      .mockReturnValue({ ipAddress: "127.0.0.1", userAgent: "Vitest" }),
   };
 });
 

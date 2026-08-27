@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 
 export const PRIORITY_LEVELS = ["CRITICAL", "HIGH", "MEDIUM", "LOW"] as const;
@@ -40,7 +41,9 @@ export const UserPreferencesInputSchema = z.object({
   moveInDate: z.string().optional(),
   preferredLocations: z.array(LocationPreferenceSchema).default([]),
   amenities: z.array(AmenityPreferenceSchema).default([]),
-  furnishingPreference: z.enum(["FURNISHED", "SEMI-FURNISHED", "UNFURNISHED", "ANY"]).default("ANY"),
+  furnishingPreference: z
+    .enum(["FURNISHED", "SEMI-FURNISHED", "UNFURNISHED", "ANY"])
+    .default("ANY"),
   priorityWeights: PriorityWeightsSchema.default({}),
   useBehavioralPersonalization: z.boolean().default(true),
 });
@@ -63,7 +66,12 @@ export const DEFAULT_PRIORITY_SCORES: Record<PriorityLevel, number> = {
   LOW: 10,
 };
 
-export const MATCH_CATEGORIES = ["BEST_MATCH", "STRONG_MATCH", "GOOD_MATCH", "CLOSE_MATCH"] as const;
+export const MATCH_CATEGORIES = [
+  "BEST_MATCH",
+  "STRONG_MATCH",
+  "GOOD_MATCH",
+  "CLOSE_MATCH",
+] as const;
 export type MatchCategory = (typeof MATCH_CATEGORIES)[number];
 
 export interface MatchReason {

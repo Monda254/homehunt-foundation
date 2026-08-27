@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
@@ -117,9 +118,7 @@ async function getUserPreferencesInternal(userId: string) {
       ? JSON.parse(data.preferred_locations)
       : data.preferred_locations || [];
   const amenities =
-    typeof data.amenities === "string"
-      ? JSON.parse(data.amenities)
-      : data.amenities || [];
+    typeof data.amenities === "string" ? JSON.parse(data.amenities) : data.amenities || [];
   const priorityWeights =
     typeof data.priority_weights === "string"
       ? JSON.parse(data.priority_weights)
@@ -378,12 +377,20 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
         if (listingPrice <= prefs.preferredBudget) {
           budgetScore = 1.0;
           budgetFit = true;
-          reasons.push({ code: "WITHIN_BUDGET", isPositive: true, message: "Fits within your target preferred budget." });
+          reasons.push({
+            code: "WITHIN_BUDGET",
+            isPositive: true,
+            message: "Fits within your target preferred budget.",
+          });
         } else if (listingPrice <= prefs.maxBudget) {
           const range = prefs.maxBudget - prefs.preferredBudget;
           budgetScore = range > 0 ? 1.0 - (listingPrice - prefs.preferredBudget) / range : 1.0;
           budgetFit = true;
-          reasons.push({ code: "WITHIN_MAX_BUDGET", isPositive: true, message: "Fits within your maximum budget ceiling." });
+          reasons.push({
+            code: "WITHIN_MAX_BUDGET",
+            isPositive: true,
+            message: "Fits within your maximum budget ceiling.",
+          });
         } else {
           // Relaxed matching / Close Match
           budgetScore = 0.0;
@@ -408,7 +415,10 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
             score = 0.2;
             if (loc.town && item.town?.toLowerCase() === loc.town?.toLowerCase()) {
               score = 0.6;
-              if (loc.neighborhood && item.neighborhood?.toLowerCase() === loc.neighborhood?.toLowerCase()) {
+              if (
+                loc.neighborhood &&
+                item.neighborhood?.toLowerCase() === loc.neighborhood?.toLowerCase()
+              ) {
                 score = 0.9;
                 if (loc.estate && item.estate?.toLowerCase() === loc.estate?.toLowerCase()) {
                   score = 1.0;
@@ -421,11 +431,23 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
         locationScore = maxLocScore;
         if (locationScore >= 0.6) {
           locationFit = true;
-          reasons.push({ code: "LOCATION_MATCH", isPositive: true, message: "Located in one of your preferred areas." });
+          reasons.push({
+            code: "LOCATION_MATCH",
+            isPositive: true,
+            message: "Located in one of your preferred areas.",
+          });
         } else if (locationScore > 0) {
-          reasons.push({ code: "LOCATION_NEAR", isPositive: true, message: "Close proximity to your preferred locations." });
+          reasons.push({
+            code: "LOCATION_NEAR",
+            isPositive: true,
+            message: "Close proximity to your preferred locations.",
+          });
         } else {
-          reasons.push({ code: "LOCATION_MISMATCH", isPositive: false, message: "Outside your preferred geographic boundary." });
+          reasons.push({
+            code: "LOCATION_MISMATCH",
+            isPositive: false,
+            message: "Outside your preferred geographic boundary.",
+          });
         }
       } else {
         locationScore = 1.0;
@@ -439,14 +461,26 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
         if (itemBeds === prefs.bedrooms) {
           bedroomScore = 1.0;
           bedroomsFit = true;
-          reasons.push({ code: "BEDROOMS_EXACT", isPositive: true, message: "Matches your exact bedroom count requirement." });
+          reasons.push({
+            code: "BEDROOMS_EXACT",
+            isPositive: true,
+            message: "Matches your exact bedroom count requirement.",
+          });
         } else if (prefs.bedroomsRule === "MIN" && itemBeds > prefs.bedrooms) {
           bedroomScore = 0.8; // higher room is okay but minor penalty
           bedroomsFit = true;
-          reasons.push({ code: "BEDROOMS_SUFFICIENT", isPositive: true, message: "Meets your minimum bedroom constraint." });
+          reasons.push({
+            code: "BEDROOMS_SUFFICIENT",
+            isPositive: true,
+            message: "Meets your minimum bedroom constraint.",
+          });
         } else {
           bedroomScore = 0.0;
-          reasons.push({ code: "BEDROOMS_MISMATCH", isPositive: false, message: "Does not satisfy bedroom capacity." });
+          reasons.push({
+            code: "BEDROOMS_MISMATCH",
+            isPositive: false,
+            message: "Does not satisfy bedroom capacity.",
+          });
         }
       } else {
         bedroomScore = 1.0;
@@ -462,7 +496,11 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
           bathroomsFit = true;
         } else {
           bathroomScore = 0.0;
-          reasons.push({ code: "BATHROOMS_SHORTAGE", isPositive: false, message: "Has fewer bathrooms than requested." });
+          reasons.push({
+            code: "BATHROOMS_SHORTAGE",
+            isPositive: false,
+            message: "Has fewer bathrooms than requested.",
+          });
         }
       } else {
         bathroomScore = 1.0;
@@ -495,18 +533,29 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
           }
         }
 
-        const prefSatisfiedCount = preferredAms.filter((pref: any) => itemAm.includes(pref.amenity)).length;
+        const prefSatisfiedCount = preferredAms.filter((pref: any) =>
+          itemAm.includes(pref.amenity),
+        ).length;
         const totalPrefCount = preferredAms.length;
 
         if (mustHaveSatisfied) {
-          amenityScore = totalPrefCount > 0 ? 0.7 + 0.3 * (prefSatisfiedCount / totalPrefCount) : 1.0;
+          amenityScore =
+            totalPrefCount > 0 ? 0.7 + 0.3 * (prefSatisfiedCount / totalPrefCount) : 1.0;
           amenitiesFit = true;
           if (requiredAms.length > 0 || prefSatisfiedCount > 0) {
-            reasons.push({ code: "AMENITY_MATCH", isPositive: true, message: "Offers your required and preferred amenities." });
+            reasons.push({
+              code: "AMENITY_MATCH",
+              isPositive: true,
+              message: "Offers your required and preferred amenities.",
+            });
           }
         } else {
           amenityScore = 0.0;
-          reasons.push({ code: "AMENITY_MISSING_REQUIRED", isPositive: false, message: "Lacks one or more MUST-HAVE amenities." });
+          reasons.push({
+            code: "AMENITY_MISSING_REQUIRED",
+            isPositive: false,
+            message: "Lacks one or more MUST-HAVE amenities.",
+          });
         }
       } else {
         amenityScore = 1.0;
@@ -531,7 +580,7 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
         typeScore * propertyTypeWeight +
         amenityScore * amenitiesWeight;
 
-      let basePercent = (weightedSum / totalWeights) * 100;
+      const basePercent = (weightedSum / totalWeights) * 100;
 
       // Add Trust & Freshness Bonuses (up to 5 points)
       let bonus = 0;
@@ -560,7 +609,11 @@ const fnGetRecommendations = createServerFn({ method: "GET" })
 
       // Append verification indicators
       if (isVerified) {
-        reasons.push({ code: "VERIFIED_TRUST", isPositive: true, message: "Listing is verified by HomeHunt inspectors." });
+        reasons.push({
+          code: "VERIFIED_TRUST",
+          isPositive: true,
+          message: "Listing is verified by HomeHunt inspectors.",
+        });
       }
 
       // Record recommendation exposure
