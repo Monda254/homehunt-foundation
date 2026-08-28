@@ -22,5 +22,14 @@ jobs:
           version: latest
 
       - name: Deploy Migrations
+        env:
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
-          supabase db push --project-ref ${{ secrets.SUPABASE_PROJECT_ID }} --password ${{ secrets.SUPABASE_DB_PASSWORD }}
+          if [ -z "$SUPABASE_PROJECT_ID" ] || [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "::warning::Missing SUPABASE_PROJECT_ID or SUPABASE_DB_PASSWORD secrets. Skipping migration deployment."
+            echo "Please set these secrets in GitHub Repository Settings -> Secrets and Variables -> Actions."
+            exit 0
+          fi
+          supabase db push --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
+
