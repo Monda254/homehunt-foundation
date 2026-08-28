@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getListing } from "@/features/properties/properties.functions";
 import { reportListing } from "@/features/properties/trust.functions";
+import { useAuth } from "@/features/identity/AuthContext";
+import { createConversation } from "@/features/communication/communication.functions";
+import { requestViewing } from "@/features/communication/viewing.functions";
 import {
   MapPin,
   Bed,
@@ -21,6 +24,7 @@ import {
   X,
   ShieldCheck,
   Check,
+  MessageSquare,
 } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -32,6 +36,57 @@ export const Route = createFileRoute("/homes/$id")({
 function PublicListingDetailComponent() {
   const { id: listingId } = Route.useParams();
   const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Contact modal states
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [contactMessage, setContactMessage] = useState(
+    "Hi, I am interested in this listing. Is it still available?",
+  );
+
+  // Viewing modal states
+  const [showViewingModal, setShowViewingModal] = useState(false);
+  const [viewingDate, setViewingDate] = useState("");
+  const [viewingTime, setViewingTime] = useState("");
+  const [viewingNotes, setViewingNotes] = useState("");
+
+  const contactMutation = useMutation({
+    mutationFn: () =>
+      createConversation({
+        listingId,
+        initialMessage: contactMessage,
+      }),
+    onSuccess: () => {
+      toast.success("Enquiry sent successfully!");
+      setShowContactModal(false);
+      navigate({ to: "/messages" });
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to start conversation.");
+    },
+  });
+
+  const requestViewingMutation = useMutation({
+    mutationFn: (vars: { requestedStart: string; notes?: string }) =>
+      requestViewing({
+        listingId,
+        requestedStart: vars.requestedStart,
+        notes: vars.notes,
+      }),
+    onSuccess: () => {
+      toast.success("Viewing request submitted!");
+      setShowViewingModal(false);
+      setViewingDate("");
+      setViewingTime("");
+      setViewingNotes("");
+      navigate({ to: "/viewings" });
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to request viewing.");
+    },
+  });
 
   // Trust UI states
   const [badgeExplanation, setBadgeExplanation] = useState<{
@@ -53,6 +108,18 @@ function PublicListingDetailComponent() {
     | "OTHER"
   >("WRONG_PRICE");
   const [reportDescription, setReportDescription] = useState("");
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && user) {
+      const params = new URLSearchParams(window.location.search);
+      const action = params.get("action");
+      if (action === "contact") {
+        setShowContactModal(true);
+      } else if (action === "viewing") {
+        setShowViewingModal(true);
+      }
+    }
+  }, [user]);
 
   const {
     data: details,
@@ -121,6 +188,7 @@ function PublicListingDetailComponent() {
     verification_status: string;
     owner_identity_verified?: boolean;
     owner_agent_verified?: boolean;
+    owner_user_id?: string;
   }
 
   interface UnitDetailData {
@@ -439,20 +507,52 @@ function PublicListingDetailComponent() {
               </div>
 
               <div className="space-y-2 pt-2">
-                <button
-                  onClick={() =>
-                    toast.info(
-                      "Viewing requests are managed directly by verifications contacts. Please call owner.",
-                    )
-                  }
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-xs font-bold text-primary-foreground shadow hover:bg-primary/95 cursor-pointer"
-                >
-                  <PhoneCall className="h-4 w-4" /> Request viewing
-                </button>
+                {prop?.owner_user_id === user?.userId ? (
+                  <div className="text-center p-3 bg-secondary/50 rounded-xl border text-xs font-semibold text-muted-foreground">
+                    This is your listing
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (!user) {
+                          toast.error("Please sign in to contact the provider.");
+                          navigate({ to: "/login" });
+                          return;
+                        }
+                        setShowContactModal(true);
+                      }}
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-xs font-bold text-primary-foreground shadow hover:bg-primary/95 cursor-pointer"
+                    >
+                      <MessageSquare className="h-4 w-4" /> Contact Provider
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (!user) {
+                          toast.error("Please sign in to request a viewing.");
+                          navigate({ to: "/login" });
+                          return;
+                        }
+                        setShowViewingModal(true);
+                      }}
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-border text-foreground bg-secondary/15 hover:bg-secondary/40 py-2.5 text-xs font-bold cursor-pointer transition-all"
+                    >
+                      <Calendar className="h-4 w-4" /> Request viewing
+                    </button>
+                  </>
+                )}
 
                 <button
-                  onClick={() => setShowReportModal(true)}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-destructive/20 text-destructive bg-destructive/5 hover:bg-destructive/10 py-2.5 text-xs font-bold cursor-pointer transition-all"
+                  onClick={() => {
+                    if (!user) {
+                      toast.error("Please sign in to report a listing.");
+                      navigate({ to: "/login" });
+                      return;
+                    }
+                    setShowReportModal(true);
+                  }}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-destructive/20 text-destructive bg-destructive/5 hover:bg-destructive/10 py-2 text-xs font-bold cursor-pointer transition-all"
                 >
                   <ShieldAlert className="h-4 w-4" /> Report this listing
                 </button>
@@ -562,6 +662,182 @@ function PublicListingDetailComponent() {
                 <button
                   type="button"
                   onClick={() => setShowReportModal(false)}
+                  className="px-4 py-2 border border-border text-foreground text-xs font-semibold rounded-lg hover:bg-secondary cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {showContactModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-sm p-4 animate-in fade-in duration-150">
+          <div className="bg-card border border-border w-full max-w-md rounded-2xl p-6 shadow-xl space-y-4 relative">
+            <button
+              onClick={() => setShowContactModal(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <h3 className="font-display font-extrabold text-lg text-foreground flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-primary" /> Contact Property Provider
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Start a secure conversation about this listing. You can send an enquiry or ask
+              specific questions.
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                contactMutation.mutate();
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">
+                  Your Message
+                </label>
+                <textarea
+                  rows={4}
+                  required
+                  value={contactMessage}
+                  onChange={(e) => setContactMessage(e.target.value)}
+                  className="w-full px-3 py-2 bg-secondary/35 rounded-lg border border-border text-xs focus:outline-none resize-none"
+                />
+              </div>
+
+              {/* Quick select templates */}
+              <div className="flex gap-1.5 overflow-x-auto pb-1">
+                {[
+                  "Is this property still available?",
+                  "Can I schedule a viewing?",
+                  "Are pets allowed?",
+                ].map((temp) => (
+                  <button
+                    key={temp}
+                    type="button"
+                    onClick={() => setContactMessage(`Hi, I'm interested in this listing. ${temp}`)}
+                    className="text-[10px] bg-secondary border border-border px-2 py-1 rounded-md text-muted-foreground hover:text-foreground cursor-pointer whitespace-nowrap"
+                  >
+                    {temp}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex gap-2 justify-end pt-2 border-t">
+                <button
+                  type="submit"
+                  disabled={contactMutation.isPending}
+                  className="px-4 py-2 bg-primary text-primary-foreground text-xs font-semibold rounded-lg hover:bg-primary/95 cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
+                >
+                  {contactMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                  Send Enquiry
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowContactModal(false)}
+                  className="px-4 py-2 border border-border text-foreground text-xs font-semibold rounded-lg hover:bg-secondary cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showViewingModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-sm p-4 animate-in fade-in duration-150">
+          <div className="bg-card border border-border w-full max-w-md rounded-2xl p-6 shadow-xl space-y-4 relative">
+            <button
+              onClick={() => setShowViewingModal(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <h3 className="font-display font-extrabold text-lg text-foreground flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" /> Request Viewing Appointment
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Propose a physical appointment date and time to view the property.
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!viewingDate || !viewingTime) {
+                  toast.error("Please pick a date and time.");
+                  return;
+                }
+                const startIso = new Date(`${viewingDate}T${viewingTime}`).toISOString();
+                requestViewingMutation.mutate({ requestedStart: startIso, notes: viewingNotes });
+              }}
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={viewingDate}
+                    onChange={(e) => setViewingDate(e.target.value)}
+                    className="w-full px-3 py-2 bg-secondary/35 rounded-lg border border-border text-xs focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">
+                    Time
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    value={viewingTime}
+                    onChange={(e) => setViewingTime(e.target.value)}
+                    className="w-full px-3 py-2 bg-secondary/35 rounded-lg border border-border text-xs focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">
+                  Notes / Location Instructions
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="e.g. I will be arriving by public transport, please let me know which gate."
+                  value={viewingNotes}
+                  onChange={(e) => setViewingNotes(e.target.value)}
+                  className="w-full px-3 py-2 bg-secondary/35 rounded-lg border border-border text-xs focus:outline-none resize-none"
+                />
+              </div>
+
+              <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 text-yellow-800 rounded-xl text-[10px] leading-normal flex gap-2">
+                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Financial Safety:</strong> Never pay reservation fees before physically
+                  viewing the location and verifying details.
+                </span>
+              </div>
+
+              <div className="flex gap-2 justify-end pt-2 border-t">
+                <button
+                  type="submit"
+                  disabled={requestViewingMutation.isPending}
+                  className="px-4 py-2 bg-primary text-primary-foreground text-xs font-semibold rounded-lg hover:bg-primary/95 cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
+                >
+                  {requestViewingMutation.isPending && (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  )}
+                  Submit Request
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowViewingModal(false)}
                   className="px-4 py-2 border border-border text-foreground text-xs font-semibold rounded-lg hover:bg-secondary cursor-pointer"
                 >
                   Cancel

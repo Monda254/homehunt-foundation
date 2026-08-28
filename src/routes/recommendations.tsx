@@ -1028,6 +1028,36 @@ function MatchCard({ item, onInspect, onSave, onHide }: MatchCardProps) {
             </p>
           </div>
         </div>
+
+        {/* Direct Engagement Actions */}
+        <div className="flex gap-1.5 mt-3 pt-3 border-t border-border/60">
+          <Link
+            to="/homes/$id"
+            params={{ id: listing.id } as any}
+            search={{ action: "contact" } as any}
+            className="flex-1 text-center bg-primary hover:bg-primary/95 text-white text-[10px] font-bold py-2 rounded-lg cursor-pointer transition-colors"
+          >
+            Contact
+          </Link>
+          <Link
+            to="/homes/$id"
+            params={{ id: listing.id } as any}
+            search={{ action: "viewing" } as any}
+            className="flex-1 text-center border border-border text-foreground hover:bg-secondary text-[10px] font-bold py-2 rounded-lg cursor-pointer transition-colors"
+          >
+            Request Viewing
+          </Link>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSave();
+            }}
+            className="p-2 border border-border text-muted-foreground hover:text-primary hover:border-primary/30 rounded-lg cursor-pointer"
+            title="Save Recommendation"
+          >
+            <Heart className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
     </div>
   );

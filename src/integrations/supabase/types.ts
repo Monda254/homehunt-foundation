@@ -1,8 +1,30 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
-  __InternalSupabase: {
-    PostgrestVersion: "14.15";
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
   };
   public: {
     Tables: {
@@ -48,66 +70,1352 @@ export type Database = {
         };
         Relationships: [];
       };
-      profiles: {
+      blocks: {
         Row: {
-          avatar_url: string | null;
+          blocked_id: string;
+          blocker_id: string;
           created_at: string;
-          full_name: string | null;
-          first_name: string | null;
-          last_name: string | null;
-          display_name: string | null;
-          bio: string | null;
-          phone_number: string | null;
-          preferred_county: string | null;
-          county: string | null;
-          town: string | null;
-          preferred_language: string;
-          onboarding_completed: boolean;
-          status: Database["public"]["Enums"]["account_status"];
-          last_login_at: string | null;
-          deleted_at: string | null;
           id: string;
+        };
+        Insert: {
+          blocked_id: string;
+          blocker_id: string;
+          created_at?: string;
+          id?: string;
+        };
+        Update: {
+          blocked_id?: string;
+          blocker_id?: string;
+          created_at?: string;
+          id?: string;
+        };
+        Relationships: [];
+      };
+      buildings: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          floors: number | null;
+          id: string;
+          name: string;
+          property_id: string;
+          updated_at: string;
+          year_built: number | null;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          floors?: number | null;
+          id?: string;
+          name: string;
+          property_id: string;
+          updated_at?: string;
+          year_built?: number | null;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          floors?: number | null;
+          id?: string;
+          name?: string;
+          property_id?: string;
+          updated_at?: string;
+          year_built?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "buildings_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "buildings_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      communication_reports: {
+        Row: {
+          conversation_id: string | null;
+          created_at: string;
+          description: string;
+          id: string;
+          reason: string;
+          reported_id: string;
+          reporter_id: string;
+          status: string;
           updated_at: string;
         };
         Insert: {
-          avatar_url?: string | null;
+          conversation_id?: string | null;
           created_at?: string;
-          full_name?: string | null;
-          first_name?: string | null;
-          last_name?: string | null;
-          display_name?: string | null;
-          bio?: string | null;
-          phone_number?: string | null;
-          preferred_county?: string | null;
-          county?: string | null;
-          town?: string | null;
-          preferred_language?: string;
-          onboarding_completed?: boolean;
-          status?: Database["public"]["Enums"]["account_status"];
-          last_login_at?: string | null;
-          deleted_at?: string | null;
-          id: string;
+          description: string;
+          id?: string;
+          reason: string;
+          reported_id: string;
+          reporter_id: string;
+          status?: string;
           updated_at?: string;
         };
         Update: {
-          avatar_url?: string | null;
+          conversation_id?: string | null;
           created_at?: string;
-          full_name?: string | null;
-          first_name?: string | null;
-          last_name?: string | null;
-          display_name?: string | null;
+          description?: string;
+          id?: string;
+          reason?: string;
+          reported_id?: string;
+          reporter_id?: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "communication_reports_conversation_id_fkey";
+            columns: ["conversation_id"];
+            isOneToOne: false;
+            referencedRelation: "conversations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      conversations: {
+        Row: {
+          created_at: string;
+          id: string;
+          listing_id: string;
+          property_id: string;
+          provider_id: string;
+          seeker_id: string;
+          status: string;
+          unit_id: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          listing_id: string;
+          property_id: string;
+          provider_id: string;
+          seeker_id: string;
+          status?: string;
+          unit_id?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          listing_id?: string;
+          property_id?: string;
+          provider_id?: string;
+          seeker_id?: string;
+          status?: string;
+          unit_id?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "conversations_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "conversations_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+          {
+            foreignKeyName: "conversations_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "conversations_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "conversations_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["unit_id"];
+          },
+          {
+            foreignKeyName: "conversations_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "units";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      favorites: {
+        Row: {
+          created_at: string;
+          id: string;
+          listing_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          listing_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          listing_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "favorites_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "favorites_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+        ];
+      };
+      listing_reports: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          listing_id: string;
+          reason: string;
+          reporter_id: string;
+          resolution: string | null;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: Database["public"]["Enums"]["report_status"];
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          listing_id: string;
+          reason: string;
+          reporter_id: string;
+          resolution?: string | null;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database["public"]["Enums"]["report_status"];
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          listing_id?: string;
+          reason?: string;
+          reporter_id?: string;
+          resolution?: string | null;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database["public"]["Enums"]["report_status"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "listing_reports_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "listing_reports_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+        ];
+      };
+      listings: {
+        Row: {
+          availability_confirmed_at: string | null;
+          availability_date: string;
+          billing_period: Database["public"]["Enums"]["billing_period"];
+          created_at: string;
+          created_by_user_id: string;
+          currency: string;
+          deleted_at: string | null;
+          deposit_amount: number | null;
+          description: string | null;
+          expires_at: string | null;
+          freshness_status: Database["public"]["Enums"]["listing_freshness_status"];
+          id: string;
+          last_verified_at: string | null;
+          listing_type: Database["public"]["Enums"]["listing_type"];
+          price: number;
+          price_confirmed_at: string | null;
+          property_id: string;
+          published_at: string | null;
+          status: Database["public"]["Enums"]["listing_status"];
+          title: string;
+          unit_id: string | null;
+          updated_at: string;
+          verification_status: Database["public"]["Enums"]["verification_status"];
+        };
+        Insert: {
+          availability_confirmed_at?: string | null;
+          availability_date: string;
+          billing_period?: Database["public"]["Enums"]["billing_period"];
+          created_at?: string;
+          created_by_user_id: string;
+          currency?: string;
+          deleted_at?: string | null;
+          deposit_amount?: number | null;
+          description?: string | null;
+          expires_at?: string | null;
+          freshness_status?: Database["public"]["Enums"]["listing_freshness_status"];
+          id?: string;
+          last_verified_at?: string | null;
+          listing_type?: Database["public"]["Enums"]["listing_type"];
+          price: number;
+          price_confirmed_at?: string | null;
+          property_id: string;
+          published_at?: string | null;
+          status?: Database["public"]["Enums"]["listing_status"];
+          title: string;
+          unit_id?: string | null;
+          updated_at?: string;
+          verification_status?: Database["public"]["Enums"]["verification_status"];
+        };
+        Update: {
+          availability_confirmed_at?: string | null;
+          availability_date?: string;
+          billing_period?: Database["public"]["Enums"]["billing_period"];
+          created_at?: string;
+          created_by_user_id?: string;
+          currency?: string;
+          deleted_at?: string | null;
+          deposit_amount?: number | null;
+          description?: string | null;
+          expires_at?: string | null;
+          freshness_status?: Database["public"]["Enums"]["listing_freshness_status"];
+          id?: string;
+          last_verified_at?: string | null;
+          listing_type?: Database["public"]["Enums"]["listing_type"];
+          price?: number;
+          price_confirmed_at?: string | null;
+          property_id?: string;
+          published_at?: string | null;
+          status?: Database["public"]["Enums"]["listing_status"];
+          title?: string;
+          unit_id?: string | null;
+          updated_at?: string;
+          verification_status?: Database["public"]["Enums"]["verification_status"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "listings_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "listings_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "listings_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["unit_id"];
+          },
+          {
+            foreignKeyName: "listings_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "units";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      messages: {
+        Row: {
+          content: string;
+          conversation_id: string;
+          created_at: string;
+          id: string;
+          message_type: string;
+          sender_id: string;
+          status: string;
+          updated_at: string;
+        };
+        Insert: {
+          content: string;
+          conversation_id: string;
+          created_at?: string;
+          id?: string;
+          message_type?: string;
+          sender_id: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Update: {
+          content?: string;
+          conversation_id?: string;
+          created_at?: string;
+          id?: string;
+          message_type?: string;
+          sender_id?: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey";
+            columns: ["conversation_id"];
+            isOneToOne: false;
+            referencedRelation: "conversations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      moderation_appeals: {
+        Row: {
+          created_at: string;
+          id: string;
+          notes: string | null;
+          reason: string;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: Database["public"]["Enums"]["appeal_status"];
+          target_id: string;
+          target_type: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          notes?: string | null;
+          reason: string;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database["public"]["Enums"]["appeal_status"];
+          target_id: string;
+          target_type: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          notes?: string | null;
+          reason?: string;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database["public"]["Enums"]["appeal_status"];
+          target_id?: string;
+          target_type?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      notification_preferences: {
+        Row: {
+          channel: string;
+          created_at: string;
+          enabled: boolean;
+          id: string;
+          notification_type: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          channel: string;
+          created_at?: string;
+          enabled?: boolean;
+          id?: string;
+          notification_type: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          channel?: string;
+          created_at?: string;
+          enabled?: boolean;
+          id?: string;
+          notification_type?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          content: string;
+          created_at: string;
+          id: string;
+          is_read: boolean;
+          notification_type: string;
+          payload: Json;
+          title: string;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          notification_type: string;
+          payload?: Json;
+          title: string;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          notification_type?: string;
+          payload?: Json;
+          title?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      password_reset_tokens: {
+        Row: {
+          created_at: string;
+          expires_at: string;
+          id: string;
+          token_hash: string;
+          used_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          expires_at: string;
+          id?: string;
+          token_hash: string;
+          used_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          token_hash?: string;
+          used_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      permissions: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      profiles: {
+        Row: {
+          agent_verified: boolean;
+          avatar_url: string | null;
+          bio: string | null;
+          county: string | null;
+          created_at: string;
+          deleted_at: string | null;
+          display_name: string | null;
+          first_name: string | null;
+          full_name: string | null;
+          id: string;
+          identity_verified: boolean;
+          last_login_at: string | null;
+          last_name: string | null;
+          onboarding_completed: boolean;
+          phone_number: string | null;
+          preferred_county: string | null;
+          preferred_language: string;
+          status: Database["public"]["Enums"]["account_status"];
+          town: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          agent_verified?: boolean;
+          avatar_url?: string | null;
           bio?: string | null;
+          county?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+          display_name?: string | null;
+          first_name?: string | null;
+          full_name?: string | null;
+          id: string;
+          identity_verified?: boolean;
+          last_login_at?: string | null;
+          last_name?: string | null;
+          onboarding_completed?: boolean;
           phone_number?: string | null;
           preferred_county?: string | null;
-          county?: string | null;
-          town?: string | null;
           preferred_language?: string;
-          onboarding_completed?: boolean;
           status?: Database["public"]["Enums"]["account_status"];
-          last_login_at?: string | null;
-          deleted_at?: string | null;
-          id?: string;
+          town?: string | null;
           updated_at?: string;
+        };
+        Update: {
+          agent_verified?: boolean;
+          avatar_url?: string | null;
+          bio?: string | null;
+          county?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+          display_name?: string | null;
+          first_name?: string | null;
+          full_name?: string | null;
+          id?: string;
+          identity_verified?: boolean;
+          last_login_at?: string | null;
+          last_name?: string | null;
+          onboarding_completed?: boolean;
+          phone_number?: string | null;
+          preferred_county?: string | null;
+          preferred_language?: string;
+          status?: Database["public"]["Enums"]["account_status"];
+          town?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      properties: {
+        Row: {
+          address: string | null;
+          country: string;
+          county: string;
+          created_at: string;
+          created_by_user_id: string;
+          deleted_at: string | null;
+          description: string | null;
+          estate: string | null;
+          id: string;
+          landmark_description: string | null;
+          latitude: number | null;
+          longitude: number | null;
+          name: string;
+          neighborhood: string | null;
+          owner_user_id: string;
+          property_type: Database["public"]["Enums"]["property_type"];
+          status: Database["public"]["Enums"]["property_status"];
+          town: string;
+          updated_at: string;
+          verification_status: Database["public"]["Enums"]["verification_status"];
+        };
+        Insert: {
+          address?: string | null;
+          country?: string;
+          county: string;
+          created_at?: string;
+          created_by_user_id: string;
+          deleted_at?: string | null;
+          description?: string | null;
+          estate?: string | null;
+          id?: string;
+          landmark_description?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          name: string;
+          neighborhood?: string | null;
+          owner_user_id: string;
+          property_type: Database["public"]["Enums"]["property_type"];
+          status?: Database["public"]["Enums"]["property_status"];
+          town: string;
+          updated_at?: string;
+          verification_status?: Database["public"]["Enums"]["verification_status"];
+        };
+        Update: {
+          address?: string | null;
+          country?: string;
+          county?: string;
+          created_at?: string;
+          created_by_user_id?: string;
+          deleted_at?: string | null;
+          description?: string | null;
+          estate?: string | null;
+          id?: string;
+          landmark_description?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          name?: string;
+          neighborhood?: string | null;
+          owner_user_id?: string;
+          property_type?: Database["public"]["Enums"]["property_type"];
+          status?: Database["public"]["Enums"]["property_status"];
+          town?: string;
+          updated_at?: string;
+          verification_status?: Database["public"]["Enums"]["verification_status"];
+        };
+        Relationships: [];
+      };
+      property_amenities: {
+        Row: {
+          amenity: string;
+          created_at: string;
+          id: string;
+          property_id: string;
+        };
+        Insert: {
+          amenity: string;
+          created_at?: string;
+          id?: string;
+          property_id: string;
+        };
+        Update: {
+          amenity?: string;
+          created_at?: string;
+          id?: string;
+          property_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "property_amenities_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "property_amenities_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      property_claims: {
+        Row: {
+          created_at: string;
+          id: string;
+          property_id: string;
+          rejection_reason: string | null;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: Database["public"]["Enums"]["claim_status"];
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          property_id: string;
+          rejection_reason?: string | null;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database["public"]["Enums"]["claim_status"];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          property_id?: string;
+          rejection_reason?: string | null;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database["public"]["Enums"]["claim_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "property_claims_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "property_claims_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      property_media: {
+        Row: {
+          caption: string | null;
+          created_at: string;
+          id: string;
+          is_primary: boolean;
+          listing_id: string | null;
+          media_type: Database["public"]["Enums"]["media_type"];
+          property_id: string | null;
+          sort_order: number;
+          storage_key: string | null;
+          unit_id: string | null;
+          url: string;
+        };
+        Insert: {
+          caption?: string | null;
+          created_at?: string;
+          id?: string;
+          is_primary?: boolean;
+          listing_id?: string | null;
+          media_type?: Database["public"]["Enums"]["media_type"];
+          property_id?: string | null;
+          sort_order?: number;
+          storage_key?: string | null;
+          unit_id?: string | null;
+          url: string;
+        };
+        Update: {
+          caption?: string | null;
+          created_at?: string;
+          id?: string;
+          is_primary?: boolean;
+          listing_id?: string | null;
+          media_type?: Database["public"]["Enums"]["media_type"];
+          property_id?: string | null;
+          sort_order?: number;
+          storage_key?: string | null;
+          unit_id?: string | null;
+          url?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "property_media_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "property_media_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+          {
+            foreignKeyName: "property_media_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "property_media_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "property_media_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["unit_id"];
+          },
+          {
+            foreignKeyName: "property_media_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "units";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      property_parties: {
+        Row: {
+          created_at: string;
+          id: string;
+          property_id: string;
+          relationship_type: Database["public"]["Enums"]["relationship_type"];
+          status: Database["public"]["Enums"]["relationship_status"];
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          property_id: string;
+          relationship_type: Database["public"]["Enums"]["relationship_type"];
+          status?: Database["public"]["Enums"]["relationship_status"];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          property_id?: string;
+          relationship_type?: Database["public"]["Enums"]["relationship_type"];
+          status?: Database["public"]["Enums"]["relationship_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "property_parties_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "property_parties_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      recommendation_feedback: {
+        Row: {
+          created_at: string | null;
+          feedback_type: string;
+          id: string;
+          listing_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          feedback_type: string;
+          id?: string;
+          listing_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          feedback_type?: string;
+          id?: string;
+          listing_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_feedback_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "recommendation_feedback_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+        ];
+      };
+      recommendation_history: {
+        Row: {
+          clicked_at: string | null;
+          hidden_at: string | null;
+          id: string;
+          listing_id: string;
+          saved_at: string | null;
+          shown_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          clicked_at?: string | null;
+          hidden_at?: string | null;
+          id?: string;
+          listing_id: string;
+          saved_at?: string | null;
+          shown_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          clicked_at?: string | null;
+          hidden_at?: string | null;
+          id?: string;
+          listing_id?: string;
+          saved_at?: string | null;
+          shown_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_history_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "recommendation_history_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+        ];
+      };
+      risk_flags: {
+        Row: {
+          created_at: string;
+          id: string;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          risk_type: string;
+          severity: Database["public"]["Enums"]["risk_severity"];
+          status: Database["public"]["Enums"]["risk_status"];
+          subject_id: string;
+          subject_type: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          risk_type: string;
+          severity?: Database["public"]["Enums"]["risk_severity"];
+          status?: Database["public"]["Enums"]["risk_status"];
+          subject_id: string;
+          subject_type: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          risk_type?: string;
+          severity?: Database["public"]["Enums"]["risk_severity"];
+          status?: Database["public"]["Enums"]["risk_status"];
+          subject_id?: string;
+          subject_type?: string;
+        };
+        Relationships: [];
+      };
+      role_permissions: {
+        Row: {
+          created_at: string;
+          id: string;
+          permission_name: string;
+          role: Database["public"]["Enums"]["app_role"];
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          permission_name: string;
+          role: Database["public"]["Enums"]["app_role"];
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          permission_name?: string;
+          role?: Database["public"]["Enums"]["app_role"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "role_permissions_permission_name_fkey";
+            columns: ["permission_name"];
+            isOneToOne: false;
+            referencedRelation: "permissions";
+            referencedColumns: ["name"];
+          },
+        ];
+      };
+      saved_searches: {
+        Row: {
+          created_at: string;
+          filters: Json;
+          id: string;
+          name: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          filters: Json;
+          id?: string;
+          name: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          filters?: Json;
+          id?: string;
+          name?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      search_analytics_events: {
+        Row: {
+          created_at: string;
+          event_type: string;
+          id: string;
+          payload: Json;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          event_type: string;
+          id?: string;
+          payload: Json;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          event_type?: string;
+          id?: string;
+          payload?: Json;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      sessions: {
+        Row: {
+          created_at: string;
+          expires_at: string;
+          id: string;
+          ip_address: unknown;
+          last_seen_at: string;
+          revoked_at: string | null;
+          session_token_hash: string;
+          user_agent: string | null;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          expires_at: string;
+          id?: string;
+          ip_address?: unknown;
+          last_seen_at?: string;
+          revoked_at?: string | null;
+          session_token_hash: string;
+          user_agent?: string | null;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          ip_address?: unknown;
+          last_seen_at?: string;
+          revoked_at?: string | null;
+          session_token_hash?: string;
+          user_agent?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      unit_amenities: {
+        Row: {
+          amenity: string;
+          created_at: string;
+          id: string;
+          unit_id: string;
+        };
+        Insert: {
+          amenity: string;
+          created_at?: string;
+          id?: string;
+          unit_id: string;
+        };
+        Update: {
+          amenity?: string;
+          created_at?: string;
+          id?: string;
+          unit_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "unit_amenities_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["unit_id"];
+          },
+          {
+            foreignKeyName: "unit_amenities_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "units";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      units: {
+        Row: {
+          area: number | null;
+          bathrooms: number;
+          bedrooms: number;
+          building_id: string | null;
+          created_at: string;
+          deleted_at: string | null;
+          description: string | null;
+          floor: number | null;
+          id: string;
+          property_id: string;
+          status: Database["public"]["Enums"]["unit_status"];
+          unit_number: string;
+          unit_type: Database["public"]["Enums"]["unit_type"];
+          updated_at: string;
+        };
+        Insert: {
+          area?: number | null;
+          bathrooms?: number;
+          bedrooms?: number;
+          building_id?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+          description?: string | null;
+          floor?: number | null;
+          id?: string;
+          property_id: string;
+          status?: Database["public"]["Enums"]["unit_status"];
+          unit_number: string;
+          unit_type: Database["public"]["Enums"]["unit_type"];
+          updated_at?: string;
+        };
+        Update: {
+          area?: number | null;
+          bathrooms?: number;
+          bedrooms?: number;
+          building_id?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+          description?: string | null;
+          floor?: number | null;
+          id?: string;
+          property_id?: string;
+          status?: Database["public"]["Enums"]["unit_status"];
+          unit_number?: string;
+          unit_type?: Database["public"]["Enums"]["unit_type"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "units_building_id_fkey";
+            columns: ["building_id"];
+            isOneToOne: false;
+            referencedRelation: "buildings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "units_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "units_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_preferences: {
+        Row: {
+          amenities: Json | null;
+          bathrooms: number | null;
+          bathrooms_rule: string | null;
+          bedrooms: number | null;
+          bedrooms_rule: string | null;
+          created_at: string | null;
+          furnishing_preference: string | null;
+          id: string;
+          max_budget: number | null;
+          min_budget: number | null;
+          move_in_date: string | null;
+          preferred_budget: number | null;
+          preferred_locations: Json | null;
+          priority_weights: Json | null;
+          property_types: string[] | null;
+          updated_at: string | null;
+          use_behavioral_personalization: boolean | null;
+          user_id: string;
+        };
+        Insert: {
+          amenities?: Json | null;
+          bathrooms?: number | null;
+          bathrooms_rule?: string | null;
+          bedrooms?: number | null;
+          bedrooms_rule?: string | null;
+          created_at?: string | null;
+          furnishing_preference?: string | null;
+          id?: string;
+          max_budget?: number | null;
+          min_budget?: number | null;
+          move_in_date?: string | null;
+          preferred_budget?: number | null;
+          preferred_locations?: Json | null;
+          priority_weights?: Json | null;
+          property_types?: string[] | null;
+          updated_at?: string | null;
+          use_behavioral_personalization?: boolean | null;
+          user_id: string;
+        };
+        Update: {
+          amenities?: Json | null;
+          bathrooms?: number | null;
+          bathrooms_rule?: string | null;
+          bedrooms?: number | null;
+          bedrooms_rule?: string | null;
+          created_at?: string | null;
+          furnishing_preference?: string | null;
+          id?: string;
+          max_budget?: number | null;
+          min_budget?: number | null;
+          move_in_date?: string | null;
+          preferred_budget?: number | null;
+          preferred_locations?: Json | null;
+          priority_weights?: Json | null;
+          property_types?: string[] | null;
+          updated_at?: string | null;
+          use_behavioral_personalization?: boolean | null;
+          user_id?: string;
         };
         Relationships: [];
       };
@@ -135,473 +1443,372 @@ export type Database = {
         };
         Relationships: [];
       };
-      permissions: {
+      verification_evidence: {
         Row: {
-          id: string;
-          name: string;
-          description: string | null;
           created_at: string;
+          evidence_type: string;
+          id: string;
+          review_notes: string | null;
+          status: Database["public"]["Enums"]["evidence_status"];
+          storage_reference: string;
+          submitted_at: string;
+          submitted_by: string;
+          updated_at: string;
+          verification_id: string;
         };
         Insert: {
-          id?: string;
-          name: string;
-          description?: string | null;
           created_at?: string;
+          evidence_type: string;
+          id?: string;
+          review_notes?: string | null;
+          status?: Database["public"]["Enums"]["evidence_status"];
+          storage_reference: string;
+          submitted_at?: string;
+          submitted_by: string;
+          updated_at?: string;
+          verification_id: string;
         };
         Update: {
-          id?: string;
-          name?: string;
-          description?: string | null;
           created_at?: string;
+          evidence_type?: string;
+          id?: string;
+          review_notes?: string | null;
+          status?: Database["public"]["Enums"]["evidence_status"];
+          storage_reference?: string;
+          submitted_at?: string;
+          submitted_by?: string;
+          updated_at?: string;
+          verification_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "verification_evidence_verification_id_fkey";
+            columns: ["verification_id"];
+            isOneToOne: false;
+            referencedRelation: "verifications";
+            referencedColumns: ["id"];
+          },
+        ];
       };
-      role_permissions: {
+      verification_history: {
         Row: {
-          id: string;
-          role: Database["public"]["Enums"]["app_role"];
-          permission_id: string;
+          changed_by: string | null;
           created_at: string;
+          id: string;
+          notes: string | null;
+          status: Database["public"]["Enums"]["verification_status"];
+          verification_id: string;
         };
         Insert: {
-          id?: string;
-          role: Database["public"]["Enums"]["app_role"];
-          permission_id: string;
+          changed_by?: string | null;
           created_at?: string;
+          id?: string;
+          notes?: string | null;
+          status: Database["public"]["Enums"]["verification_status"];
+          verification_id: string;
         };
         Update: {
-          id?: string;
-          role?: Database["public"]["Enums"]["app_role"];
-          permission_id?: string;
+          changed_by?: string | null;
           created_at?: string;
+          id?: string;
+          notes?: string | null;
+          status?: Database["public"]["Enums"]["verification_status"];
+          verification_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "verification_history_verification_id_fkey";
+            columns: ["verification_id"];
+            isOneToOne: false;
+            referencedRelation: "verifications";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       verification_tokens: {
         Row: {
-          id: string;
-          user_id: string;
-          token_hash: string;
+          created_at: string;
           expires_at: string;
+          id: string;
+          token_hash: string;
           used_at: string | null;
-          created_at: string;
+          user_id: string;
         };
         Insert: {
-          id?: string;
-          user_id: string;
-          token_hash: string;
-          expires_at: string;
-          used_at?: string | null;
           created_at?: string;
+          expires_at: string;
+          id?: string;
+          token_hash: string;
+          used_at?: string | null;
+          user_id: string;
         };
         Update: {
+          created_at?: string;
+          expires_at?: string;
           id?: string;
-          user_id?: string;
           token_hash?: string;
-          expires_at?: string;
           used_at?: string | null;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      password_reset_tokens: {
-        Row: {
-          id: string;
-          user_id: string;
-          token_hash: string;
-          expires_at: string;
-          used_at: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id: string;
-          token_hash: string;
-          expires_at: string;
-          used_at?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
           user_id?: string;
-          token_hash?: string;
-          expires_at?: string;
-          used_at?: string | null;
-          created_at?: string;
         };
         Relationships: [];
       };
-      sessions: {
+      verifications: {
         Row: {
-          id: string;
-          user_id: string;
-          session_token_hash: string;
           created_at: string;
-          expires_at: string;
-          last_seen_at: string;
-          revoked_at: string | null;
-          ip_address: unknown;
-          user_agent: string | null;
-        };
-        Insert: {
-          id?: string;
-          user_id: string;
-          session_token_hash: string;
-          created_at?: string;
-          expires_at: string;
-          last_seen_at?: string;
-          revoked_at?: string | null;
-          ip_address?: unknown;
-          user_agent?: string | null;
-        };
-        Update: {
-          id?: string;
-          user_id?: string;
-          session_token_hash?: string;
-          created_at?: string;
-          expires_at?: string;
-          last_seen_at?: string;
-          revoked_at?: string | null;
-          ip_address?: unknown;
-          user_agent?: string | null;
-        };
-        Relationships: [];
-      };
-      properties: {
-        Row: {
-          id: string;
-          property_type: Database["public"]["Enums"]["property_type"];
-          name: string;
-          description: string | null;
-          status: Database["public"]["Enums"]["property_status"];
-          owner_user_id: string;
-          created_by_user_id: string;
-          country: string;
-          county: string;
-          town: string;
-          neighborhood: string | null;
-          estate: string | null;
-          address: string | null;
-          latitude: number | null;
-          longitude: number | null;
-          landmark_description: string | null;
-          created_at: string;
-          updated_at: string;
-          deleted_at: string | null;
-        };
-        Insert: {
-          id?: string;
-          property_type: Database["public"]["Enums"]["property_type"];
-          name: string;
-          description?: string | null;
-          status?: Database["public"]["Enums"]["property_status"];
-          owner_user_id: string;
-          created_by_user_id: string;
-          country?: string;
-          county: string;
-          town: string;
-          neighborhood?: string | null;
-          estate?: string | null;
-          address?: string | null;
-          latitude?: number | null;
-          longitude?: number | null;
-          landmark_description?: string | null;
-          created_at?: string;
-          updated_at?: string;
-          deleted_at?: string | null;
-        };
-        Update: {
-          id?: string;
-          property_type?: Database["public"]["Enums"]["property_type"];
-          name?: string;
-          description?: string | null;
-          status?: Database["public"]["Enums"]["property_status"];
-          owner_user_id?: string;
-          created_by_user_id?: string;
-          country?: string;
-          county?: string;
-          town?: string;
-          neighborhood?: string | null;
-          estate?: string | null;
-          address?: string | null;
-          latitude?: number | null;
-          longitude?: number | null;
-          landmark_description?: string | null;
-          created_at?: string;
-          updated_at?: string;
-          deleted_at?: string | null;
-        };
-        Relationships: [];
-      };
-      buildings: {
-        Row: {
-          id: string;
-          property_id: string;
-          name: string;
-          description: string | null;
-          floors: number | null;
-          year_built: number | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          property_id: string;
-          name: string;
-          description?: string | null;
-          floors?: number | null;
-          year_built?: number | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          property_id?: string;
-          name?: string;
-          description?: string | null;
-          floors?: number | null;
-          year_built?: number | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      units: {
-        Row: {
-          id: string;
-          property_id: string;
-          building_id: string | null;
-          unit_number: string;
-          unit_type: Database["public"]["Enums"]["unit_type"];
-          floor: number | null;
-          bedrooms: number;
-          bathrooms: number;
-          area: number | null;
-          status: Database["public"]["Enums"]["unit_status"];
-          description: string | null;
-          created_at: string;
-          updated_at: string;
-          deleted_at: string | null;
-        };
-        Insert: {
-          id?: string;
-          property_id: string;
-          building_id?: string | null;
-          unit_number: string;
-          unit_type: Database["public"]["Enums"]["unit_type"];
-          floor?: number | null;
-          bedrooms?: number;
-          bathrooms?: number;
-          area?: number | null;
-          status?: Database["public"]["Enums"]["unit_status"];
-          description?: string | null;
-          created_at?: string;
-          updated_at?: string;
-          deleted_at?: string | null;
-        };
-        Update: {
-          id?: string;
-          property_id?: string;
-          building_id?: string | null;
-          unit_number?: string;
-          unit_type?: Database["public"]["Enums"]["unit_type"];
-          floor?: number | null;
-          bedrooms?: number;
-          bathrooms?: number;
-          area?: number | null;
-          status?: Database["public"]["Enums"]["unit_status"];
-          description?: string | null;
-          created_at?: string;
-          updated_at?: string;
-          deleted_at?: string | null;
-        };
-        Relationships: [];
-      };
-      property_amenities: {
-        Row: {
-          id: string;
-          property_id: string;
-          amenity: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          property_id: string;
-          amenity: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          property_id?: string;
-          amenity?: string;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      unit_amenities: {
-        Row: {
-          id: string;
-          unit_id: string;
-          amenity: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          unit_id: string;
-          amenity: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          unit_id?: string;
-          amenity?: string;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      property_parties: {
-        Row: {
-          id: string;
-          property_id: string;
-          user_id: string;
-          relationship_type: Database["public"]["Enums"]["relationship_type"];
-          status: Database["public"]["Enums"]["relationship_status"];
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          property_id: string;
-          user_id: string;
-          relationship_type: Database["public"]["Enums"]["relationship_type"];
-          status?: Database["public"]["Enums"]["relationship_status"];
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          property_id?: string;
-          user_id?: string;
-          relationship_type?: Database["public"]["Enums"]["relationship_type"];
-          status?: Database["public"]["Enums"]["relationship_status"];
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      listings: {
-        Row: {
-          id: string;
-          property_id: string;
-          unit_id: string | null;
-          title: string;
-          description: string | null;
-          listing_type: Database["public"]["Enums"]["listing_type"];
-          status: Database["public"]["Enums"]["listing_status"];
-          price: number;
-          currency: string;
-          billing_period: Database["public"]["Enums"]["billing_period"];
-          deposit_amount: number | null;
-          availability_date: string;
-          published_at: string | null;
           expires_at: string | null;
-          created_by_user_id: string;
-          created_at: string;
+          id: string;
+          rejection_reason: string | null;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          revocation_reason: string | null;
+          status: Database["public"]["Enums"]["verification_status"];
+          subject_id: string;
+          subject_type: string;
+          submitted_at: string;
           updated_at: string;
-          deleted_at: string | null;
+          verification_type: Database["public"]["Enums"]["verification_type"];
         };
         Insert: {
-          id?: string;
-          property_id: string;
-          unit_id?: string | null;
-          title: string;
-          description?: string | null;
-          listing_type?: Database["public"]["Enums"]["listing_type"];
-          status?: Database["public"]["Enums"]["listing_status"];
-          price: number;
-          currency?: string;
-          billing_period?: Database["public"]["Enums"]["billing_period"];
-          deposit_amount?: number | null;
-          availability_date: string;
-          published_at?: string | null;
-          expires_at?: string | null;
-          created_by_user_id: string;
           created_at?: string;
+          expires_at?: string | null;
+          id?: string;
+          rejection_reason?: string | null;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          revocation_reason?: string | null;
+          status?: Database["public"]["Enums"]["verification_status"];
+          subject_id: string;
+          subject_type: string;
+          submitted_at?: string;
           updated_at?: string;
-          deleted_at?: string | null;
+          verification_type: Database["public"]["Enums"]["verification_type"];
         };
         Update: {
-          id?: string;
-          property_id?: string | null;
-          unit_id?: string | null;
-          title?: string;
-          description?: string | null;
-          listing_type?: Database["public"]["Enums"]["listing_type"];
-          status?: Database["public"]["Enums"]["listing_status"];
-          price?: number;
-          currency?: string;
-          billing_period?: Database["public"]["Enums"]["billing_period"];
-          deposit_amount?: number | null;
-          availability_date?: string;
-          published_at?: string | null;
-          expires_at?: string | null;
-          created_by_user_id?: string;
           created_at?: string;
+          expires_at?: string | null;
+          id?: string;
+          rejection_reason?: string | null;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          revocation_reason?: string | null;
+          status?: Database["public"]["Enums"]["verification_status"];
+          subject_id?: string;
+          subject_type?: string;
+          submitted_at?: string;
           updated_at?: string;
-          deleted_at?: string | null;
+          verification_type?: Database["public"]["Enums"]["verification_type"];
         };
         Relationships: [];
       };
-      property_media: {
+      viewing_availabilities: {
         Row: {
-          id: string;
-          property_id: string | null;
-          unit_id: string | null;
-          listing_id: string | null;
-          media_type: Database["public"]["Enums"]["media_type"];
-          url: string;
-          storage_key: string | null;
-          caption: string | null;
-          sort_order: number;
-          is_primary: boolean;
           created_at: string;
+          day_of_week: number;
+          end_time: string;
+          id: string;
+          listing_id: string | null;
+          provider_id: string;
+          start_time: string;
+          updated_at: string;
         };
         Insert: {
-          id?: string;
-          property_id?: string | null;
-          unit_id?: string | null;
-          listing_id?: string | null;
-          media_type?: Database["public"]["Enums"]["media_type"];
-          url: string;
-          storage_key?: string | null;
-          caption?: string | null;
-          sort_order?: number;
-          is_primary?: boolean;
           created_at?: string;
+          day_of_week: number;
+          end_time: string;
+          id?: string;
+          listing_id?: string | null;
+          provider_id: string;
+          start_time: string;
+          updated_at?: string;
         };
         Update: {
-          id?: string;
-          property_id?: string | null;
-          unit_id?: string | null;
-          listing_id?: string | null;
-          media_type?: Database["public"]["Enums"]["media_type"];
-          url?: string;
-          storage_key?: string | null;
-          caption?: string | null;
-          sort_order?: number;
-          is_primary?: boolean;
           created_at?: string;
+          day_of_week?: number;
+          end_time?: string;
+          id?: string;
+          listing_id?: string | null;
+          provider_id?: string;
+          start_time?: string;
+          updated_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "viewing_availabilities_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "viewing_availabilities_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+        ];
+      };
+      viewings: {
+        Row: {
+          confirmed_end: string | null;
+          confirmed_start: string | null;
+          conversation_id: string | null;
+          created_at: string;
+          id: string;
+          listing_id: string;
+          notes: string | null;
+          property_id: string;
+          provider_id: string;
+          requested_end: string;
+          requested_start: string;
+          seeker_id: string;
+          status: string;
+          unit_id: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          confirmed_end?: string | null;
+          confirmed_start?: string | null;
+          conversation_id?: string | null;
+          created_at?: string;
+          id?: string;
+          listing_id: string;
+          notes?: string | null;
+          property_id: string;
+          provider_id: string;
+          requested_end: string;
+          requested_start: string;
+          seeker_id: string;
+          status?: string;
+          unit_id?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          confirmed_end?: string | null;
+          confirmed_start?: string | null;
+          conversation_id?: string | null;
+          created_at?: string;
+          id?: string;
+          listing_id?: string;
+          notes?: string | null;
+          property_id?: string;
+          provider_id?: string;
+          requested_end?: string;
+          requested_start?: string;
+          seeker_id?: string;
+          status?: string;
+          unit_id?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "viewings_conversation_id_fkey";
+            columns: ["conversation_id"];
+            isOneToOne: false;
+            referencedRelation: "conversations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "viewings_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "viewings_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+          {
+            foreignKeyName: "viewings_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "viewings_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "viewings_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["unit_id"];
+          },
+          {
+            foreignKeyName: "viewings_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "units";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {
-      [_ in never]: never;
+      listings_search_view: {
+        Row: {
+          address: string | null;
+          area: number | null;
+          availability_confirmed_at: string | null;
+          availability_date: string | null;
+          bathrooms: number | null;
+          bedrooms: number | null;
+          billing_period: Database["public"]["Enums"]["billing_period"] | null;
+          county: string | null;
+          currency: string | null;
+          deposit_amount: number | null;
+          estate: string | null;
+          floor: number | null;
+          landmark_description: string | null;
+          latitude: number | null;
+          listing_created_at: string | null;
+          listing_deleted_at: string | null;
+          listing_description: string | null;
+          listing_freshness_status: Database["public"]["Enums"]["listing_freshness_status"] | null;
+          listing_id: string | null;
+          listing_last_verified_at: string | null;
+          listing_status: Database["public"]["Enums"]["listing_status"] | null;
+          listing_title: string | null;
+          listing_type: Database["public"]["Enums"]["listing_type"] | null;
+          listing_verification_status: Database["public"]["Enums"]["verification_status"] | null;
+          longitude: number | null;
+          neighborhood: string | null;
+          owner_agent_verified: boolean | null;
+          owner_identity_verified: boolean | null;
+          price: number | null;
+          price_confirmed_at: string | null;
+          primary_image_url: string | null;
+          property_amenities: string[] | null;
+          property_id: string | null;
+          property_name: string | null;
+          property_type: Database["public"]["Enums"]["property_type"] | null;
+          property_verification_status: Database["public"]["Enums"]["verification_status"] | null;
+          published_at: string | null;
+          town: string | null;
+          unit_id: string | null;
+          unit_status: Database["public"]["Enums"]["unit_status"] | null;
+          unit_type: Database["public"]["Enums"]["unit_type"] | null;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       current_user_roles: {
         Args: never;
         Returns: Database["public"]["Enums"]["app_role"][];
+      };
+      has_permission: {
+        Args: { _permission: string; _user_id: string };
+        Returns: boolean;
       };
       has_role: {
         Args: {
@@ -610,13 +1817,24 @@ export type Database = {
         };
         Returns: boolean;
       };
+      is_active_property_party: {
+        Args: { _property_id: string; _user_id: string };
+        Returns: boolean;
+      };
       is_platform_admin: { Args: { _user_id: string }; Returns: boolean };
     };
     Enums: {
+      account_status: "PENDING_VERIFICATION" | "ACTIVE" | "SUSPENDED" | "DEACTIVATED" | "LOCKED";
       app_role:
         "tenant" | "landlord" | "agent" | "property_manager" | "verifier" | "admin" | "super_admin";
-      account_status: "ACTIVE" | "SUSPENDED" | "PENDING_VERIFICATION" | "DEACTIVATED" | "LOCKED";
-      user_status: "ACTIVE" | "SUSPENDED" | "PENDING_VERIFICATION";
+      appeal_status: "APPEAL_SUBMITTED" | "UNDER_REVIEW" | "UPHELD" | "REVERSED";
+      billing_period: "MONTHLY" | "WEEKLY" | "DAILY" | "YEARLY";
+      claim_status: "PENDING" | "APPROVED" | "REJECTED" | "WITHDRAWN";
+      evidence_status: "PENDING" | "APPROVED" | "REJECTED";
+      listing_freshness_status: "CURRENT" | "STALE" | "REQUIRES_REVALIDATION" | "EXPIRED";
+      listing_status: "DRAFT" | "PENDING_REVIEW" | "PUBLISHED" | "PAUSED" | "EXPIRED" | "ARCHIVED";
+      listing_type: "FOR_RENT" | "FOR_SALE";
+      media_type: "IMAGE" | "VIDEO" | "FLOOR_PLAN" | "DOCUMENT";
       property_status: "DRAFT" | "ACTIVE" | "INACTIVE" | "ARCHIVED";
       property_type:
         | "APARTMENT"
@@ -630,6 +1848,11 @@ export type Database = {
         | "ROOM"
         | "SHARED_ACCOMMODATION"
         | "OTHER";
+      relationship_status: "ACTIVE" | "PENDING" | "REVOKED";
+      relationship_type: "OWNER" | "AGENT" | "PROPERTY_MANAGER";
+      report_status: "OPEN" | "UNDER_REVIEW" | "RESOLVED" | "DISMISSED" | "ESCALATED";
+      risk_severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+      risk_status: "OPEN" | "RESOLVED" | "DISMISSED";
       unit_status:
         | "DRAFT"
         | "AVAILABLE"
@@ -649,12 +1872,16 @@ export type Database = {
         | "SHARED"
         | "HOUSE"
         | "OTHER";
-      listing_status: "DRAFT" | "PENDING_REVIEW" | "PUBLISHED" | "PAUSED" | "EXPIRED" | "ARCHIVED";
-      listing_type: "FOR_RENT" | "FOR_SALE";
-      billing_period: "MONTHLY" | "WEEKLY" | "DAILY" | "YEARLY";
-      relationship_type: "OWNER" | "AGENT" | "PROPERTY_MANAGER";
-      relationship_status: "ACTIVE" | "PENDING" | "REVOKED";
-      media_type: "IMAGE" | "VIDEO" | "FLOOR_PLAN" | "DOCUMENT";
+      verification_status:
+        "UNVERIFIED" | "PENDING" | "UNDER_REVIEW" | "VERIFIED" | "REJECTED" | "EXPIRED" | "REVOKED";
+      verification_type:
+        | "IDENTITY"
+        | "PROPERTY_OWNERSHIP"
+        | "PROPERTY_EXISTENCE"
+        | "LISTING"
+        | "CONTACT"
+        | "AGENT"
+        | "LANDLORD";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -774,8 +2001,12 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
+      account_status: ["PENDING_VERIFICATION", "ACTIVE", "SUSPENDED", "DEACTIVATED", "LOCKED"],
       app_role: [
         "tenant",
         "landlord",
@@ -785,8 +2016,14 @@ export const Constants = {
         "admin",
         "super_admin",
       ],
-      account_status: ["ACTIVE", "SUSPENDED", "PENDING_VERIFICATION", "DEACTIVATED", "LOCKED"],
-      user_status: ["ACTIVE", "SUSPENDED", "PENDING_VERIFICATION"],
+      appeal_status: ["APPEAL_SUBMITTED", "UNDER_REVIEW", "UPHELD", "REVERSED"],
+      billing_period: ["MONTHLY", "WEEKLY", "DAILY", "YEARLY"],
+      claim_status: ["PENDING", "APPROVED", "REJECTED", "WITHDRAWN"],
+      evidence_status: ["PENDING", "APPROVED", "REJECTED"],
+      listing_freshness_status: ["CURRENT", "STALE", "REQUIRES_REVALIDATION", "EXPIRED"],
+      listing_status: ["DRAFT", "PENDING_REVIEW", "PUBLISHED", "PAUSED", "EXPIRED", "ARCHIVED"],
+      listing_type: ["FOR_RENT", "FOR_SALE"],
+      media_type: ["IMAGE", "VIDEO", "FLOOR_PLAN", "DOCUMENT"],
       property_status: ["DRAFT", "ACTIVE", "INACTIVE", "ARCHIVED"],
       property_type: [
         "APARTMENT",
@@ -801,6 +2038,11 @@ export const Constants = {
         "SHARED_ACCOMMODATION",
         "OTHER",
       ],
+      relationship_status: ["ACTIVE", "PENDING", "REVOKED"],
+      relationship_type: ["OWNER", "AGENT", "PROPERTY_MANAGER"],
+      report_status: ["OPEN", "UNDER_REVIEW", "RESOLVED", "DISMISSED", "ESCALATED"],
+      risk_severity: ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+      risk_status: ["OPEN", "RESOLVED", "DISMISSED"],
       unit_status: [
         "DRAFT",
         "AVAILABLE",
@@ -822,12 +2064,24 @@ export const Constants = {
         "HOUSE",
         "OTHER",
       ],
-      listings_status: ["DRAFT", "PENDING_REVIEW", "PUBLISHED", "PAUSED", "EXPIRED", "ARCHIVED"],
-      listing_type: ["FOR_RENT", "FOR_SALE"],
-      billing_period: ["MONTHLY", "WEEKLY", "DAILY", "YEARLY"],
-      relationship_type: ["OWNER", "AGENT", "PROPERTY_MANAGER"],
-      relationship_status: ["ACTIVE", "PENDING", "REVOKED"],
-      media_type: ["IMAGE", "VIDEO", "FLOOR_PLAN", "DOCUMENT"],
+      verification_status: [
+        "UNVERIFIED",
+        "PENDING",
+        "UNDER_REVIEW",
+        "VERIFIED",
+        "REJECTED",
+        "EXPIRED",
+        "REVOKED",
+      ],
+      verification_type: [
+        "IDENTITY",
+        "PROPERTY_OWNERSHIP",
+        "PROPERTY_EXISTENCE",
+        "LISTING",
+        "CONTACT",
+        "AGENT",
+        "LANDLORD",
+      ],
     },
   },
 } as const;

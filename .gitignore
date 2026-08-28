@@ -33,3 +33,11 @@ dist-ssr
 
 # Environment files
 .env
+
+# Scratch scripts & Supabase CLI temp directories
+scratch/
+supabase/.temp/
+supabase/.branches/
+supabase/snippets/
+
+
