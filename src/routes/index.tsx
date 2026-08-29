@@ -575,7 +575,8 @@ function Index() {
               </h2>
               <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
                 We have fully deployed Phases 0 through 6: authentication, listing management,
-                discovery/search maps, trust verification, matching recommendations, and viewing bookings & messaging.
+                discovery/search maps, trust verification, matching recommendations, and viewing
+                bookings & messaging.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
