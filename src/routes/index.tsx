@@ -136,36 +136,36 @@ function Index() {
               Home<span className="text-accent">Hunt</span>
             </span>
             <span className="hidden rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground md:inline-block border border-border">
-              Phase 0 Foundation
+              Phase 6 Active
             </span>
           </div>
 
           {/* Desktop Nav */}
           <nav className="hidden items-center gap-6 md:flex">
-            <button
-              onClick={() => openPhaseNotice("Property Listings")}
+            <Link
+              to="/homes"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               Discover
-            </button>
-            <button
-              onClick={() => openPhaseNotice("Map Search")}
+            </Link>
+            <Link
+              to="/homes"
               className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               <Map className="h-4 w-4" /> Map Search
-            </button>
-            <button
-              onClick={() => openPhaseNotice("Lease & Disputes")}
+            </Link>
+            <Link
+              to="/viewings"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               Tenancy Support
-            </button>
-            <button
-              onClick={() => openPhaseNotice("Landlord Portal")}
+            </Link>
+            <Link
+              to="/properties"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               For Landlords
-            </button>
+            </Link>
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
@@ -218,42 +218,34 @@ function Index() {
         <div className="fixed inset-0 top-16 z-30 bg-background/98 backdrop-blur-lg md:hidden animate-in fade-in duration-200">
           <div className="container-page py-6 flex flex-col gap-5">
             <div className="flex flex-col gap-4 border-b border-border/60 pb-6">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPhaseNotice("Property Listings");
-                }}
+              <Link
+                to="/homes"
+                onClick={() => setMobileMenuOpen(false)}
                 className="text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
                 Discover Rentals
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPhaseNotice("Map Search");
-                }}
+              </Link>
+              <Link
+                to="/homes"
+                onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2 text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
                 <Map className="h-5 w-5" /> Map Search
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPhaseNotice("Lease & Disputes");
-                }}
+              </Link>
+              <Link
+                to="/viewings"
+                onClick={() => setMobileMenuOpen(false)}
                 className="text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
                 Tenancy Support
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openPhaseNotice("Landlord Portal");
-                }}
+              </Link>
+              <Link
+                to="/properties"
+                onClick={() => setMobileMenuOpen(false)}
                 className="text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
                 For Landlords
-              </button>
+              </Link>
             </div>
             <div className="flex flex-col gap-3 pt-2">
               {isAuthenticated ? (
@@ -455,12 +447,12 @@ function Index() {
                   uploading active listings.
                 </p>
               </div>
-              <button
-                onClick={() => openPhaseNotice("Property Verification Details")}
+              <Link
+                to="/trust"
                 className="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-accent transition-colors self-start"
               >
                 Learn Verification <ArrowRight className="h-3 w-3" />
-              </button>
+              </Link>
             </div>
 
             {/* Feature 2 */}
@@ -477,12 +469,12 @@ function Index() {
                   workplaces in your targeted zones.
                 </p>
               </div>
-              <button
-                onClick={() => openPhaseNotice("Spatial Search Mockups")}
+              <Link
+                to="/homes"
                 className="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-accent transition-colors self-start"
               >
                 Learn Spatial Search <ArrowRight className="h-3 w-3" />
-              </button>
+              </Link>
             </div>
 
             {/* Feature 3 */}
@@ -499,12 +491,12 @@ function Index() {
                   calendars, and rate agents.
                 </p>
               </div>
-              <button
-                onClick={() => openPhaseNotice("Viewing Booking Mockups")}
+              <Link
+                to="/viewings"
                 className="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-accent transition-colors self-start"
               >
                 Learn Bookings <ArrowRight className="h-3 w-3" />
-              </button>
+              </Link>
             </div>
 
             {/* Feature 4 */}
@@ -521,12 +513,12 @@ function Index() {
                   escalate structured claims easily.
                 </p>
               </div>
-              <button
-                onClick={() => openPhaseNotice("Disputes Resolution System")}
+              <Link
+                to="/dashboard"
                 className="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-accent transition-colors self-start"
               >
                 Learn Dispute Tools <ArrowRight className="h-3 w-3" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -579,11 +571,11 @@ function Index() {
                 Architectural Status
               </span>
               <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl text-primary mt-2">
-                Phase 0 Foundations Active
+                Phase 6 Active (Full-Stack Deployed)
               </h2>
               <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                We are currently deploying Phase 0: setup, authentication schemas, PostGIS
-                databases, API configurations, and the core routing skeleton.
+                We have fully deployed Phases 0 through 6: authentication, listing management,
+                discovery/search maps, trust verification, matching recommendations, and viewing bookings & messaging.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
@@ -593,12 +585,12 @@ function Index() {
                 >
                   Check System Health API <ArrowRight className="h-4 w-4" />
                 </a>
-                <button
-                  onClick={() => openPhaseNotice("Documentation & Database Schemas")}
+                <Link
+                  to="/dashboard"
                   className="inline-flex items-center justify-center rounded-xl border border-input bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm hover:bg-secondary/40"
                 >
-                  View Monorepo Specs
-                </button>
+                  View Monorepo Dashboard
+                </Link>
               </div>
             </div>
           </div>

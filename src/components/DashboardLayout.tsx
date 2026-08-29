@@ -53,7 +53,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
           { label: "My Listings", to: "/listings", icon: FolderKanban },
         ]
       : []),
-    { label: "Map Search", to: "/map", icon: Map },
+    { label: "Map Search", to: "/homes", icon: Map },
     { label: "Recommended Matches", to: "/recommendations", icon: Compass },
     { label: "Saved Homes", to: "/saved", icon: Bookmark },
     { label: "Applications", to: "/applications", icon: FolderKanban },
