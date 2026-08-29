@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/features/identity/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 import {
   Outlet,
   Link,
@@ -125,6 +126,7 @@ function RootComponent() {
       <AuthProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );

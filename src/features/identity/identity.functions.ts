@@ -16,16 +16,50 @@ import { checkRateLimit } from "@/core/auth/rate-limit.server";
 import type { Database } from "@/integrations/supabase/types";
 
 // =============================================================
-// Helper: get base URL for redirects
+// Helper: get base URL for redirects from incoming request
 // =============================================================
-function getBaseUrl(): string {
-  const env = process.env.APP_ENV ?? "development";
-  return env === "development" ? "http://localhost:3000" : "https://homehunt.dev";
+function getBaseUrlFromRequest(request?: Request): string | undefined {
+  if (!request) return undefined;
+  const headers = request.headers;
+  const host = headers.get("x-forwarded-host") || headers.get("host");
+  if (!host) return undefined;
+
+  const proto = headers.get("x-forwarded-proto") || "http";
+  const resolvedProto = host.startsWith("localhost") || host.startsWith("127.0.0.1") ? "http" : "https";
+
+  return `${resolvedProto}://${host}`;
 }
 
 // =============================================================
 // Helper: create temporary client to perform public authentication operations
 // =============================================================
+function isNewSupabaseApiKey(value: string): boolean {
+  return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");
+}
+
+function createSupabaseFetch(supabaseKey: string): typeof fetch {
+  return (input, init) => {
+    const headers = new Headers(
+      typeof Request !== "undefined" && input instanceof Request ? input.headers : undefined,
+    );
+
+    if (init?.headers) {
+      new Headers(init.headers).forEach((value, key) => headers.set(key, value));
+    }
+
+    // New Supabase API keys are opaque strings, not bearer JWTs.
+    if (
+      isNewSupabaseApiKey(supabaseKey) &&
+      headers.get("Authorization") === `Bearer ${supabaseKey}`
+    ) {
+      headers.delete("Authorization");
+    }
+
+    headers.set("apikey", supabaseKey);
+    return fetch(input, { ...init, headers });
+  };
+}
+
 function createPublicAuthClient() {
   const SUPABASE_URL = process.env["SUPABASE_URL"];
   const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"];
@@ -33,6 +67,9 @@ function createPublicAuthClient() {
     throw new Error("Supabase public credentials missing in environment");
   }
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    global: {
+      fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
+    },
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -204,6 +241,7 @@ const fnRegister = createServerFn({ method: "POST" })
     const request = getRequest();
     const requestId = resolveRequestId(request?.headers);
     const meta = auditMetadataFromRequest(request);
+    const baseUrl = getBaseUrlFromRequest(request);
 
     // Rate limit registration by IP
     const rateLimitKey = `register:${meta.ipAddress ?? "unknown"}`;
@@ -245,7 +283,7 @@ const fnRegister = createServerFn({ method: "POST" })
         requestId,
         email,
       });
-      throw new AppError(ERROR_CODES.INTERNAL_ERROR, "Could not create user account.");
+      throw new AppError(ERROR_CODES.INTERNAL_ERROR, authError?.message || "Could not create user account.");
     }
 
     const userId = userAuth.user.id;
@@ -277,7 +315,7 @@ const fnRegister = createServerFn({ method: "POST" })
     }
 
     // Send verification email
-    await emailService.sendVerificationEmail(email, verificationToken);
+    await emailService.sendVerificationEmail(email, verificationToken, baseUrl);
 
     // Record audit logs
     await Promise.all([
@@ -338,7 +376,11 @@ const fnLogin = createServerFn({ method: "POST" })
       });
 
       logger.warn("User login failed", { event: "login.failed", requestId, email });
-      throw new AppError(ERROR_CODES.UNAUTHENTICATED, "Email or password is incorrect.");
+      const isEmailNotConfirmed = authError?.message?.toLowerCase().includes("confirm");
+      const errorMessage = isEmailNotConfirmed
+        ? "Please verify your email address before logging in."
+        : "Email or password is incorrect.";
+      throw new AppError(ERROR_CODES.UNAUTHENTICATED, errorMessage);
     }
 
     const userId = authData.user.id;
@@ -551,6 +593,7 @@ const fnResendVerification = createServerFn({ method: "POST" })
     const request = getRequest();
     const requestId = resolveRequestId(request?.headers);
     const meta = auditMetadataFromRequest(request);
+    const baseUrl = getBaseUrlFromRequest(request);
 
     const email = data.email.trim().toLowerCase();
 
@@ -591,7 +634,7 @@ const fnResendVerification = createServerFn({ method: "POST" })
         });
 
         // Dispatches verification email
-        await emailService.sendVerificationEmail(email, verificationToken);
+        await emailService.sendVerificationEmail(email, verificationToken, baseUrl);
 
         await recordAuditEvent({
           actorId: user.id,
@@ -615,6 +658,7 @@ const fnRequestPasswordReset = createServerFn({ method: "POST" })
     const request = getRequest();
     const requestId = resolveRequestId(request?.headers);
     const meta = auditMetadataFromRequest(request);
+    const baseUrl = getBaseUrlFromRequest(request);
 
     const email = data.email.trim().toLowerCase();
 
@@ -645,7 +689,7 @@ const fnRequestPasswordReset = createServerFn({ method: "POST" })
       });
 
       // Send password reset email
-      await emailService.sendPasswordResetEmail(email, resetToken);
+      await emailService.sendPasswordResetEmail(email, resetToken, baseUrl);
 
       await recordAuditEvent({
         actorId: user.id,

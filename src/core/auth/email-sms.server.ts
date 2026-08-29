@@ -9,8 +9,8 @@ import { logger } from "../observability/logger";
 import { readServerConfig } from "../config/server-config";
 
 export interface EmailService {
-  sendVerificationEmail(email: string, token: string): Promise<void>;
-  sendPasswordResetEmail(email: string, token: string): Promise<void>;
+  sendVerificationEmail(email: string, token: string, customBaseUrl?: string): Promise<void>;
+  sendPasswordResetEmail(email: string, token: string, customBaseUrl?: string): Promise<void>;
 }
 
 export interface SmsService {
@@ -20,12 +20,12 @@ export interface SmsService {
 // In a real staging/production environment, this would initialize an SMTP client
 // or integrate with an external transactional service like Resend, Mailgun, etc.
 export const emailService: EmailService = {
-  async sendVerificationEmail(email: string, token: string): Promise<void> {
+  async sendVerificationEmail(email: string, token: string, customBaseUrl?: string): Promise<void> {
     const config = readServerConfig();
     const isDev = !config.ok || config.config.APP_ENV === "development";
 
     // Construct local or production redirect link
-    const baseUrl = isDev ? "http://localhost:3000" : "https://homehunt.dev";
+    const baseUrl = customBaseUrl || (isDev ? "http://localhost:8080" : "https://homehunt.dev");
     const verificationLink = `${baseUrl}/verify-email?token=${token}`;
 
     logger.info("Email verification dispatched", {
@@ -43,11 +43,11 @@ export const emailService: EmailService = {
     }
   },
 
-  async sendPasswordResetEmail(email: string, token: string): Promise<void> {
+  async sendPasswordResetEmail(email: string, token: string, customBaseUrl?: string): Promise<void> {
     const config = readServerConfig();
     const isDev = !config.ok || config.config.APP_ENV === "development";
 
-    const baseUrl = isDev ? "http://localhost:3000" : "https://homehunt.dev";
+    const baseUrl = customBaseUrl || (isDev ? "http://localhost:8080" : "https://homehunt.dev");
     const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
     logger.info("Password reset dispatched", {
