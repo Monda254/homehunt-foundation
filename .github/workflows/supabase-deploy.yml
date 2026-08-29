@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'supabase/migrations/**'
+      - "supabase/migrations/**"
   workflow_dispatch:
 
 jobs:
@@ -32,4 +32,3 @@ jobs:
             exit 0
           fi
           supabase db push --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
-

@@ -25,7 +25,8 @@ function getBaseUrlFromRequest(request?: Request): string | undefined {
   if (!host) return undefined;
 
   const proto = headers.get("x-forwarded-proto") || "http";
-  const resolvedProto = host.startsWith("localhost") || host.startsWith("127.0.0.1") ? "http" : "https";
+  const resolvedProto =
+    host.startsWith("localhost") || host.startsWith("127.0.0.1") ? "http" : "https";
 
   return `${resolvedProto}://${host}`;
 }
@@ -283,7 +284,10 @@ const fnRegister = createServerFn({ method: "POST" })
         requestId,
         email,
       });
-      throw new AppError(ERROR_CODES.INTERNAL_ERROR, authError?.message || "Could not create user account.");
+      throw new AppError(
+        ERROR_CODES.INTERNAL_ERROR,
+        authError?.message || "Could not create user account.",
+      );
     }
 
     const userId = userAuth.user.id;

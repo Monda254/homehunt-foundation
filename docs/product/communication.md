@@ -6,7 +6,7 @@ The HomeHunt communication system is housing-specific. It links seekers directly
 
 1. **Structured First-Contact**:
    Seekers discover a listing and initiate an enquiry using template messages or free-form text. The platform creates a unified communication thread.
-   
+
 2. **Context-Rich Header**:
    Both parties see the property context header (listing title, rent price, image, location, and verified badges) directly above the chat feed, ensuring context is never lost.
 

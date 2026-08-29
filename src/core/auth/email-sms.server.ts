@@ -43,7 +43,11 @@ export const emailService: EmailService = {
     }
   },
 
-  async sendPasswordResetEmail(email: string, token: string, customBaseUrl?: string): Promise<void> {
+  async sendPasswordResetEmail(
+    email: string,
+    token: string,
+    customBaseUrl?: string,
+  ): Promise<void> {
     const config = readServerConfig();
     const isDev = !config.ok || config.config.APP_ENV === "development";
 
