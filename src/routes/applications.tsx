@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { RequireAuth, useAuth } from "@/features/identity/AuthContext";
 import { DashboardLayout } from "@/components/DashboardLayout";

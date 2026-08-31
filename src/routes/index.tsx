@@ -577,10 +577,23 @@ function Index() {
               </span>
             </div>
           ) : listings && listings.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {listings.map((list) => (
-                <ListingCard key={list.id} listing={list as unknown as ListingCardData} />
-              ))}
+            <div className="space-y-8">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {listings.slice(0, 6).map((list) => (
+                  <ListingCard key={list.id} listing={list as unknown as ListingCardData} />
+                ))}
+              </div>
+              {listings.length > 6 && (
+                <div className="text-center pt-4">
+                  <Link
+                    to="/homes"
+                    search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/95 hover:shadow cursor-pointer"
+                  >
+                    See More Verified Homes <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              )}
             </div>
           ) : (
             <div className="surface-card p-12 text-center max-w-md mx-auto border border-dashed border-border/80">

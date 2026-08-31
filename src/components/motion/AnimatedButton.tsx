@@ -1,9 +1,8 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { HTMLMotionProps, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
-interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
+interface AnimatedButtonProps extends HTMLMotionProps<"button"> {
   loading?: boolean;
   success?: boolean;
   variant?: "primary" | "secondary" | "danger" | "ghost";
@@ -24,11 +23,11 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
 
     return (
       <motion.button
-        ref={ref as any}
+        ref={ref}
         whileTap={props.disabled || loading ? {} : { scale: 0.98 }}
         whileHover={props.disabled || loading ? {} : { scale: 1.01 }}
         className={`${btnStyle} ${className} relative flex items-center justify-center gap-2 overflow-hidden`}
-        {...(props as any)}
+        {...props}
       >
         {loading && <Loader2 className="h-4 w-4 animate-spin text-current shrink-0" />}
         {success && (
@@ -40,7 +39,9 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
             ✓
           </motion.span>
         )}
-        <span className={loading ? "opacity-90" : "opacity-100"}>{children}</span>
+        <span className={loading ? "opacity-90" : "opacity-100"}>
+          {children as React.ReactNode}
+        </span>
       </motion.button>
     );
   },
