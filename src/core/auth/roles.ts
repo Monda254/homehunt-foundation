@@ -74,6 +74,9 @@ export const APP_PERMISSIONS = [
   "APPLICATIONS_VIEW_SELF",
   "APPLICATIONS_WITHDRAW",
   "APPLICATIONS_MANAGE",
+  "TENANCIES_CREATE",
+  "TENANCIES_VIEW_SELF",
+  "TENANCIES_MANAGE",
 ] as const;
 
 export type AppPermission = (typeof APP_PERMISSIONS)[number];
@@ -90,6 +93,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "APPLICATIONS_CREATE",
     "APPLICATIONS_VIEW_SELF",
     "APPLICATIONS_WITHDRAW",
+    "TENANCIES_CREATE",
+    "TENANCIES_VIEW_SELF",
   ],
   landlord: [
     "USER_VIEW_SELF",
@@ -108,6 +113,9 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_PUBLISH",
     "APPLICATIONS_VIEW_SELF",
     "APPLICATIONS_MANAGE",
+    "TENANCIES_CREATE",
+    "TENANCIES_VIEW_SELF",
+    "TENANCIES_MANAGE",
   ],
   agent: [
     "USER_VIEW_SELF",
@@ -126,6 +134,9 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_PUBLISH",
     "APPLICATIONS_VIEW_SELF",
     "APPLICATIONS_MANAGE",
+    "TENANCIES_CREATE",
+    "TENANCIES_VIEW_SELF",
+    "TENANCIES_MANAGE",
   ],
   property_manager: [
     "USER_VIEW_SELF",
@@ -144,6 +155,9 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_PUBLISH",
     "APPLICATIONS_VIEW_SELF",
     "APPLICATIONS_MANAGE",
+    "TENANCIES_CREATE",
+    "TENANCIES_VIEW_SELF",
+    "TENANCIES_MANAGE",
   ],
   verifier: [
     "USER_VIEW_SELF",
@@ -194,6 +208,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_RESTORE",
     "APPLICATIONS_VIEW_SELF",
     "APPLICATIONS_MANAGE",
+    "TENANCIES_VIEW_SELF",
+    "TENANCIES_MANAGE",
   ],
   super_admin: [
     "USER_VIEW_SELF",
@@ -232,6 +248,9 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_RESTORE",
     "APPLICATIONS_VIEW_SELF",
     "APPLICATIONS_MANAGE",
+    "TENANCIES_CREATE",
+    "TENANCIES_VIEW_SELF",
+    "TENANCIES_MANAGE",
   ],
 };
 

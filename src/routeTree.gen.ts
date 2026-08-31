@@ -23,11 +23,13 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TenanciesRouteImport } from './routes/tenancies'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as ViewingsRouteImport } from './routes/viewings'
 import { Route as ApplicationsIdRouteImport } from './routes/applications.$id'
 import { Route as DashboardApplicationsRouteImport } from './routes/dashboard.applications'
+import { Route as DashboardTenanciesRouteImport } from './routes/dashboard.tenancies'
 import { Route as HomesIndexRouteImport } from './routes/homes.index'
 import { Route as HomesIdRouteImport } from './routes/homes.$id'
 import { Route as ListingsIndexRouteImport } from './routes/listings.index'
@@ -35,8 +37,10 @@ import { Route as ListingsIdRouteImport } from './routes/listings.$id'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as PropertiesNewRouteImport } from './routes/properties.new'
+import { Route as TenanciesIdRouteImport } from './routes/tenancies.$id'
 import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as DashboardApplicationsIdRouteImport } from './routes/dashboard.applications.$id'
+import { Route as DashboardTenanciesIdRouteImport } from './routes/dashboard.tenancies.$id'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiV1HealthDatabaseRouteImport } from './routes/api/v1/health.database'
 import { Route as PropertiesPropertyIdUnitsUnitIdRouteImport } from './routes/properties.$propertyId.units.$unitId'
@@ -111,6 +115,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TenanciesRoute = TenanciesRouteImport.update({
+  id: '/tenancies',
+  path: '/tenancies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
@@ -134,6 +143,11 @@ const ApplicationsIdRoute = ApplicationsIdRouteImport.update({
 const DashboardApplicationsRoute = DashboardApplicationsRouteImport.update({
   id: '/applications',
   path: '/applications',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTenanciesRoute = DashboardTenanciesRouteImport.update({
+  id: '/tenancies',
+  path: '/tenancies',
   getParentRoute: () => DashboardRoute,
 } as any)
 const HomesIndexRoute = HomesIndexRouteImport.update({
@@ -171,6 +185,11 @@ const PropertiesNewRoute = PropertiesNewRouteImport.update({
   path: '/properties/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TenanciesIdRoute = TenanciesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TenanciesRoute,
+} as any)
 const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
   id: '/api/v1/health',
   path: '/api/v1/health',
@@ -180,6 +199,11 @@ const DashboardApplicationsIdRoute = DashboardApplicationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => DashboardApplicationsRoute,
+} as any)
+const DashboardTenanciesIdRoute = DashboardTenanciesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardTenanciesRoute,
 } as any)
 const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
   id: '/api/public/v1/health',
@@ -213,20 +237,24 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/tenancies': typeof TenanciesRouteWithChildren
   '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/dashboard/applications': typeof DashboardApplicationsRouteWithChildren
+  '/dashboard/tenancies': typeof DashboardTenanciesRouteWithChildren
   '/homes/$id': typeof HomesIdRoute
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/properties/new': typeof PropertiesNewRoute
+  '/tenancies/$id': typeof TenanciesIdRoute
   '/homes/': typeof HomesIndexRoute
   '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
   '/dashboard/applications/$id': typeof DashboardApplicationsIdRoute
+  '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
   '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
@@ -246,20 +274,24 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/tenancies': typeof TenanciesRouteWithChildren
   '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/dashboard/applications': typeof DashboardApplicationsRouteWithChildren
+  '/dashboard/tenancies': typeof DashboardTenanciesRouteWithChildren
   '/homes/$id': typeof HomesIdRoute
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/properties/new': typeof PropertiesNewRoute
+  '/tenancies/$id': typeof TenanciesIdRoute
   '/homes': typeof HomesIndexRoute
   '/listings': typeof ListingsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
   '/dashboard/applications/$id': typeof DashboardApplicationsIdRoute
+  '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
   '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
@@ -280,20 +312,24 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
+  '/tenancies': typeof TenanciesRouteWithChildren
   '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/dashboard/applications': typeof DashboardApplicationsRouteWithChildren
+  '/dashboard/tenancies': typeof DashboardTenanciesRouteWithChildren
   '/homes/$id': typeof HomesIdRoute
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/properties/new': typeof PropertiesNewRoute
+  '/tenancies/$id': typeof TenanciesIdRoute
   '/homes/': typeof HomesIndexRoute
   '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
   '/dashboard/applications/$id': typeof DashboardApplicationsIdRoute
+  '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
   '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
@@ -315,20 +351,24 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/tenancies'
     | '/trust'
     | '/verify-email'
     | '/viewings'
     | '/applications/$id'
     | '/dashboard/applications'
+    | '/dashboard/tenancies'
     | '/homes/$id'
     | '/listings/$id'
     | '/properties/$id'
     | '/properties/new'
+    | '/tenancies/$id'
     | '/homes/'
     | '/listings/'
     | '/properties/'
     | '/api/v1/health'
     | '/dashboard/applications/$id'
+    | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
     | '/properties/$propertyId/units/$unitId'
@@ -348,20 +388,24 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/tenancies'
     | '/trust'
     | '/verify-email'
     | '/viewings'
     | '/applications/$id'
     | '/dashboard/applications'
+    | '/dashboard/tenancies'
     | '/homes/$id'
     | '/listings/$id'
     | '/properties/$id'
     | '/properties/new'
+    | '/tenancies/$id'
     | '/homes'
     | '/listings'
     | '/properties'
     | '/api/v1/health'
     | '/dashboard/applications/$id'
+    | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
     | '/properties/$propertyId/units/$unitId'
@@ -381,20 +425,24 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/saved'
     | '/settings'
+    | '/tenancies'
     | '/trust'
     | '/verify-email'
     | '/viewings'
     | '/applications/$id'
     | '/dashboard/applications'
+    | '/dashboard/tenancies'
     | '/homes/$id'
     | '/listings/$id'
     | '/properties/$id'
     | '/properties/new'
+    | '/tenancies/$id'
     | '/homes/'
     | '/listings/'
     | '/properties/'
     | '/api/v1/health'
     | '/dashboard/applications/$id'
+    | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
     | '/properties/$propertyId/units/$unitId'
@@ -415,6 +463,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SavedRoute: typeof SavedRoute
   SettingsRoute: typeof SettingsRoute
+  TenanciesRoute: typeof TenanciesRouteWithChildren
   TrustRoute: typeof TrustRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   ViewingsRoute: typeof ViewingsRoute
@@ -530,6 +579,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tenancies': {
+      id: '/tenancies'
+      path: '/tenancies'
+      fullPath: '/tenancies'
+      preLoaderRoute: typeof TenanciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trust': {
       id: '/trust'
       path: '/trust'
@@ -563,6 +619,13 @@ declare module '@tanstack/react-router' {
       path: '/applications'
       fullPath: '/dashboard/applications'
       preLoaderRoute: typeof DashboardApplicationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/tenancies': {
+      id: '/dashboard/tenancies'
+      path: '/tenancies'
+      fullPath: '/dashboard/tenancies'
+      preLoaderRoute: typeof DashboardTenanciesRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/homes/': {
@@ -614,6 +677,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tenancies/$id': {
+      id: '/tenancies/$id'
+      path: '/$id'
+      fullPath: '/tenancies/$id'
+      preLoaderRoute: typeof TenanciesIdRouteImport
+      parentRoute: typeof TenanciesRoute
+    }
     '/api/v1/health': {
       id: '/api/v1/health'
       path: '/api/v1/health'
@@ -627,6 +697,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/applications/$id'
       preLoaderRoute: typeof DashboardApplicationsIdRouteImport
       parentRoute: typeof DashboardApplicationsRoute
+    }
+    '/dashboard/tenancies/$id': {
+      id: '/dashboard/tenancies/$id'
+      path: '/$id'
+      fullPath: '/dashboard/tenancies/$id'
+      preLoaderRoute: typeof DashboardTenanciesIdRouteImport
+      parentRoute: typeof DashboardTenanciesRoute
     }
     '/api/public/v1/health': {
       id: '/api/public/v1/health'
@@ -677,16 +754,41 @@ const DashboardApplicationsRouteWithChildren =
     DashboardApplicationsRouteChildren,
   )
 
+interface DashboardTenanciesRouteChildren {
+  DashboardTenanciesIdRoute: typeof DashboardTenanciesIdRoute
+}
+
+const DashboardTenanciesRouteChildren: DashboardTenanciesRouteChildren = {
+  DashboardTenanciesIdRoute: DashboardTenanciesIdRoute,
+}
+
+const DashboardTenanciesRouteWithChildren =
+  DashboardTenanciesRoute._addFileChildren(DashboardTenanciesRouteChildren)
+
 interface DashboardRouteChildren {
   DashboardApplicationsRoute: typeof DashboardApplicationsRouteWithChildren
+  DashboardTenanciesRoute: typeof DashboardTenanciesRouteWithChildren
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardApplicationsRoute: DashboardApplicationsRouteWithChildren,
+  DashboardTenanciesRoute: DashboardTenanciesRouteWithChildren,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
+)
+
+interface TenanciesRouteChildren {
+  TenanciesIdRoute: typeof TenanciesIdRoute
+}
+
+const TenanciesRouteChildren: TenanciesRouteChildren = {
+  TenanciesIdRoute: TenanciesIdRoute,
+}
+
+const TenanciesRouteWithChildren = TenanciesRoute._addFileChildren(
+  TenanciesRouteChildren,
 )
 
 interface ApiV1HealthRouteChildren {
@@ -716,6 +818,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SavedRoute: SavedRoute,
   SettingsRoute: SettingsRoute,
+  TenanciesRoute: TenanciesRouteWithChildren,
   TrustRoute: TrustRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   ViewingsRoute: ViewingsRoute,
