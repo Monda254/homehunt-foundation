@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Building,
   Compass,
+  ClipboardList,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -51,6 +52,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       ? [
           { label: "My Properties", to: "/properties", icon: Building },
           { label: "My Listings", to: "/listings", icon: FolderKanban },
+          { label: "Received Applications", to: "/dashboard/applications", icon: ClipboardList },
         ]
       : []),
     { label: "Map Search", to: "/homes", icon: Map },

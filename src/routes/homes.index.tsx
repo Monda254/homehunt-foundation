@@ -439,18 +439,18 @@ function HomesDiscoveryPage() {
               {searchResponse.totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 pt-6 border-t border-border/40">
                   <button
-                    disabled={searchParams.page <= 1}
-                    onClick={() => updateFilters({ page: searchParams.page - 1 })}
+                    disabled={(searchParams.page || 1) <= 1}
+                    onClick={() => updateFilters({ page: (searchParams.page || 1) - 1 })}
                     className="inline-flex h-9 w-20 items-center justify-center rounded-lg border border-border text-xs font-semibold text-foreground hover:bg-secondary disabled:opacity-50"
                   >
                     Previous
                   </button>
                   <span className="text-xs text-muted-foreground font-semibold">
-                    Page {searchParams.page} of {searchResponse.totalPages}
+                    Page {searchParams.page || 1} of {searchResponse.totalPages}
                   </span>
                   <button
-                    disabled={searchParams.page >= searchResponse.totalPages}
-                    onClick={() => updateFilters({ page: searchParams.page + 1 })}
+                    disabled={(searchParams.page || 1) >= searchResponse.totalPages}
+                    onClick={() => updateFilters({ page: (searchParams.page || 1) + 1 })}
                     className="inline-flex h-9 w-20 items-center justify-center rounded-lg border border-border text-xs font-semibold text-foreground hover:bg-secondary disabled:opacity-50"
                   >
                     Next

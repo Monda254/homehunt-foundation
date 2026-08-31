@@ -1752,6 +1752,388 @@ export type Database = {
           },
         ];
       };
+      application_requirements: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          is_active: boolean;
+          is_required: boolean;
+          listing_id: string | null;
+          name: string;
+          order_index: number;
+          property_id: string;
+          type: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_required?: boolean;
+          listing_id?: string | null;
+          name: string;
+          order_index?: number;
+          property_id: string;
+          type?: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_required?: boolean;
+          listing_id?: string | null;
+          name?: string;
+          order_index?: number;
+          property_id?: string;
+          type?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "application_requirements_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "application_requirements_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+          {
+            foreignKeyName: "application_requirements_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "application_requirements_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+        ];
+      };
+      rental_applications: {
+        Row: {
+          id: string;
+          application_number: string | null;
+          listing_id: string;
+          property_id: string;
+          unit_id: string | null;
+          applicant_id: string;
+          provider_id: string;
+          status: string;
+          rent_snapshot: number;
+          currency_snapshot: string;
+          billing_period_snapshot: string;
+          deposit_snapshot: number;
+          preferred_move_in_date: string | null;
+          preferred_lease_months: number | null;
+          personal_info: Json;
+          employment_info: Json;
+          household_info: Json;
+          created_at: string;
+          updated_at: string;
+          submitted_at: string | null;
+          decided_at: string | null;
+          decided_by: string | null;
+          rejection_reason: string | null;
+          rejection_notes: string | null;
+        };
+        Insert: {
+          id?: string;
+          application_number?: string | null;
+          listing_id: string;
+          property_id: string;
+          unit_id?: string | null;
+          applicant_id: string;
+          provider_id: string;
+          status?: string;
+          rent_snapshot: number;
+          currency_snapshot?: string;
+          billing_period_snapshot?: string;
+          deposit_snapshot: number;
+          preferred_move_in_date?: string | null;
+          preferred_lease_months?: number | null;
+          personal_info?: Json;
+          employment_info?: Json;
+          household_info?: Json;
+          created_at?: string;
+          updated_at?: string;
+          submitted_at?: string | null;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          rejection_reason?: string | null;
+          rejection_notes?: string | null;
+        };
+        Update: {
+          id?: string;
+          application_number?: string | null;
+          listing_id?: string;
+          property_id?: string;
+          unit_id?: string | null;
+          applicant_id?: string;
+          provider_id?: string;
+          status?: string;
+          rent_snapshot?: number;
+          currency_snapshot?: string;
+          billing_period_snapshot?: string;
+          deposit_snapshot?: number;
+          preferred_move_in_date?: string | null;
+          preferred_lease_months?: number | null;
+          personal_info?: Json;
+          employment_info?: Json;
+          household_info?: Json;
+          created_at?: string;
+          updated_at?: string;
+          submitted_at?: string | null;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          rejection_reason?: string | null;
+          rejection_notes?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "rental_applications_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "rental_applications_listing_id_fkey";
+            columns: ["listing_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["listing_id"];
+          },
+          {
+            foreignKeyName: "rental_applications_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "properties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "rental_applications_property_id_fkey";
+            columns: ["property_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["property_id"];
+          },
+          {
+            foreignKeyName: "rental_applications_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "units";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "rental_applications_unit_id_fkey";
+            columns: ["unit_id"];
+            isOneToOne: false;
+            referencedRelation: "listings_search_view";
+            referencedColumns: ["unit_id"];
+          },
+        ];
+      };
+      application_documents: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+          file_path: string;
+          file_size: number;
+          mime_type: string;
+          status: string;
+          rejection_reason: string | null;
+          requirement_id: string | null;
+          application_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+          file_path: string;
+          file_size: number;
+          mime_type: string;
+          status?: string;
+          rejection_reason?: string | null;
+          requirement_id?: string | null;
+          application_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+          file_path?: string;
+          file_size?: number;
+          mime_type?: string;
+          status?: string;
+          rejection_reason?: string | null;
+          requirement_id?: string | null;
+          application_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "application_documents_application_id_fkey";
+            columns: ["application_id"];
+            isOneToOne: false;
+            referencedRelation: "rental_applications";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "application_documents_requirement_id_fkey";
+            columns: ["requirement_id"];
+            isOneToOne: false;
+            referencedRelation: "application_requirements";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      application_requests: {
+        Row: {
+          created_at: string;
+          due_date: string | null;
+          id: string;
+          message: string;
+          recipient_id: string;
+          requester_id: string;
+          requirement_id: string | null;
+          application_id: string;
+          status: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          due_date?: string | null;
+          id?: string;
+          message: string;
+          recipient_id: string;
+          requester_id: string;
+          requirement_id?: string | null;
+          application_id: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          due_date?: string | null;
+          id?: string;
+          message?: string;
+          recipient_id?: string;
+          requester_id?: string;
+          requirement_id?: string | null;
+          application_id?: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "application_requests_application_id_fkey";
+            columns: ["application_id"];
+            isOneToOne: false;
+            referencedRelation: "rental_applications";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "application_requests_requirement_id_fkey";
+            columns: ["requirement_id"];
+            isOneToOne: false;
+            referencedRelation: "application_requirements";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      application_reviews: {
+        Row: {
+          created_at: string;
+          id: string;
+          notes: string | null;
+          recommendation: string;
+          reviewer_id: string;
+          application_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          notes?: string | null;
+          recommendation: string;
+          reviewer_id: string;
+          application_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          notes?: string | null;
+          recommendation?: string;
+          reviewer_id?: string;
+          application_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "application_reviews_application_id_fkey";
+            columns: ["application_id"];
+            isOneToOne: false;
+            referencedRelation: "rental_applications";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      application_status_history: {
+        Row: {
+          changed_by: string | null;
+          created_at: string;
+          id: string;
+          new_status: string;
+          notes: string | null;
+          application_id: string;
+          previous_status: string | null;
+        };
+        Insert: {
+          changed_by?: string | null;
+          created_at?: string;
+          id?: string;
+          new_status: string;
+          notes?: string | null;
+          application_id: string;
+          previous_status?: string | null;
+        };
+        Update: {
+          changed_by?: string | null;
+          created_at?: string;
+          id?: string;
+          new_status?: string;
+          notes?: string | null;
+          application_id?: string;
+          previous_status?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "application_status_history_application_id_fkey";
+            columns: ["application_id"];
+            isOneToOne: false;
+            referencedRelation: "rental_applications";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       listings_search_view: {

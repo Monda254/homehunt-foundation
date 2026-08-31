@@ -70,6 +70,10 @@ export const APP_PERMISSIONS = [
   "APPEALS_RESOLVE",
   "LISTING_PAUSE",
   "LISTING_RESTORE",
+  "APPLICATIONS_CREATE",
+  "APPLICATIONS_VIEW_SELF",
+  "APPLICATIONS_WITHDRAW",
+  "APPLICATIONS_MANAGE",
 ] as const;
 
 export type AppPermission = (typeof APP_PERMISSIONS)[number];
@@ -83,6 +87,9 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "PROFILE_UPDATE_SELF",
     "SESSION_VIEW_SELF",
     "SESSION_REVOKE_SELF",
+    "APPLICATIONS_CREATE",
+    "APPLICATIONS_VIEW_SELF",
+    "APPLICATIONS_WITHDRAW",
   ],
   landlord: [
     "USER_VIEW_SELF",
@@ -99,6 +106,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_CREATE",
     "LISTING_UPDATE",
     "LISTING_PUBLISH",
+    "APPLICATIONS_VIEW_SELF",
+    "APPLICATIONS_MANAGE",
   ],
   agent: [
     "USER_VIEW_SELF",
@@ -115,6 +124,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_CREATE",
     "LISTING_UPDATE",
     "LISTING_PUBLISH",
+    "APPLICATIONS_VIEW_SELF",
+    "APPLICATIONS_MANAGE",
   ],
   property_manager: [
     "USER_VIEW_SELF",
@@ -131,6 +142,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "LISTING_CREATE",
     "LISTING_UPDATE",
     "LISTING_PUBLISH",
+    "APPLICATIONS_VIEW_SELF",
+    "APPLICATIONS_MANAGE",
   ],
   verifier: [
     "USER_VIEW_SELF",
@@ -179,6 +192,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "APPEALS_RESOLVE",
     "LISTING_PAUSE",
     "LISTING_RESTORE",
+    "APPLICATIONS_VIEW_SELF",
+    "APPLICATIONS_MANAGE",
   ],
   super_admin: [
     "USER_VIEW_SELF",
@@ -215,6 +230,8 @@ export const ROLE_PERMISSIONS: Record<AppRole, AppPermission[]> = {
     "APPEALS_RESOLVE",
     "LISTING_PAUSE",
     "LISTING_RESTORE",
+    "APPLICATIONS_VIEW_SELF",
+    "APPLICATIONS_MANAGE",
   ],
 };
 

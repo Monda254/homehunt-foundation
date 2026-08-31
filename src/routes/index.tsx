@@ -144,12 +144,14 @@ function Index() {
           <nav className="hidden items-center gap-6 md:flex">
             <Link
               to="/homes"
+              search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               Discover
             </Link>
             <Link
               to="/homes"
+              search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
               className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               <Map className="h-4 w-4" /> Map Search
@@ -220,6 +222,7 @@ function Index() {
             <div className="flex flex-col gap-4 border-b border-border/60 pb-6">
               <Link
                 to="/homes"
+                search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
@@ -227,6 +230,7 @@ function Index() {
               </Link>
               <Link
                 to="/homes"
+                search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2 text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
@@ -471,6 +475,7 @@ function Index() {
               </div>
               <Link
                 to="/homes"
+                search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
                 className="mt-6 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-accent transition-colors self-start"
               >
                 Learn Spatial Search <ArrowRight className="h-3 w-3" />
