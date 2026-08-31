@@ -10,6 +10,8 @@ import { RequireAuth } from "@/features/identity/AuthContext";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Globe, ToggleLeft, Loader2, Home, MapPin, Eye, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { AnimatedCard } from "@/components/motion/AnimatedCard";
+import { AnimatedButton } from "@/components/motion/AnimatedButton";
 
 export const Route = createFileRoute("/listings/")({
   component: () => (
@@ -77,9 +79,9 @@ function ListingsManagementComponent() {
                 county: string;
               } | null;
               return (
-                <div
+                <AnimatedCard
                   key={list.id}
-                  className="surface-card p-5 border border-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:shadow-md transition-shadow"
+                  className="surface-card p-5 border border-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -120,13 +122,14 @@ function ListingsManagementComponent() {
                     </Link>
 
                     {list.status === "DRAFT" || list.status === "PAUSED" ? (
-                      <button
+                      <AnimatedButton
                         onClick={() => publishMutation.mutate(list.id)}
-                        disabled={publishMutation.isPending}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/95 px-3 py-1.5 text-xs font-semibold cursor-pointer"
+                        loading={publishMutation.isPending}
+                        variant="primary"
+                        className="text-xs font-semibold py-1.5 px-3 rounded-lg"
                       >
                         <Globe className="h-3.5 w-3.5" /> Publish
-                      </button>
+                      </AnimatedButton>
                     ) : (
                       <>
                         <Link
@@ -136,29 +139,31 @@ function ListingsManagementComponent() {
                         >
                           <Eye className="h-3.5 w-3.5" /> View Public
                         </Link>
-                        <button
+                        <AnimatedButton
                           onClick={() => pauseMutation.mutate(list.id)}
-                          disabled={pauseMutation.isPending}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer"
+                          loading={pauseMutation.isPending}
+                          variant="secondary"
+                          className="text-xs font-semibold py-1.5 px-3 rounded-lg"
                         >
                           <ToggleLeft className="h-3.5 w-3.5 text-muted-foreground" /> Pause
-                        </button>
+                        </AnimatedButton>
                       </>
                     )}
 
-                    <button
+                    <AnimatedButton
                       onClick={() => {
                         if (confirm("Are you sure you want to archive this advertisement?")) {
                           archiveMutation.mutate(list.id);
                         }
                       }}
-                      disabled={archiveMutation.isPending}
-                      className="inline-flex items-center justify-center rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/5 cursor-pointer"
+                      loading={archiveMutation.isPending}
+                      variant="danger"
+                      className="text-xs font-semibold py-1.5 px-3 rounded-lg border border-border"
                     >
                       Archive
-                    </button>
+                    </AnimatedButton>
                   </div>
-                </div>
+                </AnimatedCard>
               );
             })}
           </div>

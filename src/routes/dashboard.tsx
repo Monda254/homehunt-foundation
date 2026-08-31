@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { RequireAuth, useAuth } from "@/features/identity/AuthContext";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { AnimatedNumber } from "@/components/motion/AnimatedNumber";
+import { AnimatedCard } from "@/components/motion/AnimatedCard";
 import {
   User,
   Landmark,
@@ -90,7 +92,7 @@ function DashboardComponent() {
                 />
               </svg>
               <span className="absolute text-[10px] font-bold text-foreground">
-                {completeness}%
+                <AnimatedNumber value={completeness} />%
               </span>
             </div>
           </div>
@@ -121,7 +123,10 @@ function DashboardComponent() {
            ------------------------------------------------------------ */}
         {isTenant && (
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="surface-card p-6 flex flex-col justify-between shadow-sm">
+            <AnimatedCard
+              className="surface-card p-6 flex flex-col justify-between shadow-sm"
+              delay={0.05}
+            >
               <div>
                 <div className="h-10 w-10 bg-primary/10 text-primary flex items-center justify-center rounded-xl mb-4">
                   <Search className="h-5 w-5" />
@@ -139,9 +144,12 @@ function DashboardComponent() {
                   * Property search module is scheduled for Phase 3 (Integrates with PostGIS maps).
                 </span>
               </div>
-            </div>
+            </AnimatedCard>
 
-            <div className="surface-card p-6 flex flex-col justify-between shadow-sm">
+            <AnimatedCard
+              className="surface-card p-6 flex flex-col justify-between shadow-sm"
+              delay={0.1}
+            >
               <div>
                 <div className="h-10 w-10 bg-accent/15 text-accent flex items-center justify-center rounded-xl mb-4">
                   <Building className="h-5 w-5" />
@@ -159,7 +167,7 @@ function DashboardComponent() {
                   * Application and lease signing workflows scheduled for Phase 4.
                 </span>
               </div>
-            </div>
+            </AnimatedCard>
           </div>
         )}
 
@@ -168,7 +176,10 @@ function DashboardComponent() {
            ------------------------------------------------------------ */}
         {isLandlord && (
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="surface-card p-6 flex flex-col justify-between shadow-sm">
+            <AnimatedCard
+              className="surface-card p-6 flex flex-col justify-between shadow-sm"
+              delay={0.05}
+            >
               <div>
                 <div className="h-10 w-10 bg-primary/10 text-primary flex items-center justify-center rounded-xl mb-4">
                   <PlusCircle className="h-5 w-5" />
@@ -186,9 +197,12 @@ function DashboardComponent() {
                   * Property creation and KYC verification scheduled for Phase 2.
                 </span>
               </div>
-            </div>
+            </AnimatedCard>
 
-            <div className="surface-card p-6 flex flex-col justify-between shadow-sm">
+            <AnimatedCard
+              className="surface-card p-6 flex flex-col justify-between shadow-sm"
+              delay={0.1}
+            >
               <div>
                 <div className="h-10 w-10 bg-accent/15 text-accent flex items-center justify-center rounded-xl mb-4">
                   <FolderOpen className="h-5 w-5" />
@@ -207,7 +221,7 @@ function DashboardComponent() {
                   modules.
                 </span>
               </div>
-            </div>
+            </AnimatedCard>
           </div>
         )}
 
@@ -216,7 +230,10 @@ function DashboardComponent() {
            ------------------------------------------------------------ */}
         {isAgent && (
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="surface-card p-6 flex flex-col justify-between shadow-sm">
+            <AnimatedCard
+              className="surface-card p-6 flex flex-col justify-between shadow-sm"
+              delay={0.05}
+            >
               <div>
                 <div className="h-10 w-10 bg-primary/10 text-primary flex items-center justify-center rounded-xl mb-4">
                   <Building className="h-5 w-5" />
@@ -234,9 +251,12 @@ function DashboardComponent() {
                   * Property agent assignment scheduled for Phase 2.
                 </span>
               </div>
-            </div>
+            </AnimatedCard>
 
-            <div className="surface-card p-6 flex flex-col justify-between shadow-sm">
+            <AnimatedCard
+              className="surface-card p-6 flex flex-col justify-between shadow-sm"
+              delay={0.1}
+            >
               <div>
                 <div className="h-10 w-10 bg-accent/15 text-accent flex items-center justify-center rounded-xl mb-4">
                   <UserCheck className="h-5 w-5" />
@@ -254,7 +274,7 @@ function DashboardComponent() {
                   * Viewer bookings and trust scores are scheduled for subsequent phases.
                 </span>
               </div>
-            </div>
+            </AnimatedCard>
           </div>
         )}
 
@@ -262,7 +282,7 @@ function DashboardComponent() {
             ADMINISTRATOR SECTION
            ------------------------------------------------------------ */}
         {isAdmin && (
-          <div className="surface-card p-6 shadow-sm space-y-4">
+          <AnimatedCard className="surface-card p-6 shadow-sm space-y-4" delay={0.15}>
             <h3 className="font-display font-semibold text-lg text-foreground flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" /> Admin Controls
             </h3>
@@ -278,7 +298,7 @@ function DashboardComponent() {
                 Open User Management
               </Link>
             </div>
-          </div>
+          </AnimatedCard>
         )}
       </div>
     </DashboardLayout>

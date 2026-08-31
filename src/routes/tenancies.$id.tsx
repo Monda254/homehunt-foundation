@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { RequireAuth, useAuth } from "@/features/identity/AuthContext";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { HomeHuntJourney, type JourneyStage } from "@/components/motion/HomeHuntJourney";
+import { AnimatedButton } from "@/components/motion/AnimatedButton";
+import { AnimatedCard } from "@/components/motion/AnimatedCard";
 import {
   getTenancyDetails,
   acceptLease,
@@ -275,6 +278,18 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
   const { tenancy: ten, leases, moveIn, history } = details;
   const currentLease = leases && leases.length > 0 ? leases[0] : null;
 
+  // Map status to housing milestones stages
+  let journeyStage: JourneyStage = "DISCOVER";
+  if (ten.status === "PENDING" || ten.status === "LEASE_PREPARATION") {
+    journeyStage = "APPROVE";
+  } else if (ten.status === "AWAITING_ACCEPTANCE") {
+    journeyStage = "LEASE";
+  } else if (ten.status === "MOVE_IN_PENDING") {
+    journeyStage = "MOVE_IN";
+  } else if (ten.status === "ACTIVE" || ten.status === "OCCUPIED") {
+    journeyStage = "TENANCY";
+  }
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -287,6 +302,9 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
             <ChevronLeft className="h-3.5 w-3.5" /> Back to My Tenancies
           </Link>
         </div>
+
+        {/* Housing Milestones journey */}
+        <HomeHuntJourney currentStage={journeyStage} />
 
         {/* Summary Banner */}
         <div className="surface-card p-6 shadow-sm border border-border/80 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -342,7 +360,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
             {ten.status === "AWAITING_ACCEPTANCE" &&
               currentLease &&
               currentLease.status === "SENT_TO_TENANT" && (
-                <div className="surface-card p-6 shadow-sm border border-yellow-500/20 bg-yellow-500/5 rounded-2xl space-y-5">
+                <div className="surface-card p-6 shadow-sm border border-yellow-500/20 bg-yellow-500/5 rounded-2xl space-y-5 animate-in fade-in duration-200">
                   <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-400">
                     <AlertTriangle className="h-5 w-5 shrink-0" />
                     <h3 className="font-display font-bold text-base">
@@ -410,15 +428,14 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
 
                   {!showDeclineForm ? (
                     <div className="flex flex-wrap gap-3 pt-2">
-                      <button
-                        type="button"
-                        disabled={signing}
+                      <AnimatedButton
                         onClick={() => handleAcceptLease(currentLease.id)}
-                        className="btn btn-primary text-xs flex items-center gap-2"
+                        loading={signing}
+                        variant="primary"
+                        className="text-xs font-semibold py-2 px-4 rounded-lg"
                       >
-                        {signing && <Loader2 className="h-4 w-4 animate-spin" />}
                         Digitally Sign & Accept Lease
-                      </button>
+                      </AnimatedButton>
                       <button
                         type="button"
                         onClick={() => setShowDeclineForm(true)}
@@ -442,15 +459,14 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                         />
                       </div>
                       <div className="flex gap-2">
-                        <button
-                          type="button"
-                          disabled={declining}
+                        <AnimatedButton
                           onClick={() => handleDeclineLease(currentLease.id)}
-                          className="btn btn-primary bg-destructive text-white hover:bg-destructive/95 text-xs flex items-center gap-2"
+                          loading={declining}
+                          variant="danger"
+                          className="text-xs font-semibold py-2 px-4 rounded-lg"
                         >
-                          {declining && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                           Decline Terms
-                        </button>
+                        </AnimatedButton>
                         <button
                           type="button"
                           onClick={() => setShowDeclineForm(false)}
@@ -466,7 +482,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
 
             {/* MOVE-IN ACTION REQUIRED PANEL */}
             {ten.status === "MOVE_IN_PENDING" && (
-              <div className="surface-card p-6 shadow-sm border border-primary/20 bg-primary/5 rounded-2xl space-y-4">
+              <div className="surface-card p-6 shadow-sm border border-primary/20 bg-primary/5 rounded-2xl space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 text-primary">
                   <ClipboardList className="h-5 w-5 shrink-0" />
                   <h3 className="font-display font-bold text-base">
@@ -563,7 +579,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                       {moveInMedia.map((m, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-500/10 px-2.5 py-1.5 rounded-lg border border-emerald-500/20 w-fit"
+                          className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-500/10 px-2.5 py-1.5 rounded-lg border border-emerald-500/20 w-fit animate-in zoom-in-95"
                         >
                           <ShieldCheck className="h-4 w-4" />
                           <span>File {idx + 1}</span>
@@ -587,15 +603,14 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                   </div>
 
                   <div className="pt-2">
-                    <button
-                      type="button"
-                      disabled={completingMoveIn}
+                    <AnimatedButton
                       onClick={handleCompleteMoveIn}
-                      className="btn btn-primary text-xs flex items-center gap-2"
+                      loading={completingMoveIn}
+                      variant="primary"
+                      className="text-xs font-semibold py-2 px-4 rounded-lg"
                     >
-                      {completingMoveIn && <Loader2 className="h-4 w-4 animate-spin" />}
                       Confirm Occupancy & Sign Move-In
-                    </button>
+                    </AnimatedButton>
                   </div>
                 </div>
               </div>
@@ -612,7 +627,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">
                     Property Provider
                   </span>
-                  <div className="surface-card p-3.5 border border-border/40 rounded-xl space-y-1">
+                  <div className="surface-card p-3.5 border border-border/40 rounded-xl space-y-1 bg-secondary/10">
                     <p className="text-foreground font-medium">{ten.provider?.full_name}</p>
                     <p className="text-muted-foreground">{ten.provider?.phone_number}</p>
                   </div>
@@ -622,7 +637,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">
                     Tenancy Period
                   </span>
-                  <div className="surface-card p-3.5 border border-border/40 rounded-xl space-y-1">
+                  <div className="surface-card p-3.5 border border-border/40 rounded-xl space-y-1 bg-secondary/10">
                     <p className="text-foreground">
                       <strong>Start Date:</strong>{" "}
                       {ten.start_date
@@ -653,7 +668,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                   </p>
                 ) : (
                   leases.map((l: any) => (
-                    <div
+                    <AnimatedCard
                       key={l.id}
                       className="flex items-center justify-between p-3.5 rounded-xl border border-border bg-card/60 text-xs"
                     >
@@ -674,12 +689,12 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                       {l.status === "EXECUTED" && l.file_path && (
                         <button
                           onClick={() => handleDownloadDoc(l.file_path)}
-                          className="btn btn-secondary text-[10px] px-3 py-1.5 flex items-center gap-1.5"
+                          className="btn btn-secondary text-[10px] px-3 py-1.5 flex items-center gap-1.5 cursor-pointer"
                         >
                           <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> View Contract
                         </button>
                       )}
-                    </div>
+                    </AnimatedCard>
                   ))
                 )}
               </div>
@@ -695,8 +710,8 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
               </h3>
 
               <div className="relative border-l-2 border-border/80 pl-5 ml-2.5 space-y-6 py-2">
-                {history.map((event: any) => (
-                  <div key={event.id} className="relative">
+                {history.map((event: any, idx: number) => (
+                  <AnimatedCard key={event.id} className="relative" delay={idx * 0.05}>
                     <div className="absolute -left-[27px] top-0.5 bg-background border-2 border-primary rounded-full h-3 w-3" />
                     <div>
                       <span className="text-[10px] font-bold text-primary uppercase tracking-widest block">
@@ -711,7 +726,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
                         {new Date(event.created_at).toLocaleString()}
                       </span>
                     </div>
-                  </div>
+                  </AnimatedCard>
                 ))}
               </div>
             </div>
@@ -726,7 +741,7 @@ function TenancyDetailsComponent({ tenancyId }: TenancyDetailsProps) {
               <div className="pt-2">
                 <Link
                   to="/messages"
-                  className="btn btn-primary text-xs w-full flex items-center justify-center gap-2"
+                  className="btn btn-primary text-xs w-full flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <MessageSquare className="h-4 w-4" /> Message Landlord
                 </Link>

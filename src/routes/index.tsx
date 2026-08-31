@@ -4,6 +4,9 @@ import { useAuth } from "@/features/identity/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicListings } from "@/features/properties/properties.functions";
 import { ListingCard, type ListingCardData } from "@/components/PropertyCard";
+import { motion } from "framer-motion";
+import { staggerContainerVariants, fadeUpVariants } from "@/components/motion/motionVariants";
+import { AnimatedModal } from "@/components/motion/AnimatedModal";
 import {
   Search,
   MapPin,
@@ -297,22 +300,39 @@ function Index() {
       {/* Hero Section */}
       <section className="relative overflow-hidden py-12 lg:py-20">
         <div className="container-page grid gap-12 lg:grid-cols-12 lg:items-center">
-          <div className="flex flex-col lg:col-span-7">
-            <div className="inline-flex max-w-fit items-center gap-1.5 rounded-full bg-secondary/80 px-3.5 py-1.5 text-xs font-semibold text-primary border border-primary/10 mb-6">
+          <motion.div
+            variants={staggerContainerVariants}
+            initial="initial"
+            animate="animate"
+            className="flex flex-col lg:col-span-7"
+          >
+            <motion.div
+              variants={fadeUpVariants}
+              className="inline-flex max-w-fit items-center gap-1.5 rounded-full bg-secondary/80 px-3.5 py-1.5 text-xs font-semibold text-primary border border-primary/10 mb-6"
+            >
               <ShieldCheck className="h-3.5 w-3.5 text-verified" />
               100% Scam-Free Rental Guarantee
-            </div>
-            <h1 className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground leading-[1.1]">
+            </motion.div>
+            <motion.h1
+              variants={fadeUpVariants}
+              className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground leading-[1.1]"
+            >
               Find your next home in Kenya,{" "}
               <span className="text-gradient-brand">with confidence.</span>
-            </h1>
-            <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            </motion.h1>
+            <motion.p
+              variants={fadeUpVariants}
+              className="mt-4 text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed"
+            >
               Tired of deposit scams, fake listings, and middleman viewing fees? HomeHunt verifies
               every landlord, property, and listing so you can search securely.
-            </p>
+            </motion.p>
 
             {/* Mock Search Bar */}
-            <div className="mt-8 rounded-2xl border border-border bg-card p-4 shadow-elevated">
+            <motion.div
+              variants={fadeUpVariants}
+              className="mt-8 rounded-2xl border border-border bg-card p-4 shadow-elevated"
+            >
               <div className="grid gap-3 sm:grid-cols-3">
                 {/* Location Input */}
                 <div className="flex flex-col gap-1.5 rounded-xl bg-secondary/30 p-3 border border-border/40 hover:border-primary/20 transition-colors">
@@ -375,10 +395,13 @@ function Index() {
               >
                 <Search className="h-5 w-5" /> Search Available Properties
               </button>
-            </div>
+            </motion.div>
 
             {/* Quick Stats */}
-            <div className="mt-8 grid grid-cols-3 gap-4 border-t border-border/60 pt-6">
+            <motion.div
+              variants={fadeUpVariants}
+              className="mt-8 grid grid-cols-3 gap-4 border-t border-border/60 pt-6"
+            >
               <div>
                 <p className="font-display text-2xl sm:text-3xl font-extrabold text-primary">
                   100%
@@ -397,11 +420,16 @@ function Index() {
                 </p>
                 <p className="text-xs sm:text-sm text-muted-foreground">Major Cities Covered</p>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Hero Image Section */}
-          <div className="relative lg:col-span-5 flex justify-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="relative lg:col-span-5 flex justify-center"
+          >
             <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-primary to-accent opacity-15 blur-lg"></div>
             <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-elevated transition-transform hover:scale-[1.01] hover:rotate-[0.5deg] duration-300">
               <img
@@ -419,7 +447,7 @@ function Index() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -620,46 +648,36 @@ function Index() {
       </footer>
 
       {/* Phase Info Modal Dialog */}
-      {activeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-elevated animate-in zoom-in-95 duration-200">
-            <button
-              onClick={() => setActiveModal(null)}
-              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
-              aria-label="Close modal"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <div className="flex gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
-                <AlertCircle className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="font-display font-bold text-lg text-foreground">
-                  Foundation Mode (Phase 0)
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                  You triggered:{" "}
-                  <strong className="text-foreground font-semibold">"{activeModal}"</strong>.
-                </p>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                  This feature belongs to a future implementation phase. We are currently
-                  establishing the Phase 0 core architecture (database, routes, authentication
-                  skeleton). Live business features will go online as subsequent stages deploy.
-                </p>
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={() => setActiveModal(null)}
-                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-colors"
-                  >
-                    Understood
-                  </button>
-                </div>
-              </div>
+      <AnimatedModal
+        isOpen={!!activeModal}
+        onClose={() => setActiveModal(null)}
+        title="Foundation Mode (Phase 0)"
+      >
+        <div className="flex gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
+            <AlertCircle className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              You triggered:{" "}
+              <strong className="text-foreground font-semibold">"{activeModal}"</strong>.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+              This feature belongs to a future implementation phase. We are currently establishing
+              the Phase 0 core architecture (database, routes, authentication skeleton). Live
+              business features will go online as subsequent stages deploy.
+            </p>
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setActiveModal(null)}
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-colors"
+              >
+                Understood
+              </button>
             </div>
           </div>
         </div>
-      )}
+      </AnimatedModal>
     </div>
   );
 }

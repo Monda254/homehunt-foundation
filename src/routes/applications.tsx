@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { RequireAuth, useAuth } from "@/features/identity/AuthContext";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import React, { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { AnimatedButton } from "@/components/motion/AnimatedButton";
+import { AnimatedCard } from "@/components/motion/AnimatedCard";
 import {
   FolderKanban,
   Info,
@@ -403,389 +404,415 @@ function ApplicationsComponent() {
               </div>
             </div>
 
-            {/* STEP 1: Personal Info */}
-            {wizardStep === 1 && (
-              <div className="space-y-4 max-w-xl">
-                <h3 className="font-display font-semibold text-lg flex items-center gap-2">
-                  <User className="h-5 w-5 text-primary" /> Personal Information
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  These details will be shared with the landlord to contact you regarding the
-                  tenancy.
-                </p>
-                <div className="space-y-3">
-                  <div>
-                    <label className="label">Full Name</label>
-                    <input
-                      type="text"
-                      className="input"
-                      value={personalInfo.fullName}
-                      onChange={(e) =>
-                        setPersonalInfo({ ...personalInfo, fullName: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Phone Number</label>
-                    <input
-                      type="text"
-                      className="input"
-                      value={personalInfo.phoneNumber}
-                      onChange={(e) =>
-                        setPersonalInfo({ ...personalInfo, phoneNumber: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Email Address</label>
-                    <input
-                      type="email"
-                      className="input"
-                      value={personalInfo.email}
-                      onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 2: Occupancy & Move-in */}
-            {wizardStep === 2 && (
-              <div className="space-y-4 max-w-xl">
-                <h3 className="font-display font-semibold text-lg flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" /> Household Details
-                </h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="label">Preferred Move-in Date</label>
-                    <input
-                      type="date"
-                      className="input"
-                      value={occupancyInfo.preferredMoveInDate}
-                      onChange={(e) =>
-                        setOccupancyInfo({ ...occupancyInfo, preferredMoveInDate: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Preferred Lease Term (Months)</label>
-                    <input
-                      type="number"
-                      className="input"
-                      value={occupancyInfo.preferredLeaseMonths}
-                      onChange={(e) =>
-                        setOccupancyInfo({
-                          ...occupancyInfo,
-                          preferredLeaseMonths: parseInt(e.target.value) || 12,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Number of Adults</label>
-                    <input
-                      type="number"
-                      className="input"
-                      value={occupancyInfo.adults}
-                      onChange={(e) =>
-                        setOccupancyInfo({
-                          ...occupancyInfo,
-                          adults: parseInt(e.target.value) || 1,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Number of Children</label>
-                    <input
-                      type="number"
-                      className="input"
-                      value={occupancyInfo.children}
-                      onChange={(e) =>
-                        setOccupancyInfo({
-                          ...occupancyInfo,
-                          children: parseInt(e.target.value) || 0,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 pt-2">
-                  <input
-                    type="checkbox"
-                    id="pets"
-                    checked={occupancyInfo.pets}
-                    onChange={(e) => setOccupancyInfo({ ...occupancyInfo, pets: e.target.checked })}
-                    className="rounded text-primary border-border focus:ring-primary h-4 w-4"
-                  />
-                  <label htmlFor="pets" className="text-sm font-medium text-foreground select-none">
-                    I have pets
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 3: Employment & Income */}
-            {wizardStep === 3 && (
-              <div className="space-y-4 max-w-xl">
-                <h3 className="font-display font-semibold text-lg flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-primary" /> Employment & Income
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="label">Employment Status</label>
-                    <select
-                      className="input"
-                      value={employmentInfo.status}
-                      onChange={(e) =>
-                        setEmploymentInfo({ ...employmentInfo, status: e.target.value })
-                      }
-                    >
-                      {EMPLOYMENT_STATUSES.map((status) => (
-                        <option key={status} value={status}>
-                          {status.replace("_", " ")}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {employmentInfo.status !== "UNEMPLOYED" && (
-                    <div className="grid gap-3 sm:grid-cols-2">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={wizardStep}
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                {/* STEP 1: Personal Info */}
+                {wizardStep === 1 && (
+                  <div className="space-y-4 max-w-xl">
+                    <h3 className="font-display font-semibold text-lg flex items-center gap-2">
+                      <User className="h-5 w-5 text-primary" /> Personal Information
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      These details will be shared with the landlord to contact you regarding the
+                      tenancy.
+                    </p>
+                    <div className="space-y-3">
                       <div>
-                        <label className="label">Employer Name</label>
+                        <label className="label">Full Name</label>
                         <input
                           type="text"
                           className="input"
-                          value={employmentInfo.employer}
+                          value={personalInfo.fullName}
                           onChange={(e) =>
-                            setEmploymentInfo({ ...employmentInfo, employer: e.target.value })
+                            setPersonalInfo({ ...personalInfo, fullName: e.target.value })
                           }
                         />
                       </div>
                       <div>
-                        <label className="label">Occupation</label>
+                        <label className="label">Phone Number</label>
                         <input
                           type="text"
                           className="input"
-                          value={employmentInfo.occupation}
+                          value={personalInfo.phoneNumber}
                           onChange={(e) =>
-                            setEmploymentInfo({ ...employmentInfo, occupation: e.target.value })
+                            setPersonalInfo({ ...personalInfo, phoneNumber: e.target.value })
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label className="label">Email Address</label>
+                        <input
+                          type="email"
+                          className="input"
+                          value={personalInfo.email}
+                          onChange={(e) =>
+                            setPersonalInfo({ ...personalInfo, email: e.target.value })
                           }
                         />
                       </div>
                     </div>
-                  )}
-                  <div>
-                    <label className="label">Monthly Income Range</label>
-                    <select
-                      className="input"
-                      value={employmentInfo.incomeRange}
-                      onChange={(e) =>
-                        setEmploymentInfo({ ...employmentInfo, incomeRange: e.target.value })
-                      }
-                    >
-                      {INCOME_RANGES.map((range) => (
-                        <option key={range} value={range}>
-                          {range}
-                        </option>
-                      ))}
-                    </select>
                   </div>
-                </div>
-              </div>
-            )}
+                )}
 
-            {/* STEP 4: Verification Documents */}
-            {wizardStep === 4 && (
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-display font-semibold text-lg flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-primary" /> Required Documents
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    Private and encrypted. Only visible to the landlord and verifier.
-                  </p>
-                </div>
-
-                <div className="grid gap-4 max-w-2xl">
-                  {listingRequirements.map((req) => {
-                    const uploaded = uploadedDocs.filter(
-                      (d) =>
-                        d.requirement_id === req.id ||
-                        (req.id.startsWith("default-") && !d.requirement_id),
-                    );
-
-                    return (
-                      <div
-                        key={req.id}
-                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 rounded-xl border border-border bg-card/60 hover:bg-card/90 transition-all"
+                {/* STEP 2: Occupancy & Move-in */}
+                {wizardStep === 2 && (
+                  <div className="space-y-4 max-w-xl">
+                    <h3 className="font-display font-semibold text-lg flex items-center gap-2">
+                      <Users className="h-5 w-5 text-primary" /> Household Details
+                    </h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="label">Preferred Move-in Date</label>
+                        <input
+                          type="date"
+                          className="input"
+                          value={occupancyInfo.preferredMoveInDate}
+                          onChange={(e) =>
+                            setOccupancyInfo({
+                              ...occupancyInfo,
+                              preferredMoveInDate: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label className="label">Preferred Lease Term (Months)</label>
+                        <input
+                          type="number"
+                          className="input"
+                          value={occupancyInfo.preferredLeaseMonths}
+                          onChange={(e) =>
+                            setOccupancyInfo({
+                              ...occupancyInfo,
+                              preferredLeaseMonths: parseInt(e.target.value) || 12,
+                            })
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label className="label">Number of Adults</label>
+                        <input
+                          type="number"
+                          className="input"
+                          value={occupancyInfo.adults}
+                          onChange={(e) =>
+                            setOccupancyInfo({
+                              ...occupancyInfo,
+                              adults: parseInt(e.target.value) || 1,
+                            })
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label className="label">Number of Children</label>
+                        <input
+                          type="number"
+                          className="input"
+                          value={occupancyInfo.children}
+                          onChange={(e) =>
+                            setOccupancyInfo({
+                              ...occupancyInfo,
+                              children: parseInt(e.target.value) || 0,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 pt-2">
+                      <input
+                        type="checkbox"
+                        id="pets"
+                        checked={occupancyInfo.pets}
+                        onChange={(e) =>
+                          setOccupancyInfo({ ...occupancyInfo, pets: e.target.checked })
+                        }
+                        className="rounded text-primary border-border focus:ring-primary h-4 w-4"
+                      />
+                      <label
+                        htmlFor="pets"
+                        className="text-sm font-medium text-foreground select-none"
                       >
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-foreground">
-                              {req.name}
-                            </span>
-                            {req.is_required && (
-                              <span className="text-[10px] font-bold text-accent uppercase tracking-widest">
-                                Required
-                              </span>
-                            )}
-                          </div>
-                          {req.description && (
-                            <p className="text-xs text-muted-foreground mt-1">{req.description}</p>
-                          )}
+                        I have pets
+                      </label>
+                    </div>
+                  </div>
+                )}
 
-                          {/* List of uploaded files for this requirement */}
-                          {uploaded.length > 0 && (
-                            <div className="mt-3 space-y-1.5">
-                              {uploaded.map((doc) => (
+                {/* STEP 3: Employment & Income */}
+                {wizardStep === 3 && (
+                  <div className="space-y-4 max-w-xl">
+                    <h3 className="font-display font-semibold text-lg flex items-center gap-2">
+                      <Briefcase className="h-5 w-5 text-primary" /> Employment & Income
+                    </h3>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="label">Employment Status</label>
+                        <select
+                          className="input"
+                          value={employmentInfo.status}
+                          onChange={(e) =>
+                            setEmploymentInfo({ ...employmentInfo, status: e.target.value })
+                          }
+                        >
+                          {EMPLOYMENT_STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                              {status.replace("_", " ")}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {employmentInfo.status !== "UNEMPLOYED" && (
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <div>
+                            <label className="label">Employer Name</label>
+                            <input
+                              type="text"
+                              className="input"
+                              value={employmentInfo.employer}
+                              onChange={(e) =>
+                                setEmploymentInfo({ ...employmentInfo, employer: e.target.value })
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label className="label">Occupation</label>
+                            <input
+                              type="text"
+                              className="input"
+                              value={employmentInfo.occupation}
+                              onChange={(e) =>
+                                setEmploymentInfo({ ...employmentInfo, occupation: e.target.value })
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+                      <div>
+                        <label className="label">Monthly Income Range</label>
+                        <select
+                          className="input"
+                          value={employmentInfo.incomeRange}
+                          onChange={(e) =>
+                            setEmploymentInfo({ ...employmentInfo, incomeRange: e.target.value })
+                          }
+                        >
+                          {INCOME_RANGES.map((range) => (
+                            <option key={range} value={range}>
+                              {range}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 4: Verification Documents */}
+                {wizardStep === 4 && (
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-display font-semibold text-lg flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-primary" /> Required Documents
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                        Private and encrypted. Only visible to the landlord and verifier.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4 max-w-2xl">
+                      {listingRequirements.map((req) => {
+                        const uploaded = uploadedDocs.filter(
+                          (d) =>
+                            d.requirement_id === req.id ||
+                            (req.id.startsWith("default-") && !d.requirement_id),
+                        );
+
+                        return (
+                          <div
+                            key={req.id}
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 rounded-xl border border-border bg-card/60 hover:bg-card/90 transition-all"
+                          >
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-semibold text-foreground">
+                                  {req.name}
+                                </span>
+                                {req.is_required && (
+                                  <span className="text-[10px] font-bold text-accent uppercase tracking-widest">
+                                    Required
+                                  </span>
+                                )}
+                              </div>
+                              {req.description && (
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {req.description}
+                                </p>
+                              )}
+
+                              {/* List of uploaded files for this requirement */}
+                              {uploaded.length > 0 && (
+                                <div className="mt-3 space-y-1.5">
+                                  {uploaded.map((doc) => (
+                                    <div
+                                      key={doc.id}
+                                      className="flex items-center gap-2 text-xs font-medium text-emerald-600 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 w-fit"
+                                    >
+                                      <ShieldCheck className="h-4.5 w-4.5 shrink-0" />
+                                      <span>{doc.name}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleDeleteUploadedDoc(doc.id, doc.file_path)
+                                        }
+                                        className="text-emerald-800 hover:text-red-600 shrink-0 ml-1.5"
+                                      >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            <div>
+                              <label className="btn btn-secondary text-xs flex items-center gap-2 cursor-pointer w-fit shrink-0">
+                                {uploadingDocId === req.id ? (
+                                  <>
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Uploading...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Upload className="h-3.5 w-3.5" /> Upload File
+                                  </>
+                                )}
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  className="hidden"
+                                  disabled={uploadingDocId !== null}
+                                  onChange={(e) => handleFileUpload(e, req.id, req.name)}
+                                />
+                              </label>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 5: Review & Submit */}
+                {wizardStep === 5 && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="font-display font-semibold text-lg">
+                        Review Application Details
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Double-check all information before submitting to the property landlord.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-6 md:grid-cols-2 max-w-4xl">
+                      {/* Summary card */}
+                      <div className="surface-card p-5 border border-border/70 rounded-xl space-y-4">
+                        <h4 className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
+                          Profile & Occupancy
+                        </h4>
+                        <div className="text-xs space-y-2.5">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Applicant Name</span>
+                            <span className="font-medium">{personalInfo.fullName}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Phone Number</span>
+                            <span className="font-medium">{personalInfo.phoneNumber}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Email Address</span>
+                            <span className="font-medium">{personalInfo.email}</span>
+                          </div>
+                          <div className="border-t border-border/60 my-2 pt-2" />
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Move-in Date</span>
+                            <span className="font-medium">
+                              {occupancyInfo.preferredMoveInDate || "Not Specified"}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Lease Term</span>
+                            <span className="font-medium">
+                              {occupancyInfo.preferredLeaseMonths} Months
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Household Size</span>
+                            <span className="font-medium">
+                              {occupancyInfo.adults} Adult(s), {occupancyInfo.children} Child(ren)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Employment card */}
+                      <div className="surface-card p-5 border border-border/70 rounded-xl space-y-4">
+                        <h4 className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
+                          Employment & Files
+                        </h4>
+                        <div className="text-xs space-y-2.5">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Employment Status</span>
+                            <span className="font-medium capitalize">{employmentInfo.status}</span>
+                          </div>
+                          {employmentInfo.employer && (
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Employer</span>
+                              <span className="font-medium">{employmentInfo.employer}</span>
+                            </div>
+                          )}
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Income Range</span>
+                            <span className="font-medium">{employmentInfo.incomeRange}</span>
+                          </div>
+                          <div className="border-t border-border/60 my-2 pt-2" />
+                          <div>
+                            <span className="text-muted-foreground block mb-2">
+                              Uploaded Files ({uploadedDocs.length})
+                            </span>
+                            <div className="space-y-1">
+                              {uploadedDocs.map((doc) => (
                                 <div
                                   key={doc.id}
-                                  className="flex items-center gap-2 text-xs font-medium text-emerald-600 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 w-fit"
+                                  className="flex items-center gap-1.5 text-xs text-foreground"
                                 >
-                                  <ShieldCheck className="h-4.5 w-4.5 shrink-0" />
-                                  <span>{doc.name}</span>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteUploadedDoc(doc.id, doc.file_path)}
-                                    className="text-emerald-800 hover:text-red-600 shrink-0 ml-1.5"
-                                  >
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                  </button>
+                                  <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />
+                                  <span className="truncate max-w-[200px]">{doc.name}</span>
                                 </div>
                               ))}
                             </div>
-                          )}
-                        </div>
-
-                        <div>
-                          <label className="btn btn-secondary text-xs flex items-center gap-2 cursor-pointer w-fit shrink-0">
-                            {uploadingDocId === req.id ? (
-                              <>
-                                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Uploading...
-                              </>
-                            ) : (
-                              <>
-                                <Upload className="h-3.5 w-3.5" /> Upload File
-                              </>
-                            )}
-                            <input
-                              type="file"
-                              accept="image/*,application/pdf"
-                              className="hidden"
-                              disabled={uploadingDocId !== null}
-                              onChange={(e) => handleFileUpload(e, req.id, req.name)}
-                            />
-                          </label>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* STEP 5: Review & Submit */}
-            {wizardStep === 5 && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-display font-semibold text-lg">Review Application Details</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    Double-check all information before submitting to the property landlord.
-                  </p>
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-2 max-w-4xl">
-                  {/* Summary card */}
-                  <div className="surface-card p-5 border border-border/70 rounded-xl space-y-4">
-                    <h4 className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
-                      Profile & Occupancy
-                    </h4>
-                    <div className="text-xs space-y-2.5">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Applicant Name</span>
-                        <span className="font-medium">{personalInfo.fullName}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Phone Number</span>
-                        <span className="font-medium">{personalInfo.phoneNumber}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Email Address</span>
-                        <span className="font-medium">{personalInfo.email}</span>
-                      </div>
-                      <div className="border-t border-border/60 my-2 pt-2" />
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Move-in Date</span>
-                        <span className="font-medium">
-                          {occupancyInfo.preferredMoveInDate || "Not Specified"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Lease Term</span>
-                        <span className="font-medium">
-                          {occupancyInfo.preferredLeaseMonths} Months
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Household Size</span>
-                        <span className="font-medium">
-                          {occupancyInfo.adults} Adult(s), {occupancyInfo.children} Child(ren)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Employment card */}
-                  <div className="surface-card p-5 border border-border/70 rounded-xl space-y-4">
-                    <h4 className="font-display font-bold text-sm text-foreground uppercase tracking-wider">
-                      Employment & Files
-                    </h4>
-                    <div className="text-xs space-y-2.5">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Employment Status</span>
-                        <span className="font-medium capitalize">{employmentInfo.status}</span>
-                      </div>
-                      {employmentInfo.employer && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Employer</span>
-                          <span className="font-medium">{employmentInfo.employer}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Income Range</span>
-                        <span className="font-medium">{employmentInfo.incomeRange}</span>
-                      </div>
-                      <div className="border-t border-border/60 my-2 pt-2" />
-                      <div>
-                        <span className="text-muted-foreground block mb-2">
-                          Uploaded Files ({uploadedDocs.length})
-                        </span>
-                        <div className="space-y-1">
-                          {uploadedDocs.map((doc) => (
-                            <div
-                              key={doc.id}
-                              className="flex items-center gap-1.5 text-xs text-foreground"
-                            >
-                              <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />
-                              <span className="truncate max-w-[200px]">{doc.name}</span>
-                            </div>
-                          ))}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="flex gap-2.5 rounded-xl bg-secondary/50 p-4 border border-border/60 text-left max-w-xl">
-                  <Info className="h-5 w-5 text-primary shrink-0" />
-                  <p className="text-xs text-muted-foreground leading-normal">
-                    <strong>Submission Confirmation:</strong> Submitting this application sends your
-                    files and profile details directly to the property landlord. It does not
-                    establish a tenancy or process any payments.
-                  </p>
-                </div>
-              </div>
-            )}
+                    <div className="flex gap-2.5 rounded-xl bg-secondary/50 p-4 border border-border/60 text-left max-w-xl">
+                      <Info className="h-5 w-5 text-primary shrink-0" />
+                      <p className="text-xs text-muted-foreground leading-normal">
+                        <strong>Submission Confirmation:</strong> Submitting this application sends
+                        your files and profile details directly to the property landlord. It does
+                        not establish a tenancy or process any payments.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
 
             {/* Navigation buttons */}
             <div className="flex justify-between border-t border-border pt-4">

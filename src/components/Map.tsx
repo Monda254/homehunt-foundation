@@ -172,7 +172,7 @@ export const PropertyMap: React.FC<MapProps> = ({
     if (markerBounds.length > 0 && listings.length > 0) {
       map.fitBounds(markerBounds, { padding: [40, 40], maxZoom: 15 });
     }
-  }, [listings, isLeafletLoaded]);
+  }, [listings, isLeafletLoaded, activeListingId]);
 
   // 3. Highlight / open popup when activeListingId changes
   useEffect(() => {

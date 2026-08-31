@@ -35,6 +35,8 @@ import {
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { AnimatedCard } from "@/components/motion/AnimatedCard";
+import { Skeleton } from "@/components/motion/Skeleton";
 
 export const Route = createFileRoute("/homes/")({
   validateSearch: (search) => SearchListingsSchema.parse(search),
@@ -799,10 +801,10 @@ function SearchListingCard({
   onFavoriteToggle: (e: React.MouseEvent, id: string) => void;
 }) {
   return (
-    <div
+    <AnimatedCard
       onMouseEnter={() => onHoverChange(listing.id)}
       onMouseLeave={() => onHoverChange(null)}
-      className={`bg-card rounded-2xl border overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative ${
+      className={`bg-card rounded-2xl border overflow-hidden shadow-sm flex flex-col group relative ${
         isHighlighted ? "border-accent ring-2 ring-accent/15 scale-[1.01]" : "border-border"
       }`}
     >
@@ -893,23 +895,23 @@ function SearchListingCard({
           </Link>
         </div>
       </div>
-    </div>
+    </AnimatedCard>
   );
 }
 
 function ListingCardSkeleton() {
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm animate-pulse flex flex-col h-[400px]">
-      <div className="aspect-[16/10] bg-secondary/40 w-full shrink-0" />
+    <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm flex flex-col h-[400px]">
+      <Skeleton className="aspect-[16/10] w-full shrink-0" />
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div className="space-y-3">
-          <div className="h-6 bg-secondary/50 rounded w-1/3" />
-          <div className="h-4 bg-secondary/50 rounded w-full" />
-          <div className="h-4 bg-secondary/40 rounded w-2/3" />
+          <Skeleton className="h-6 w-1/3" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
         </div>
         <div className="flex gap-4 items-center border-t border-border/40 pt-3">
-          <div className="h-4 bg-secondary/40 rounded w-12" />
-          <div className="h-4 bg-secondary/40 rounded w-12" />
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="h-4 w-12" />
         </div>
       </div>
     </div>

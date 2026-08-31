@@ -7,9 +7,13 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { AnimatePresence } from "framer-motion";
+import { MotionProvider } from "@/components/motion/MotionProvider";
+import { PageTransition } from "@/components/motion/PageTransition";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -120,13 +124,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <Toaster />
+        <MotionProvider>
+          <AnimatePresence mode="wait" initial={false}>
+            <PageTransition key={location.pathname}>
+              <Outlet />
+            </PageTransition>
+          </AnimatePresence>
+          <Toaster />
+        </MotionProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

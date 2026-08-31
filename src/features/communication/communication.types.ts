@@ -61,6 +61,7 @@ export const NOTIFICATION_TYPES = [
   "APPLICATION_SUBMITTED",
   "APPLICATION_STATUS_CHANGED",
   "APPLICATION_INFO_REQUEST",
+  "TENANCY_STATUS_CHANGED",
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 

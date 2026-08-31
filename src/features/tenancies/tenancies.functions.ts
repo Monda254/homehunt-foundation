@@ -1112,14 +1112,14 @@ export const fnGetSecureTenancyDocUrl = createServerFn({ method: "POST" })
 // -------------------------------------------------------------
 export const createTenancy = (data: z.infer<typeof CreateTenancySchema>) =>
   fnCreateTenancy({ data });
-export const prepareLease = (data: z.infer<typeof PrepareLeaseSchema>) => fnPrepareLease({ data });
+export const prepareLease = (data: z.input<typeof PrepareLeaseSchema>) => fnPrepareLease({ data });
 export const sendLease = (leaseId: string) => fnSendLease({ data: leaseId });
 export const acceptLease = (data: z.infer<typeof AcceptLeaseSchema>) => fnAcceptLease({ data });
 export const declineLease = (data: z.infer<typeof DeclineLeaseSchema>) => fnDeclineLease({ data });
 export const executeLease = (leaseId: string) => fnExecuteLease({ data: leaseId });
 export const scheduleMoveIn = (data: z.infer<typeof ScheduleMoveInSchema>) =>
   fnScheduleMoveIn({ data });
-export const completeMoveIn = (data: z.infer<typeof CompleteMoveInSchema>) =>
+export const completeMoveIn = (data: z.input<typeof CompleteMoveInSchema>) =>
   fnCompleteMoveIn({ data });
 export const endTenancy = (data: z.infer<typeof EndTenancySchema>) => fnEndTenancy({ data });
 export const getTenancyDetails = (tenancyId: string) => fnGetTenancyDetails({ data: tenancyId });
