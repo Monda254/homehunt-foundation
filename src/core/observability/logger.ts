@@ -19,7 +19,7 @@ export interface LogContext {
 const REDACTED = "[redacted]";
 
 const SENSITIVE_KEY_PATTERN =
-  /pass(word)?|secret|token|authorization|apikey|api_key|cookie|session|otp|pin|id_number|national_id|card|cvv|iban|private/i;
+  /pass(word)?|secret|token|authorization|apikey|api_key|cookie|session|otp|pin|id_number|national_id|card|cvv|iban|private|mpesa|checkout_id|stk|msisdn/i;
 
 export function redact(value: unknown, depth = 0): unknown {
   if (depth > 4 || value === null || typeof value !== "object") return value;

@@ -27,6 +27,7 @@ import { Route as TenanciesRouteImport } from './routes/tenancies'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as ViewingsRouteImport } from './routes/viewings'
+import { Route as AdminIntelligenceRouteImport } from './routes/admin.intelligence'
 import { Route as ApplicationsIdRouteImport } from './routes/applications.$id'
 import { Route as DashboardApplicationsRouteImport } from './routes/dashboard.applications'
 import { Route as DashboardTenanciesRouteImport } from './routes/dashboard.tenancies'
@@ -135,6 +136,11 @@ const ViewingsRoute = ViewingsRouteImport.update({
   path: '/viewings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIntelligenceRoute = AdminIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApplicationsIdRoute = ApplicationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -224,7 +230,7 @@ const PropertiesPropertyIdUnitsUnitIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
+  '/admin/intelligence': typeof AdminIntelligenceRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/dashboard/applications': typeof DashboardApplicationsRouteWithChildren
   '/dashboard/tenancies': typeof DashboardTenanciesRouteWithChildren
@@ -261,7 +268,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -278,6 +285,7 @@ export interface FileRoutesByTo {
   '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
+  '/admin/intelligence': typeof AdminIntelligenceRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/dashboard/applications': typeof DashboardApplicationsRouteWithChildren
   '/dashboard/tenancies': typeof DashboardTenanciesRouteWithChildren
@@ -299,7 +307,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/trust': typeof TrustRoute
   '/verify-email': typeof VerifyEmailRoute
   '/viewings': typeof ViewingsRoute
+  '/admin/intelligence': typeof AdminIntelligenceRoute
   '/applications/$id': typeof ApplicationsIdRoute
   '/dashboard/applications': typeof DashboardApplicationsRouteWithChildren
   '/dashboard/tenancies': typeof DashboardTenanciesRouteWithChildren
@@ -355,6 +364,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/verify-email'
     | '/viewings'
+    | '/admin/intelligence'
     | '/applications/$id'
     | '/dashboard/applications'
     | '/dashboard/tenancies'
@@ -392,6 +402,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/verify-email'
     | '/viewings'
+    | '/admin/intelligence'
     | '/applications/$id'
     | '/dashboard/applications'
     | '/dashboard/tenancies'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/trust'
     | '/verify-email'
     | '/viewings'
+    | '/admin/intelligence'
     | '/applications/$id'
     | '/dashboard/applications'
     | '/dashboard/tenancies'
@@ -450,7 +462,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
@@ -607,6 +619,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ViewingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/intelligence': {
+      id: '/admin/intelligence'
+      path: '/intelligence'
+      fullPath: '/admin/intelligence'
+      preLoaderRoute: typeof AdminIntelligenceRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/applications/$id': {
       id: '/applications/$id'
       path: '/$id'
@@ -729,6 +748,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIntelligenceRoute: typeof AdminIntelligenceRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIntelligenceRoute: AdminIntelligenceRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface ApplicationsRouteChildren {
   ApplicationsIdRoute: typeof ApplicationsIdRoute
 }
@@ -805,7 +834,7 @@ const ApiV1HealthRouteWithChildren = ApiV1HealthRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
