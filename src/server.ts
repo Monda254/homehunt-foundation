@@ -1,3 +1,19 @@
+// Polyfill __exportAll helper if omitted by bundler chunking
+if (typeof (globalThis as any).__exportAll !== "function") {
+  (globalThis as any).__exportAll = function (all: any, target: any = {}) {
+    for (const key in all) {
+      if (Object.prototype.hasOwnProperty.call(all, key)) {
+        Object.defineProperty(target, key, {
+          get: all[key],
+          enumerable: true,
+          configurable: true,
+        });
+      }
+    }
+    return target;
+  };
+}
+
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";

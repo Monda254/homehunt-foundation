@@ -14,5 +14,12 @@ export default defineConfig({
   },
   nitro: {
     preset: process.env.VERCEL ? "vercel" : process.env.NITRO_PRESET || undefined,
+    esbuild: {
+      options: {
+        banner: {
+          js: `if(typeof globalThis.__exportAll!=="function"){globalThis.__exportAll=function(a,t){t=t||{};for(var k in a)if(Object.prototype.hasOwnProperty.call(a,k))Object.defineProperty(t,k,{get:a[k],enumerable:true,configurable:true});return t;}};`,
+        },
+      },
+    },
   },
 });
