@@ -1329,11 +1329,15 @@ export const getMyListings = createServerFn({ method: "GET" })
       .eq("status", "ACTIVE");
 
     const propertyIds = (partyRows || []).map((r) => r.property_id);
+    const orFilter =
+      propertyIds.length > 0
+        ? `created_by_user_id.eq.${userId},property_id.in.(${propertyIds.join(",")})`
+        : `created_by_user_id.eq.${userId}`;
 
     const { data } = await supabaseAdmin
       .from("listings")
       .select("*, properties(name, county, town)")
-      .or(`created_by_user_id.eq.${userId},property_id.in.(${propertyIds.join(",")})`)
+      .or(orFilter)
       .is("deleted_at", null);
 
     return data || [];
