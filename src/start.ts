@@ -6,7 +6,7 @@ import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
     return await next();
-  } catch (error: any) {
+  } catch (error) {
     if (
       error != null &&
       typeof error === "object" &&
@@ -14,8 +14,8 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
         "status" in error ||
         "isRedirect" in error ||
         "isNotFound" in error ||
-        error.name === "RedirectError" ||
-        error.constructor?.name === "Redirect")
+        (error as Record<string, unknown>).name === "RedirectError" ||
+        (error as Record<string, unknown>).constructor?.name === "Redirect")
     ) {
       throw error;
     }

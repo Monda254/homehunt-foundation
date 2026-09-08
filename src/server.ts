@@ -1,6 +1,9 @@
 // Polyfill __exportAll helper if omitted by bundler chunking
-if (typeof (globalThis as any).__exportAll !== "function") {
-  (globalThis as any).__exportAll = function (all: any, target: any = {}) {
+if (typeof (globalThis as Record<string, unknown>).__exportAll !== "function") {
+  (globalThis as Record<string, unknown>).__exportAll = function (
+    all: Record<string, () => unknown>,
+    target: Record<string, unknown> = {},
+  ) {
     for (const key in all) {
       if (Object.prototype.hasOwnProperty.call(all, key)) {
         Object.defineProperty(target, key, {
