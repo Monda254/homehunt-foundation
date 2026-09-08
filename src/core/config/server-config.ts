@@ -27,8 +27,8 @@ export function readServerConfig(
 ): ServerConfigResult {
   const parsed = serverEnvSchema.safeParse({
     APP_ENV: env["APP_ENV"] ?? "development",
-    SUPABASE_URL: env["SUPABASE_URL"],
-    SUPABASE_PUBLISHABLE_KEY: env["SUPABASE_PUBLISHABLE_KEY"],
+    SUPABASE_URL: env["SUPABASE_URL"] ?? env["VITE_SUPABASE_URL"] ?? "https://ljffnleivjgbzyoajapk.supabase.co",
+    SUPABASE_PUBLISHABLE_KEY: env["SUPABASE_PUBLISHABLE_KEY"] ?? env["VITE_SUPABASE_PUBLISHABLE_KEY"] ?? "sb_publishable_wcrajNTOgB_9myTj7jI8jA_pbL0Zivo",
   });
 
   if (!parsed.success) {
