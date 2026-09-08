@@ -1,5 +1,6 @@
 export function renderErrorPage(error?: unknown): string {
-  const errorMessage = error instanceof Error ? error.stack || error.message : error ? String(error) : "";
+  const errorMessage =
+    error instanceof Error ? error.stack || error.message : error ? String(error) : "";
   return `<!doctype html>
 <html lang="en">
   <head>

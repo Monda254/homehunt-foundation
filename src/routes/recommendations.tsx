@@ -108,8 +108,8 @@ function RecommendationsPage() {
       // Check if preferences are completely unconfigured to prompt onboarding
       const hasConfig =
         !!prefs.maxBudget || (prefs.preferredLocations && prefs.preferredLocations.length > 0);
-      if (!hasConfig && onboardingStep === null) {
-        setOnboardingStep(1);
+      if (!hasConfig) {
+        setOnboardingStep((prev) => (prev === null ? 1 : prev));
       }
     }
   }, [prefs]);

@@ -23,6 +23,14 @@ export const PropertyMap: React.FC<MapProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LRef = useRef<any>(null);
 
+  const onBoundsChangeRef = useRef(onBoundsChange);
+  const onMarkerClickRef = useRef(onMarkerClick);
+
+  useEffect(() => {
+    onBoundsChangeRef.current = onBoundsChange;
+    onMarkerClickRef.current = onMarkerClick;
+  });
+
   // 1. Dynamic import of Leaflet on client-side mounting
   useEffect(() => {
     if (typeof window === "undefined" || mapRef.current) return;
@@ -64,9 +72,9 @@ export const PropertyMap: React.FC<MapProps> = ({
 
         // Bounding box trigger
         map.on("moveend", () => {
-          if (onBoundsChange) {
+          if (onBoundsChangeRef.current) {
             const bounds = map.getBounds();
-            onBoundsChange({
+            onBoundsChangeRef.current({
               north: bounds.getNorth(),
               south: bounds.getSouth(),
               east: bounds.getEast(),
@@ -160,8 +168,8 @@ export const PropertyMap: React.FC<MapProps> = ({
       // Events
       marker.on("click", () => {
         marker.openPopup();
-        if (onMarkerClick) {
-          onMarkerClick(listing.id);
+        if (onMarkerClickRef.current) {
+          onMarkerClickRef.current(listing.id);
         }
       });
 
