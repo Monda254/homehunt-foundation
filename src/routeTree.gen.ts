@@ -45,7 +45,9 @@ import { Route as DashboardApplicationsIdRouteImport } from './routes/dashboard.
 import { Route as DashboardTenanciesIdRouteImport } from './routes/dashboard.tenancies.$id'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiV1HealthDatabaseRouteImport } from './routes/api/v1/health.database'
+import { Route as ApiV1PaymentsStkPushRouteImport } from './routes/api/v1/payments.stk-push'
 import { Route as PropertiesPropertyIdUnitsUnitIdRouteImport } from './routes/properties.$propertyId.units.$unitId'
+import { Route as ApiV1PaymentsMpesaCallbackRouteImport } from './routes/api/v1/payments.mpesa.callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -227,10 +229,21 @@ const ApiV1HealthDatabaseRoute = ApiV1HealthDatabaseRouteImport.update({
   path: '/database',
   getParentRoute: () => ApiV1HealthRoute,
 } as any)
+const ApiV1PaymentsStkPushRoute = ApiV1PaymentsStkPushRouteImport.update({
+  id: '/api/v1/payments/stk-push',
+  path: '/api/v1/payments/stk-push',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertiesPropertyIdUnitsUnitIdRoute =
   PropertiesPropertyIdUnitsUnitIdRouteImport.update({
     id: '/properties/$propertyId/units/$unitId',
     path: '/properties/$propertyId/units/$unitId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiV1PaymentsMpesaCallbackRoute =
+  ApiV1PaymentsMpesaCallbackRouteImport.update({
+    id: '/api/v1/payments/mpesa/callback',
+    path: '/api/v1/payments/mpesa/callback',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -271,7 +284,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
+  '/api/v1/payments/stk-push': typeof ApiV1PaymentsStkPushRoute
   '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
+  '/api/v1/payments/mpesa/callback': typeof ApiV1PaymentsMpesaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -310,7 +325,9 @@ export interface FileRoutesByTo {
   '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
+  '/api/v1/payments/stk-push': typeof ApiV1PaymentsStkPushRoute
   '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
+  '/api/v1/payments/mpesa/callback': typeof ApiV1PaymentsMpesaCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -350,7 +367,9 @@ export interface FileRoutesById {
   '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/v1/health/database': typeof ApiV1HealthDatabaseRoute
+  '/api/v1/payments/stk-push': typeof ApiV1PaymentsStkPushRoute
   '/properties/$propertyId/units/$unitId': typeof PropertiesPropertyIdUnitsUnitIdRoute
+  '/api/v1/payments/mpesa/callback': typeof ApiV1PaymentsMpesaCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -391,7 +410,9 @@ export interface FileRouteTypes {
     | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
+    | '/api/v1/payments/stk-push'
     | '/properties/$propertyId/units/$unitId'
+    | '/api/v1/payments/mpesa/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -430,7 +451,9 @@ export interface FileRouteTypes {
     | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
+    | '/api/v1/payments/stk-push'
     | '/properties/$propertyId/units/$unitId'
+    | '/api/v1/payments/mpesa/callback'
   id:
     | '__root__'
     | '/'
@@ -469,7 +492,9 @@ export interface FileRouteTypes {
     | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
     | '/api/v1/health/database'
+    | '/api/v1/payments/stk-push'
     | '/properties/$propertyId/units/$unitId'
+    | '/api/v1/payments/mpesa/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -501,7 +526,9 @@ export interface RootRouteChildren {
   ApiV1HealthRoute: typeof ApiV1HealthRouteWithChildren
   ApiV1ReadinessRoute: typeof ApiV1ReadinessRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
+  ApiV1PaymentsStkPushRoute: typeof ApiV1PaymentsStkPushRoute
   PropertiesPropertyIdUnitsUnitIdRoute: typeof PropertiesPropertyIdUnitsUnitIdRoute
+  ApiV1PaymentsMpesaCallbackRoute: typeof ApiV1PaymentsMpesaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -758,11 +785,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1HealthDatabaseRouteImport
       parentRoute: typeof ApiV1HealthRoute
     }
+    '/api/v1/payments/stk-push': {
+      id: '/api/v1/payments/stk-push'
+      path: '/api/v1/payments/stk-push'
+      fullPath: '/api/v1/payments/stk-push'
+      preLoaderRoute: typeof ApiV1PaymentsStkPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properties/$propertyId/units/$unitId': {
       id: '/properties/$propertyId/units/$unitId'
       path: '/properties/$propertyId/units/$unitId'
       fullPath: '/properties/$propertyId/units/$unitId'
       preLoaderRoute: typeof PropertiesPropertyIdUnitsUnitIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/payments/mpesa/callback': {
+      id: '/api/v1/payments/mpesa/callback'
+      path: '/api/v1/payments/mpesa/callback'
+      fullPath: '/api/v1/payments/mpesa/callback'
+      preLoaderRoute: typeof ApiV1PaymentsMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -881,7 +922,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiV1HealthRoute: ApiV1HealthRouteWithChildren,
   ApiV1ReadinessRoute: ApiV1ReadinessRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
+  ApiV1PaymentsStkPushRoute: ApiV1PaymentsStkPushRoute,
   PropertiesPropertyIdUnitsUnitIdRoute: PropertiesPropertyIdUnitsUnitIdRoute,
+  ApiV1PaymentsMpesaCallbackRoute: ApiV1PaymentsMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
