@@ -47,7 +47,9 @@ describe("Workstream A & C: M-Pesa Provider & Webhook Idempotency", () => {
   });
 
   it("should safely process invalid webhook payload structures without crashing", async () => {
-    const invalidResult = await provider.processWebhookCallback({} as any);
+    const invalidResult = await provider.processWebhookCallback(
+      {} as unknown as Parameters<typeof provider.processWebhookCallback>[0],
+    );
     expect(invalidResult.success).toBe(false);
     expect(invalidResult.status).toBe("FAILED");
     expect(invalidResult.message).toContain("Invalid M-Pesa webhook payload");
@@ -81,9 +83,8 @@ describe("Workstream A & C: M-Pesa Provider & Webhook Idempotency", () => {
 
 describe("Workstream B: Financial Reconciliation Audit", () => {
   it("should return an array of reconciliation records for a given tenancy ID", async () => {
-    const records = await PaymentReconciliationService.reconcileTenancyPayments(
-      "test-tenancy-uuid-000",
-    );
+    const records =
+      await PaymentReconciliationService.reconcileTenancyPayments("test-tenancy-uuid-000");
     expect(Array.isArray(records)).toBe(true);
   });
 });
