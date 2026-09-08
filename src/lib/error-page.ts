@@ -9,6 +9,8 @@ export function renderErrorPage(error?: unknown): string {
     );
   } else if (error) {
     errorMessage = String(error);
+  } else {
+    errorMessage = `Internal Server Error 500 (No error details captured). Timestamp: ${new Date().toISOString()}`;
   }
   return `<!doctype html>
 <html lang="en">

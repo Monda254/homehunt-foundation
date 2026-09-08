@@ -6,11 +6,20 @@ import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
     return await next();
-  } catch (error) {
-    if (error != null && typeof error === "object" && "statusCode" in error) {
+  } catch (error: any) {
+    if (
+      error != null &&
+      typeof error === "object" &&
+      ("statusCode" in error ||
+        "status" in error ||
+        "isRedirect" in error ||
+        "isNotFound" in error ||
+        error.name === "RedirectError" ||
+        error.constructor?.name === "Redirect")
+    ) {
       throw error;
     }
-    console.error(error);
+    console.error("[Start Error Middleware]:", error);
     return new Response(renderErrorPage(error), {
       status: 500,
       headers: { "content-type": "text/html; charset=utf-8" },
