@@ -1856,3 +1856,168 @@ CREATE INDEX IF NOT EXISTS idx_rec_feedback_listing_id ON public.recommendation_
 CREATE INDEX IF NOT EXISTS idx_rec_history_user_id ON public.recommendation_history(user_id);
 CREATE INDEX IF NOT EXISTS idx_rec_history_listing_id ON public.recommendation_history(listing_id);
 
+-- =============================================================
+-- HomeHunt Phase 11 — Intelligence, Analytics & AI Layer Migrations
+-- =============================================================
+
+-- 1. Analytics Events Table
+CREATE TABLE IF NOT EXISTS public.analytics_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_name VARCHAR NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  anonymous_session_id VARCHAR,
+  entity_type VARCHAR,
+  entity_id UUID,
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  request_id VARCHAR,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_analytics_events_name ON public.analytics_events(event_name);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_user ON public.analytics_events(user_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_created ON public.analytics_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_entity ON public.analytics_events(entity_type, entity_id);
+
+-- 2. Aggregated Listing Metrics Table
+CREATE TABLE IF NOT EXISTS public.analytics_listing_metrics (
+  listing_id UUID PRIMARY KEY REFERENCES public.listings(id) ON DELETE CASCADE,
+  view_count INT NOT NULL DEFAULT 0,
+  save_count INT NOT NULL DEFAULT 0,
+  viewing_request_count INT NOT NULL DEFAULT 0,
+  application_count INT NOT NULL DEFAULT 0,
+  lease_count INT NOT NULL DEFAULT 0,
+  last_calculated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 3. Listing Health & Freshness Scores Table
+CREATE TABLE IF NOT EXISTS public.listing_health_scores (
+  listing_id UUID PRIMARY KEY REFERENCES public.listings(id) ON DELETE CASCADE,
+  health_score INT NOT NULL DEFAULT 0,
+  freshness_status VARCHAR NOT NULL DEFAULT 'FRESH',
+  breakdown JSONB NOT NULL DEFAULT '{}'::jsonb,
+  last_reconfirmed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_listing_health_score ON public.listing_health_scores(health_score);
+CREATE INDEX IF NOT EXISTS idx_listing_freshness ON public.listing_health_scores(freshness_status);
+
+-- 4. AI Usage Tracking Table
+CREATE TABLE IF NOT EXISTS public.ai_usage (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  model VARCHAR NOT NULL,
+  feature VARCHAR NOT NULL,
+  prompt_version VARCHAR NOT NULL DEFAULT 'v1',
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  input_tokens INT NOT NULL DEFAULT 0,
+  output_tokens INT NOT NULL DEFAULT 0,
+  estimated_cost NUMERIC(10, 6) NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_ai_usage_feature ON public.ai_usage(feature);
+CREATE INDEX IF NOT EXISTS idx_ai_usage_user ON public.ai_usage(user_id);
+CREATE INDEX IF NOT EXISTS idx_ai_usage_created ON public.ai_usage(created_at);
+
+-- 5. Risk Signals & Anomaly Signals Table
+CREATE TABLE IF NOT EXISTS public.risk_signals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  entity_type VARCHAR NOT NULL,
+  entity_id UUID NOT NULL,
+  signal_type VARCHAR NOT NULL,
+  confidence VARCHAR NOT NULL DEFAULT 'MEDIUM',
+  reason TEXT NOT NULL,
+  status VARCHAR NOT NULL DEFAULT 'OPEN',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_risk_signals_entity ON public.risk_signals(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_risk_signals_status ON public.risk_signals(status);
+
+-- 6. Feature Flags Table
+CREATE TABLE IF NOT EXISTS public.feature_flags (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  flag_key VARCHAR UNIQUE NOT NULL,
+  description TEXT,
+  enabled BOOLEAN NOT NULL DEFAULT false,
+  rollout_percentage INT NOT NULL DEFAULT 100,
+  allowed_roles JSONB NOT NULL DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 7. Duplicate Listing Candidates Table
+CREATE TABLE IF NOT EXISTS public.duplicate_candidates (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id_1 UUID NOT NULL REFERENCES public.listings(id) ON DELETE CASCADE,
+  listing_id_2 UUID NOT NULL REFERENCES public.listings(id) ON DELETE CASCADE,
+  similarity_score NUMERIC(5, 2) NOT NULL DEFAULT 0,
+  reason TEXT NOT NULL,
+  status VARCHAR NOT NULL DEFAULT 'OPEN',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT uq_duplicate_candidate_pair UNIQUE (listing_id_1, listing_id_2)
+);
+
+CREATE INDEX IF NOT EXISTS idx_duplicate_candidates_status ON public.duplicate_candidates(status);
+CREATE INDEX IF NOT EXISTS idx_duplicate_candidates_pair ON public.duplicate_candidates(listing_id_1, listing_id_2);
+
+-- 8. User Privacy Preferences Table
+CREATE TABLE IF NOT EXISTS public.user_privacy_preferences (
+  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  enable_personalization BOOLEAN NOT NULL DEFAULT true,
+  enable_ai_assistance BOOLEAN NOT NULL DEFAULT true,
+  enable_search_history BOOLEAN NOT NULL DEFAULT true,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 9. Market Analytics Daily Aggregate Table
+CREATE TABLE IF NOT EXISTS public.market_analytics_daily (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  county VARCHAR NOT NULL,
+  town VARCHAR NOT NULL,
+  bedrooms INT NOT NULL DEFAULT 1,
+  property_type VARCHAR NOT NULL DEFAULT 'Apartment',
+  median_rent NUMERIC(12, 2) NOT NULL DEFAULT 0,
+  average_rent NUMERIC(12, 2) NOT NULL DEFAULT 0,
+  total_listings INT NOT NULL DEFAULT 0,
+  recorded_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  CONSTRAINT uq_market_analytics_daily UNIQUE (county, town, bedrooms, property_type, recorded_date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_market_analytics_location ON public.market_analytics_daily(county, town);
+CREATE INDEX IF NOT EXISTS idx_market_analytics_date ON public.market_analytics_daily(recorded_date);
+
+-- Enable RLS
+ALTER TABLE public.analytics_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.analytics_listing_metrics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.listing_health_scores ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ai_usage ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.risk_signals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.feature_flags ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.duplicate_candidates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_privacy_preferences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.market_analytics_daily ENABLE ROW LEVEL SECURITY;
+
+-- Grants
+GRANT SELECT, INSERT ON public.analytics_events TO authenticated, anon;
+GRANT SELECT ON public.analytics_listing_metrics TO authenticated, anon;
+GRANT SELECT ON public.listing_health_scores TO authenticated, anon;
+GRANT SELECT, INSERT ON public.ai_usage TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON public.risk_signals TO authenticated;
+GRANT SELECT ON public.feature_flags TO authenticated, anon;
+GRANT SELECT ON public.duplicate_candidates TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON public.user_privacy_preferences TO authenticated;
+GRANT SELECT ON public.market_analytics_daily TO authenticated, anon;
+
+GRANT ALL ON public.analytics_events TO service_role;
+GRANT ALL ON public.analytics_listing_metrics TO service_role;
+GRANT ALL ON public.listing_health_scores TO service_role;
+GRANT ALL ON public.ai_usage TO service_role;
+GRANT ALL ON public.risk_signals TO service_role;
+GRANT ALL ON public.feature_flags TO service_role;
+GRANT ALL ON public.duplicate_candidates TO service_role;
+GRANT ALL ON public.user_privacy_preferences TO service_role;
+GRANT ALL ON public.market_analytics_daily TO service_role;
+
+

@@ -1752,6 +1752,294 @@ export type Database = {
           },
         ];
       };
+      ai_usage: {
+        Row: {
+          created_at: string;
+          estimated_cost: number;
+          feature: string;
+          id: string;
+          input_tokens: number;
+          model: string;
+          output_tokens: number;
+          prompt_version: string;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          estimated_cost?: number;
+          feature: string;
+          id?: string;
+          input_tokens?: number;
+          model: string;
+          output_tokens?: number;
+          prompt_version?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          estimated_cost?: number;
+          feature?: string;
+          id?: string;
+          input_tokens?: number;
+          model?: string;
+          output_tokens?: number;
+          prompt_version?: string;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      analytics_events: {
+        Row: {
+          anonymous_session_id: string | null;
+          created_at: string;
+          entity_id: string | null;
+          entity_type: string | null;
+          event_name: string;
+          id: string;
+          metadata: Json;
+          request_id: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          anonymous_session_id?: string | null;
+          created_at?: string;
+          entity_id?: string | null;
+          entity_type?: string | null;
+          event_name: string;
+          id?: string;
+          metadata?: Json;
+          request_id?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          anonymous_session_id?: string | null;
+          created_at?: string;
+          entity_id?: string | null;
+          entity_type?: string | null;
+          event_name?: string;
+          id?: string;
+          metadata?: Json;
+          request_id?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      analytics_listing_metrics: {
+        Row: {
+          application_count: number;
+          last_calculated_at: string;
+          lease_count: number;
+          listing_id: string;
+          save_count: number;
+          view_count: number;
+          viewing_request_count: number;
+        };
+        Insert: {
+          application_count?: number;
+          last_calculated_at?: string;
+          lease_count?: number;
+          listing_id: string;
+          save_count?: number;
+          view_count?: number;
+          viewing_request_count?: number;
+        };
+        Update: {
+          application_count?: number;
+          last_calculated_at?: string;
+          lease_count?: number;
+          listing_id?: string;
+          save_count?: number;
+          view_count?: number;
+          viewing_request_count?: number;
+        };
+        Relationships: [];
+      };
+      duplicate_candidates: {
+        Row: {
+          created_at: string;
+          id: string;
+          listing_id_1: string;
+          listing_id_2: string;
+          reason: string;
+          similarity_score: number;
+          status: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          listing_id_1: string;
+          listing_id_2: string;
+          reason: string;
+          similarity_score?: number;
+          status?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          listing_id_1?: string;
+          listing_id_2?: string;
+          reason?: string;
+          similarity_score?: number;
+          status?: string;
+        };
+        Relationships: [];
+      };
+      feature_flags: {
+        Row: {
+          allowed_roles: Json;
+          created_at: string;
+          description: string | null;
+          enabled: boolean;
+          flag_key: string;
+          id: string;
+          rollout_percentage: number;
+          updated_at: string;
+        };
+        Insert: {
+          allowed_roles?: Json;
+          created_at?: string;
+          description?: string | null;
+          enabled?: boolean;
+          flag_key: string;
+          id?: string;
+          rollout_percentage?: number;
+          updated_at?: string;
+        };
+        Update: {
+          allowed_roles?: Json;
+          created_at?: string;
+          description?: string | null;
+          enabled?: boolean;
+          flag_key?: string;
+          id?: string;
+          rollout_percentage?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      listing_health_scores: {
+        Row: {
+          breakdown: Json;
+          freshness_status: string;
+          health_score: number;
+          last_reconfirmed_at: string;
+          listing_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          breakdown?: Json;
+          freshness_status?: string;
+          health_score?: number;
+          last_reconfirmed_at?: string;
+          listing_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          breakdown?: Json;
+          freshness_status?: string;
+          health_score?: number;
+          last_reconfirmed_at?: string;
+          listing_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      market_analytics_daily: {
+        Row: {
+          average_rent: number;
+          bedrooms: number;
+          county: string;
+          id: string;
+          median_rent: number;
+          property_type: string;
+          recorded_date: string;
+          total_listings: number;
+          town: string;
+        };
+        Insert: {
+          average_rent?: number;
+          bedrooms?: number;
+          county: string;
+          id?: string;
+          median_rent?: number;
+          property_type?: string;
+          recorded_date?: string;
+          total_listings?: number;
+          town: string;
+        };
+        Update: {
+          average_rent?: number;
+          bedrooms?: number;
+          county?: string;
+          id?: string;
+          median_rent?: number;
+          property_type?: string;
+          recorded_date?: string;
+          total_listings?: number;
+          town?: string;
+        };
+        Relationships: [];
+      };
+      risk_signals: {
+        Row: {
+          confidence: string;
+          created_at: string;
+          entity_id: string;
+          entity_type: string;
+          id: string;
+          reason: string;
+          signal_type: string;
+          status: string;
+          updated_at: string;
+        };
+        Insert: {
+          confidence?: string;
+          created_at?: string;
+          entity_id: string;
+          entity_type: string;
+          id?: string;
+          reason: string;
+          signal_type: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Update: {
+          confidence?: string;
+          created_at?: string;
+          entity_id?: string;
+          entity_type?: string;
+          id?: string;
+          reason?: string;
+          signal_type?: string;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      user_privacy_preferences: {
+        Row: {
+          enable_ai_assistance: boolean;
+          enable_personalization: boolean;
+          enable_search_history: boolean;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          enable_ai_assistance?: boolean;
+          enable_personalization?: boolean;
+          enable_search_history?: boolean;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          enable_ai_assistance?: boolean;
+          enable_personalization?: boolean;
+          enable_search_history?: boolean;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       application_requirements: {
         Row: {
           created_at: string;
