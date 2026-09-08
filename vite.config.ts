@@ -6,11 +6,20 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+const EXPORT_ALL_POLYFILL =
+  "if(typeof globalThis.__exportAll!=='function'){globalThis.__exportAll=function(a,t){t=t||{};for(var k in a)if(Object.prototype.hasOwnProperty.call(a,k))Object.defineProperty(t,k,{get:a[k],enumerable:true,configurable:true});return t;}};";
+
 export default defineConfig({
   vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          banner: EXPORT_ALL_POLYFILL,
+        },
+      },
+    },
     esbuild: {
-      banner:
-        "if(typeof globalThis.__exportAll!=='function'){globalThis.__exportAll=function(a,t){t=t||{};for(var k in a)if(Object.prototype.hasOwnProperty.call(a,k))Object.defineProperty(t,k,{get:a[k],enumerable:true,configurable:true});return t;}};",
+      banner: EXPORT_ALL_POLYFILL,
     },
   },
   tanstackStart: {
@@ -20,10 +29,11 @@ export default defineConfig({
   },
   nitro: {
     preset: process.env.VERCEL ? "vercel" : process.env.NITRO_PRESET || undefined,
+    banner: EXPORT_ALL_POLYFILL,
     esbuild: {
       options: {
         banner: {
-          js: `if(typeof globalThis.__exportAll!=="function"){globalThis.__exportAll=function(a,t){t=t||{};for(var k in a)if(Object.prototype.hasOwnProperty.call(a,k))Object.defineProperty(t,k,{get:a[k],enumerable:true,configurable:true});return t;}};`,
+          js: EXPORT_ALL_POLYFILL,
         },
       },
     },
