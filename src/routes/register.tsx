@@ -83,7 +83,7 @@ function RegisterComponent() {
           Create Account
         </h1>
         <p className="mt-2 text-sm text-muted-foreground text-center leading-relaxed">
-          Join HomeHunt today. Find scam-free rentals or list properties securely.
+          Join HomeHunt today. Find verified rentals or list properties securely.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">

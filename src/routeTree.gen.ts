@@ -40,6 +40,7 @@ import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as PropertiesNewRouteImport } from './routes/properties.new'
 import { Route as TenanciesIdRouteImport } from './routes/tenancies.$id'
 import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
+import { Route as ApiV1ReadinessRouteImport } from './routes/api/v1/readiness'
 import { Route as DashboardApplicationsIdRouteImport } from './routes/dashboard.applications.$id'
 import { Route as DashboardTenanciesIdRouteImport } from './routes/dashboard.tenancies.$id'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
@@ -201,6 +202,11 @@ const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
   path: '/api/v1/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiV1ReadinessRoute = ApiV1ReadinessRouteImport.update({
+  id: '/api/v1/readiness',
+  path: '/api/v1/readiness',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardApplicationsIdRoute = DashboardApplicationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -260,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
+  '/api/v1/readiness': typeof ApiV1ReadinessRoute
   '/dashboard/applications/$id': typeof DashboardApplicationsIdRoute
   '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
@@ -298,6 +305,7 @@ export interface FileRoutesByTo {
   '/listings': typeof ListingsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
+  '/api/v1/readiness': typeof ApiV1ReadinessRoute
   '/dashboard/applications/$id': typeof DashboardApplicationsIdRoute
   '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
@@ -337,6 +345,7 @@ export interface FileRoutesById {
   '/listings/': typeof ListingsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/api/v1/health': typeof ApiV1HealthRouteWithChildren
+  '/api/v1/readiness': typeof ApiV1ReadinessRoute
   '/dashboard/applications/$id': typeof DashboardApplicationsIdRoute
   '/dashboard/tenancies/$id': typeof DashboardTenanciesIdRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
@@ -377,6 +386,7 @@ export interface FileRouteTypes {
     | '/listings/'
     | '/properties/'
     | '/api/v1/health'
+    | '/api/v1/readiness'
     | '/dashboard/applications/$id'
     | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
@@ -415,6 +425,7 @@ export interface FileRouteTypes {
     | '/listings'
     | '/properties'
     | '/api/v1/health'
+    | '/api/v1/readiness'
     | '/dashboard/applications/$id'
     | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
@@ -453,6 +464,7 @@ export interface FileRouteTypes {
     | '/listings/'
     | '/properties/'
     | '/api/v1/health'
+    | '/api/v1/readiness'
     | '/dashboard/applications/$id'
     | '/dashboard/tenancies/$id'
     | '/api/public/v1/health'
@@ -487,6 +499,7 @@ export interface RootRouteChildren {
   ListingsIndexRoute: typeof ListingsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiV1HealthRoute: typeof ApiV1HealthRouteWithChildren
+  ApiV1ReadinessRoute: typeof ApiV1ReadinessRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   PropertiesPropertyIdUnitsUnitIdRoute: typeof PropertiesPropertyIdUnitsUnitIdRoute
 }
@@ -710,6 +723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/v1/readiness': {
+      id: '/api/v1/readiness'
+      path: '/api/v1/readiness'
+      fullPath: '/api/v1/readiness'
+      preLoaderRoute: typeof ApiV1ReadinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/applications/$id': {
       id: '/dashboard/applications/$id'
       path: '/$id'
@@ -859,6 +879,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListingsIndexRoute: ListingsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiV1HealthRoute: ApiV1HealthRouteWithChildren,
+  ApiV1ReadinessRoute: ApiV1ReadinessRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   PropertiesPropertyIdUnitsUnitIdRoute: PropertiesPropertyIdUnitsUnitIdRoute,
 }

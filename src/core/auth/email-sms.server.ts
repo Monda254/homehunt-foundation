@@ -24,17 +24,39 @@ export const emailService: EmailService = {
     const config = readServerConfig();
     const isDev = !config.ok || config.config.APP_ENV === "development";
 
-    // Construct local or production redirect link
-    const baseUrl = customBaseUrl || (isDev ? "http://localhost:8080" : "https://homehunt.dev");
+    const baseUrl = customBaseUrl || (isDev ? "http://localhost:8080" : "https://homehunt.co.ke");
     const verificationLink = `${baseUrl}/verify-email?token=${token}`;
+
+    const resendApiKey = process.env.RESEND_API_KEY;
 
     logger.info("Email verification dispatched", {
       event: "email.verification_sent",
       recipient: email,
+      provider: resendApiKey ? "Resend" : "LoggerFallback",
       ...(isDev ? { localUrl: verificationLink } : {}),
     });
 
-    if (isDev) {
+    if (resendApiKey) {
+      try {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "HomeHunt <no-reply@homehunt.co.ke>",
+            to: [email],
+            subject: "Verify your HomeHunt Account",
+            html: `<p>Welcome to HomeHunt! Click <a href="${verificationLink}">here</a> to verify your account.</p>`,
+          }),
+        });
+      } catch (err: unknown) {
+        logger.error("Failed to send email via Resend provider:", {
+          error: (err as Error).message,
+        });
+      }
+    } else {
       console.log("\n============================================================");
       console.log(`[DEVELOPMENT EMAIL SENDER] TO: ${email}`);
       console.log("Please click the link below to verify your account:");
@@ -51,16 +73,39 @@ export const emailService: EmailService = {
     const config = readServerConfig();
     const isDev = !config.ok || config.config.APP_ENV === "development";
 
-    const baseUrl = customBaseUrl || (isDev ? "http://localhost:8080" : "https://homehunt.dev");
+    const baseUrl = customBaseUrl || (isDev ? "http://localhost:8080" : "https://homehunt.co.ke");
     const resetLink = `${baseUrl}/reset-password?token=${token}`;
+
+    const resendApiKey = process.env.RESEND_API_KEY;
 
     logger.info("Password reset dispatched", {
       event: "email.password_reset_sent",
       recipient: email,
+      provider: resendApiKey ? "Resend" : "LoggerFallback",
       ...(isDev ? { localUrl: resetLink } : {}),
     });
 
-    if (isDev) {
+    if (resendApiKey) {
+      try {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "HomeHunt <no-reply@homehunt.co.ke>",
+            to: [email],
+            subject: "Reset your HomeHunt Password",
+            html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+          }),
+        });
+      } catch (err: unknown) {
+        logger.error("Failed to send password reset email via Resend:", {
+          error: (err as Error).message,
+        });
+      }
+    } else {
       console.log("\n============================================================");
       console.log(`[DEVELOPMENT EMAIL SENDER] TO: ${email}`);
       console.log("Please click the link below to reset your password:");
@@ -70,19 +115,43 @@ export const emailService: EmailService = {
   },
 };
 
-// Prepared for Africa's Talking, Twilio, or another SMS API
+// Prepared for Africa's Talking / Twilio SMS API
 export const smsService: SmsService = {
   async sendVerificationSms(phoneNumber: string, otp: string): Promise<void> {
     const config = readServerConfig();
     const isDev = !config.ok || config.config.APP_ENV === "development";
 
+    const atApiKey = process.env.AFRICASTALKING_API_KEY;
+    const atUsername = process.env.AFRICASTALKING_USERNAME || "sandbox";
+
     logger.info("SMS OTP verification dispatched", {
       event: "sms.otp_sent",
       recipient: phoneNumber,
+      provider: atApiKey ? "AfricasTalking" : "LoggerFallback",
       ...(isDev ? { otp } : {}),
     });
 
-    if (isDev) {
+    if (atApiKey) {
+      try {
+        const bodyParams = new URLSearchParams({
+          username: atUsername,
+          to: phoneNumber,
+          message: `Your HomeHunt verification code is: ${otp}`,
+        });
+
+        await fetch("https://api.africastalking.com/version1/messaging", {
+          method: "POST",
+          headers: {
+            apiKey: atApiKey,
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+          },
+          body: bodyParams.toString(),
+        });
+      } catch (err: unknown) {
+        logger.error("Failed to send SMS via Africa's Talking:", { error: (err as Error).message });
+      }
+    } else {
       console.log("\n============================================================");
       console.log(`[DEVELOPMENT SMS SENDER] TO: ${phoneNumber}`);
       console.log(`Your OTP code is: ${otp}`);
