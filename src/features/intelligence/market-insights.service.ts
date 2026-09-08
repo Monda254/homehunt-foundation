@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
@@ -28,7 +29,7 @@ export interface SpatialDemandCluster {
 export async function getRentIntelligence(
   county: string = "Nairobi",
   town?: string,
-  bedrooms?: number
+  bedrooms?: number,
 ): Promise<RentMarketInsight> {
   try {
     let query = supabaseAdmin
@@ -81,7 +82,8 @@ export async function getRentIntelligence(
     const averageRent = Math.round(sum / rents.length);
 
     const mid = Math.floor(rents.length / 2);
-    const medianRent = rents.length % 2 !== 0 ? rents[mid] : Math.round((rents[mid - 1] + rents[mid]) / 2);
+    const medianRent =
+      rents.length % 2 !== 0 ? rents[mid] : Math.round((rents[mid - 1] + rents[mid]) / 2);
 
     return {
       county,

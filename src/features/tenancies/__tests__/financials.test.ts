@@ -68,7 +68,11 @@ describe("Phase 9 Financial Infrastructure Services", () => {
         { error: null },
       ];
 
-      const result = await waiveObligation("ob-1", "landlord-123", "Tenant advance goodwill credit");
+      const result = await waiveObligation(
+        "ob-1",
+        "landlord-123",
+        "Tenant advance goodwill credit",
+      );
 
       expect(result.success).toBe(true);
       expect(result.obligationId).toBe("ob-1");
@@ -88,7 +92,7 @@ describe("Phase 9 Financial Infrastructure Services", () => {
       ];
 
       await expect(
-        waiveObligation("ob-1", "unauthorized-user", "Attempting waiver")
+        waiveObligation("ob-1", "unauthorized-user", "Attempting waiver"),
       ).rejects.toThrow("Access Denied");
     });
   });
@@ -97,7 +101,12 @@ describe("Phase 9 Financial Infrastructure Services", () => {
     it("returns status for completed payment transactions", async () => {
       mockQueryResults = [
         {
-          data: { id: "pay-1", status: "SUCCESSFUL", provider_reference: "MPESA-XYZ", amount: 30000 },
+          data: {
+            id: "pay-1",
+            status: "SUCCESSFUL",
+            provider_reference: "MPESA-XYZ",
+            amount: 30000,
+          },
           error: null,
         },
       ];

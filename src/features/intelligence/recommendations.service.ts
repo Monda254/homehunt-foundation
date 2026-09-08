@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 import { getOrCalculateListingHealth } from "./health.service";
 
@@ -48,7 +49,7 @@ export type FeedbackType =
 
 export async function getPersonalizedRecommendations(
   userId: string,
-  limit: number = 6
+  limit: number = 6,
 ): Promise<RecommendationItem[]> {
   try {
     // 1. Fetch user negative feedback to filter out dismissed listings
@@ -215,7 +216,7 @@ export async function recordRecommendationFeedback(
   userId: string,
   listingId: string,
   feedbackType: FeedbackType,
-  notes?: string
+  notes?: string,
 ): Promise<{ success: boolean }> {
   try {
     const { error } = await supabaseAdmin.from("recommendation_feedback").upsert({

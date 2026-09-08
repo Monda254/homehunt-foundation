@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
@@ -42,7 +43,7 @@ export async function scanListingForRiskSignals(listingId: string): Promise<Risk
     // 1. Price Anomaly Detection (Suspiciously cheap < KSh 5,000 for Nairobi multi-bedroom)
     if (rent > 0 && rent < 5000 && (listing.bedrooms || 1) >= 2) {
       const reason = `Rent price of KSh ${rent.toLocaleString()} for a ${listing.bedrooms || 2}-bedroom unit in ${town} is 60%+ below town median. Verify owner identity and lease documentation.`;
-      
+
       const signal = await createOrUpdateRiskSignal({
         entityType: "LISTING",
         entityId: listingId,
@@ -63,7 +64,7 @@ export async function scanListingForRiskSignals(listingId: string): Promise<Risk
 
     if ((reportsCount || 0) >= 2) {
       const reason = `Listing has received ${reportsCount} community report(s). Prompt administrative review recommended.`;
-      
+
       const signal = await createOrUpdateRiskSignal({
         entityType: "LISTING",
         entityId: listingId,
@@ -79,7 +80,7 @@ export async function scanListingForRiskSignals(listingId: string): Promise<Risk
     const vStatus = listing.verification_status || listing.properties?.verification_status;
     if (rent >= 100000 && vStatus !== "VERIFIED") {
       const reason = `High-value listing (KSh ${rent.toLocaleString()}/mo) published without completed identity or property ownership verification.`;
-      
+
       const signal = await createOrUpdateRiskSignal({
         entityType: "LISTING",
         entityId: listingId,
@@ -193,7 +194,7 @@ export async function getActiveRiskSignals(limit: number = 20): Promise<RiskSign
 
 export async function updateRiskSignalStatus(
   signalId: string,
-  newStatus: RiskStatus
+  newStatus: RiskStatus,
 ): Promise<boolean> {
   try {
     const { error } = await supabaseAdmin

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
@@ -14,7 +15,9 @@ export interface DuplicateCandidateRecord {
   createdAt: string;
 }
 
-export async function scanForDuplicateListings(listingId: string): Promise<DuplicateCandidateRecord[]> {
+export async function scanForDuplicateListings(
+  listingId: string,
+): Promise<DuplicateCandidateRecord[]> {
   try {
     // Fetch target listing
     const { data: targetListing } = await supabaseAdmin
@@ -123,7 +126,7 @@ export async function getOpenDuplicateCandidates(): Promise<DuplicateCandidateRe
 
 export async function updateDuplicateCandidateStatus(
   candidateId: string,
-  status: "CONFIRMED" | "DISMISSED"
+  status: "CONFIRMED" | "DISMISSED",
 ): Promise<boolean> {
   try {
     const { error } = await supabaseAdmin

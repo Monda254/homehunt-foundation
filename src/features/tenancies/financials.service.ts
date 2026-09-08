@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 import { AppError, ERROR_CODES } from "@/core/errors/api-error";
 import { NotificationService } from "@/features/communication/notifications.server";
@@ -21,13 +22,13 @@ export interface ReceiptPdfData {
 export async function waiveObligation(
   obligationId: string,
   landlordUserId: string,
-  reason: string
+  reason: string,
 ): Promise<{ success: boolean; obligationId: string }> {
   try {
     if (!reason || reason.trim().length < 5) {
       throw new AppError(
         ERROR_CODES.BAD_REQUEST,
-        "A valid reason of at least 5 characters is required to waive an obligation."
+        "A valid reason of at least 5 characters is required to waive an obligation.",
       );
     }
 
@@ -51,14 +52,14 @@ export async function waiveObligation(
     if (tenancy.provider_id !== landlordUserId) {
       throw new AppError(
         ERROR_CODES.FORBIDDEN,
-        "Access Denied: You are not authorized to waive obligations for this tenancy."
+        "Access Denied: You are not authorized to waive obligations for this tenancy.",
       );
     }
 
     if (obligation.status === "PAID" || obligation.status === "WAIVED") {
       throw new AppError(
         ERROR_CODES.BAD_REQUEST,
-        `Cannot waive an obligation with status '${obligation.status}'.`
+        `Cannot waive an obligation with status '${obligation.status}'.`,
       );
     }
 
@@ -106,7 +107,9 @@ export async function waiveObligation(
   }
 }
 
-export async function queryPaymentStatus(paymentId: string): Promise<{ status: string; settled: boolean }> {
+export async function queryPaymentStatus(
+  paymentId: string,
+): Promise<{ status: string; settled: boolean }> {
   try {
     const { data: payment } = await supabaseAdmin
       .from("payment_transactions")

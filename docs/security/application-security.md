@@ -20,12 +20,14 @@ Every database table has RLS enabled with granular token/session policies:
 ## Insecure Direct Object Reference (IDOR) Protection
 
 The backend server functions validate permissions explicitly:
+
 - Dynamic detail page `/applications/:id` and `/dashboard/applications/:id` authorize access control server-side. Knowing the application UUID does not bypass security.
 - Document downloads request a short-expiry (15 min) signed URL. The server verifies that the requesting `userId` is the applicant, the provider of the target listing, or an authorized admin/verifier.
 
 ## Role-Based Access Control (RBAC)
 
 The following role permissions are mapped in the lookup tables:
+
 - **`tenant`**: Permissions `APPLICATIONS_CREATE`, `APPLICATIONS_VIEW_SELF`, `APPLICATIONS_WITHDRAW`. Can modify and submit own drafts.
 - **`landlord` / `agent` / `property_manager`**: Permission `APPLICATIONS_MANAGE`. Can view, shortlist, request info, and decide on listings they own.
 - **`verifier`**: Permission `VERIFICATION_VIEW` to audit KYC documents.

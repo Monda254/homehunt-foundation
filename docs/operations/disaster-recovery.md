@@ -18,11 +18,13 @@
 ## 3. Disaster Scenarios & Recovery Procedures
 
 ### Scenario A: Database Outage or Data Corruption
+
 1. Navigate to Supabase Project Dashboard -> Database -> Backups.
 2. Select target Point-In-Time timestamp prior to incident.
 3. Trigger Point-In-Time Restore (PITR) to restore database instance.
 4. Run `checkSystemIntegrity()` diagnostic check to verify table relations and tenancy invariants.
 
 ### Scenario B: Third-Party Service Failure (Payment Gateway / Email / SMS)
+
 1. **SMS / Email Provider Down**: System automatically falls back to in-app transactional notifications (`notifications` table). Core viewing/application transactions continue unimpeded.
 2. **Payment Gateway Down**: Payments remain safely in `PENDING` state with retry timers enabled. No tenancy state is activated without confirmed payment receipt.

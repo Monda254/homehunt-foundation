@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
@@ -39,7 +40,8 @@ export interface TrackEventParams {
   eventName: AnalyticsEventType;
   userId?: string | null;
   anonymousSessionId?: string | null;
-  entityType?: "LISTING" | "PROPERTY" | "APPLICATION" | "TENANCY" | "PAYMENT" | "VIEWING" | "USER" | null;
+  entityType?:
+    "LISTING" | "PROPERTY" | "APPLICATION" | "TENANCY" | "PAYMENT" | "VIEWING" | "USER" | null;
   entityId?: string | null;
   metadata?: Record<string, any>;
   requestId?: string | null;
@@ -78,7 +80,9 @@ export function redactSensitiveMetadata(metadata: Record<string, any> = {}): Rec
   return sanitized;
 }
 
-export async function trackAnalyticsEvent(params: TrackEventParams): Promise<{ success: boolean; eventId?: string }> {
+export async function trackAnalyticsEvent(
+  params: TrackEventParams,
+): Promise<{ success: boolean; eventId?: string }> {
   try {
     const sanitizedMetadata = redactSensitiveMetadata(params.metadata || {});
 
@@ -113,7 +117,10 @@ export async function trackAnalyticsEvent(params: TrackEventParams): Promise<{ s
   }
 }
 
-async function updateListingMetricsCounter(listingId: string, eventName: AnalyticsEventType): Promise<void> {
+async function updateListingMetricsCounter(
+  listingId: string,
+  eventName: AnalyticsEventType,
+): Promise<void> {
   try {
     const { data: existing } = await supabaseAdmin
       .from("analytics_listing_metrics")
@@ -176,22 +183,51 @@ export async function getMarketplaceOverviewMetrics(): Promise<MarketplaceOvervi
   try {
     const [{ count: activeListingsCount }, { count: verifiedListingsCount }] = await Promise.all([
       supabaseAdmin.from("listings").select("id", { count: "exact", head: true }),
-      supabaseAdmin.from("listings").select("id", { count: "exact", head: true }).eq("verification_status", "VERIFIED"),
+      supabaseAdmin
+        .from("listings")
+        .select("id", { count: "exact", head: true })
+        .eq("verification_status", "VERIFIED"),
     ]);
 
     const [{ count: tenantsCount }, { count: providersCount }] = await Promise.all([
-      supabaseAdmin.from("user_roles").select("id", { count: "exact", head: true }).eq("role", "tenant"),
-      supabaseAdmin.from("user_roles").select("id", { count: "exact", head: true }).in("role", ["landlord", "agent", "property_manager"]),
+      supabaseAdmin
+        .from("user_roles")
+        .select("id", { count: "exact", head: true })
+        .eq("role", "tenant"),
+      supabaseAdmin
+        .from("user_roles")
+        .select("id", { count: "exact", head: true })
+        .in("role", ["landlord", "agent", "property_manager"]),
     ]);
 
-    const [{ count: searchesCount }, { count: listingViewsCount }, { count: viewingReqsCount }, { count: appsCount }, { count: leasesCount }] =
-      await Promise.all([
-        supabaseAdmin.from("analytics_events").select("id", { count: "exact", head: true }).eq("event_name", "SEARCH_PERFORMED"),
-        supabaseAdmin.from("analytics_events").select("id", { count: "exact", head: true }).eq("event_name", "LISTING_VIEWED"),
-        supabaseAdmin.from("analytics_events").select("id", { count: "exact", head: true }).eq("event_name", "VIEWING_REQUESTED"),
-        supabaseAdmin.from("analytics_events").select("id", { count: "exact", head: true }).eq("event_name", "APPLICATION_SUBMITTED"),
-        supabaseAdmin.from("analytics_events").select("id", { count: "exact", head: true }).eq("event_name", "LEASE_SIGNED"),
-      ]);
+    const [
+      { count: searchesCount },
+      { count: listingViewsCount },
+      { count: viewingReqsCount },
+      { count: appsCount },
+      { count: leasesCount },
+    ] = await Promise.all([
+      supabaseAdmin
+        .from("analytics_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_name", "SEARCH_PERFORMED"),
+      supabaseAdmin
+        .from("analytics_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_name", "LISTING_VIEWED"),
+      supabaseAdmin
+        .from("analytics_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_name", "VIEWING_REQUESTED"),
+      supabaseAdmin
+        .from("analytics_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_name", "APPLICATION_SUBMITTED"),
+      supabaseAdmin
+        .from("analytics_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_name", "LEASE_SIGNED"),
+    ]);
 
     const totalListings = activeListingsCount || 1;
     const verifiedListings = verifiedListingsCount || 0;
@@ -204,14 +240,23 @@ export async function getMarketplaceOverviewMetrics(): Promise<MarketplaceOvervi
     const leases = leasesCount || 0;
 
     const [{ count: riskCount }, { count: reportCount }, { count: aiCount }] = await Promise.all([
-      supabaseAdmin.from("risk_signals").select("id", { count: "exact", head: true }).eq("status", "OPEN"),
-      supabaseAdmin.from("analytics_events").select("id", { count: "exact", head: true }).eq("event_name", "LISTING_REPORTED"),
+      supabaseAdmin
+        .from("risk_signals")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "OPEN"),
+      supabaseAdmin
+        .from("analytics_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_name", "LISTING_REPORTED"),
       supabaseAdmin.from("ai_usage").select("id", { count: "exact", head: true }),
     ]);
 
     const [{ count: paymentsTotal }, { count: paymentsSuccess }] = await Promise.all([
       supabaseAdmin.from("payment_transactions").select("id", { count: "exact", head: true }),
-      supabaseAdmin.from("payment_transactions").select("id", { count: "exact", head: true }).eq("status", "SUCCESSFUL"),
+      supabaseAdmin
+        .from("payment_transactions")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "SUCCESSFUL"),
     ]);
 
     const pTotal = paymentsTotal || 0;
@@ -231,8 +276,10 @@ export async function getMarketplaceOverviewMetrics(): Promise<MarketplaceOvervi
       conversionFunnel: {
         searchToViewRate: searches > 0 ? Number(((views / searches) * 100).toFixed(1)) : 42.8,
         viewToViewingRate: views > 0 ? Number(((viewings / views) * 100).toFixed(1)) : 8.4,
-        viewingToAppRate: viewings > 0 ? Number(((applications / viewings) * 100).toFixed(1)) : 43.2,
-        appToLeaseRate: applications > 0 ? Number(((leases / applications) * 100).toFixed(1)) : 31.7,
+        viewingToAppRate:
+          viewings > 0 ? Number(((applications / viewings) * 100).toFixed(1)) : 43.2,
+        appToLeaseRate:
+          applications > 0 ? Number(((leases / applications) * 100).toFixed(1)) : 31.7,
         leaseToTenancyRate: leases > 0 ? 85.0 : 92.0,
       },
       trust: {
@@ -303,6 +350,13 @@ export async function getListingMetrics(listingId: string) {
     };
   } catch (err) {
     console.error("[AnalyticsService] Error reading listing metrics:", err);
-    return { views: 0, saves: 0, viewingRequests: 0, applications: 0, leases: 0, conversionRate: 0 };
+    return {
+      views: 0,
+      saves: 0,
+      viewingRequests: 0,
+      applications: 0,
+      leases: 0,
+      conversionRate: 0,
+    };
   }
 }

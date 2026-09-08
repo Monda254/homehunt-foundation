@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Shield, Eye, Bot, History, X, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateUserPrivacyPreferences, UserPrivacyPreferences } from "@/features/intelligence/privacy.service";
+import {
+  updateUserPrivacyPreferences,
+  UserPrivacyPreferences,
+} from "@/features/intelligence/privacy.service";
 
 interface UserPrivacyModalProps {
   isOpen: boolean;
@@ -17,14 +20,10 @@ export const UserPrivacyModal: React.FC<UserPrivacyModalProps> = ({
   initialPrefs,
 }) => {
   const [personalization, setPersonalization] = useState(
-    initialPrefs?.enablePersonalization ?? true
+    initialPrefs?.enablePersonalization ?? true,
   );
-  const [aiAssistance, setAiAssistance] = useState(
-    initialPrefs?.enableAiAssistance ?? true
-  );
-  const [searchHistory, setSearchHistory] = useState(
-    initialPrefs?.enableSearchHistory ?? true
-  );
+  const [aiAssistance, setAiAssistance] = useState(initialPrefs?.enableAiAssistance ?? true);
+  const [searchHistory, setSearchHistory] = useState(initialPrefs?.enableSearchHistory ?? true);
   const [isSaving, setIsSaving] = useState(false);
 
   if (!isOpen) return null;

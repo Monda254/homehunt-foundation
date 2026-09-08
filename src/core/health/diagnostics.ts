@@ -35,7 +35,10 @@ export async function checkSystemIntegrity(): Promise<SystemIntegrityReport> {
       checkName: "Orphaned Units Check",
       passed: !error && anomalyCount === 0,
       anomalyCount,
-      details: anomalyCount > 0 ? `Found ${anomalyCount} units without parent property.` : "All units linked to properties.",
+      details:
+        anomalyCount > 0
+          ? `Found ${anomalyCount} units without parent property.`
+          : "All units linked to properties.",
       severity: "HIGH",
     });
   } catch (err: any) {
@@ -61,7 +64,10 @@ export async function checkSystemIntegrity(): Promise<SystemIntegrityReport> {
       checkName: "Active Tenancy Lease Reference Check",
       passed: !error && anomalyCount === 0,
       anomalyCount,
-      details: anomalyCount > 0 ? `Found ${anomalyCount} active tenancies without lease agreement.` : "All active tenancies have linked leases.",
+      details:
+        anomalyCount > 0
+          ? `Found ${anomalyCount} active tenancies without lease agreement.`
+          : "All active tenancies have linked leases.",
       severity: "CRITICAL",
     });
   } catch (err: any) {
@@ -87,7 +93,10 @@ export async function checkSystemIntegrity(): Promise<SystemIntegrityReport> {
       checkName: "Paid Obligation Settlement Invariant",
       passed: !error && anomalyCount === 0,
       anomalyCount,
-      details: anomalyCount > 0 ? `Found ${anomalyCount} obligations marked PAID with 0 amount paid.` : "Obligation payment amounts match paid status.",
+      details:
+        anomalyCount > 0
+          ? `Found ${anomalyCount} obligations marked PAID with 0 amount paid.`
+          : "Obligation payment amounts match paid status.",
       severity: "CRITICAL",
     });
   } catch (err: any) {
@@ -121,7 +130,10 @@ export async function checkSystemIntegrity(): Promise<SystemIntegrityReport> {
       checkName: "Duplicate Active Tenancy per Unit Check",
       passed: !error && duplicateCount === 0,
       anomalyCount: duplicateCount,
-      details: duplicateCount > 0 ? `Found ${duplicateCount} units with multiple active tenancies.` : "No units have duplicate active tenancies.",
+      details:
+        duplicateCount > 0
+          ? `Found ${duplicateCount} units with multiple active tenancies.`
+          : "No units have duplicate active tenancies.",
       severity: "CRITICAL",
     });
   } catch (err: any) {

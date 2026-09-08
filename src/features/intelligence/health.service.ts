@@ -1,14 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
 
 export type FreshnessStatus =
-  | "FRESH"
-  | "AGING"
-  | "STALE"
-  | "REQUIRES_RECONFIRMATION"
-  | "UNAVAILABLE"
-  | "ARCHIVED";
+  "FRESH" | "AGING" | "STALE" | "REQUIRES_RECONFIRMATION" | "UNAVAILABLE" | "ARCHIVED";
 
 export interface ListingHealthBreakdown {
   freshnessPoints: number; // Max 20
@@ -30,7 +26,9 @@ export interface ListingHealthResult {
   updatedAt: string;
 }
 
-export async function computeListingHealthScore(listingId: string): Promise<ListingHealthResult | null> {
+export async function computeListingHealthScore(
+  listingId: string,
+): Promise<ListingHealthResult | null> {
   try {
     const { data: listing, error } = await supabaseAdmin
       .from("listings")
@@ -56,7 +54,7 @@ export async function computeListingHealthScore(listingId: string): Promise<List
 
     const daysSinceReconfirmed = Math.max(
       0,
-      Math.floor((now.getTime() - lastReconfirmedDate.getTime()) / (1000 * 60 * 60 * 24))
+      Math.floor((now.getTime() - lastReconfirmedDate.getTime()) / (1000 * 60 * 60 * 24)),
     );
 
     // 1. Freshness Points (Max 20)
@@ -108,8 +106,8 @@ export async function computeListingHealthScore(listingId: string): Promise<List
     const amenities = Array.isArray(listing.amenities)
       ? listing.amenities
       : Array.isArray(prop.amenities)
-      ? prop.amenities
-      : [];
+        ? prop.amenities
+        : [];
     let amenityCompletenessPoints = 0;
     if (amenities.length >= 4) amenityCompletenessPoints = 10;
     else if (amenities.length >= 2) amenityCompletenessPoints = 6;
@@ -156,7 +154,7 @@ export async function computeListingHealthScore(listingId: string): Promise<List
         amenityCompletenessPoints +
         verificationPoints +
         reportHistoryPoints +
-        engagementPoints
+        engagementPoints,
     );
 
     const breakdown: ListingHealthBreakdown = {
@@ -195,7 +193,9 @@ export async function computeListingHealthScore(listingId: string): Promise<List
   }
 }
 
-export async function getOrCalculateListingHealth(listingId: string): Promise<ListingHealthResult | null> {
+export async function getOrCalculateListingHealth(
+  listingId: string,
+): Promise<ListingHealthResult | null> {
   try {
     const { data: cached } = await supabaseAdmin
       .from("listing_health_scores")

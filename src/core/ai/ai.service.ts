@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
@@ -40,12 +41,13 @@ async function recordAIUsage(
   promptVersion: string,
   inputTokens: number,
   outputTokens: number,
-  userId?: string | null
+  userId?: string | null,
 ): Promise<void> {
   try {
     const costPer1kInput = 0.00015;
     const costPer1kOutput = 0.0006;
-    const estimatedCost = (inputTokens / 1000) * costPer1kInput + (outputTokens / 1000) * costPer1kOutput;
+    const estimatedCost =
+      (inputTokens / 1000) * costPer1kInput + (outputTokens / 1000) * costPer1kOutput;
 
     await supabaseAdmin.from("ai_usage").insert({
       model,
@@ -68,7 +70,9 @@ class DeterministicFallbackProvider {
 
   async analyzeListing(listing: any): Promise<AIAnalysisResult> {
     const title = sanitizeUntrustedText(listing.title || "Rental Property");
-    const rent = listing.rent_amount ? `KSh ${listing.rent_amount.toLocaleString()}/mo` : "Rent on request";
+    const rent = listing.rent_amount
+      ? `KSh ${listing.rent_amount.toLocaleString()}/mo`
+      : "Rent on request";
     const town = listing.town || "Nairobi";
     const bedrooms = listing.bedrooms || 1;
     const propType = listing.property_type || "Apartment";
@@ -79,10 +83,13 @@ class DeterministicFallbackProvider {
 
     strengths.push(`${bedrooms} bedroom ${propType} located in ${town}`);
     if (rent) strengths.push(`Listed at ${rent}`);
-    if (vStatus === "VERIFIED") strengths.push("Property verification complete with valid documentation");
+    if (vStatus === "VERIFIED")
+      strengths.push("Property verification complete with valid documentation");
 
     if (vStatus !== "VERIFIED") {
-      potentialConcerns.push("Listing verification is pending; request a physical viewing before issuing payments");
+      potentialConcerns.push(
+        "Listing verification is pending; request a physical viewing before issuing payments",
+      );
     }
 
     const desc = listing.description || "";
@@ -102,7 +109,8 @@ class DeterministicFallbackProvider {
   async giveTenantAdvice(question: string): Promise<AITenantAdviceResult> {
     const cleanQ = sanitizeUntrustedText(question).toLowerCase();
 
-    let answer = "When searching for housing in Kenya, always inspect the property in person before transferring deposit funds. Ensure leases are signed directly with verified owners or registered agents.";
+    let answer =
+      "When searching for housing in Kenya, always inspect the property in person before transferring deposit funds. Ensure leases are signed directly with verified owners or registered agents.";
     const suggestedQuestions: string[] = [
       "What utilities are included in the monthly rent?",
       "How is security managed in the apartment building?",
@@ -110,16 +118,22 @@ class DeterministicFallbackProvider {
     ];
 
     if (cleanQ.includes("deposit") || cleanQ.includes("payment")) {
-      answer = "Never pay a security deposit or holding fee prior to physically viewing the property and receiving a signed lease agreement from the verified landlord.";
-      suggestedQuestions.push("What payment methods (e.g. M-Pesa Till/Paybill) are accepted?", "Is the security deposit refundable upon moving out?");
+      answer =
+        "Never pay a security deposit or holding fee prior to physically viewing the property and receiving a signed lease agreement from the verified landlord.";
+      suggestedQuestions.push(
+        "What payment methods (e.g. M-Pesa Till/Paybill) are accepted?",
+        "Is the security deposit refundable upon moving out?",
+      );
     } else if (cleanQ.includes("viewing") || cleanQ.includes("visit")) {
-      answer = "Prepare key questions regarding water availability, electricity tokens, garbage collection, and security prior to your viewing session.";
+      answer =
+        "Prepare key questions regarding water availability, electricity tokens, garbage collection, and security prior to your viewing session.";
     }
 
     return {
       answer,
       suggestedQuestions,
-      disclaimer: "HomeHunt Tenant Assistant advice is informational and does not constitute legal counsel.",
+      disclaimer:
+        "HomeHunt Tenant Assistant advice is informational and does not constitute legal counsel.",
       isFallback: true,
     };
   }
@@ -130,7 +144,7 @@ const fallbackProvider = new DeterministicFallbackProvider();
 // 2. Main Public AI Service Endpoint
 export async function analyzeListingWithAI(
   listingId: string,
-  options?: AIServiceOptions
+  options?: AIServiceOptions,
 ): Promise<AIAnalysisResult> {
   const promptVersion = options?.promptVersion || "property_summary_v1";
   const feature = options?.feature || "PROPERTY_SUMMARY";
@@ -157,7 +171,14 @@ export async function analyzeListingWithAI(
 
     if (!apiKey) {
       // Record fallback usage and return deterministic response
-      await recordAIUsage(feature, "deterministic-fallback", promptVersion, 120, 150, options?.userId);
+      await recordAIUsage(
+        feature,
+        "deterministic-fallback",
+        promptVersion,
+        120,
+        150,
+        options?.userId,
+      );
       return await fallbackProvider.analyzeListing(listing);
     }
 
@@ -181,7 +202,7 @@ export async function analyzeListingWithAI(
 
 export async function askTenantAssistantAI(
   question: string,
-  options?: AIServiceOptions
+  options?: AIServiceOptions,
 ): Promise<AITenantAdviceResult> {
   const promptVersion = options?.promptVersion || "tenant_assistant_v1";
   const feature = options?.feature || "TENANT_ASSISTANT";
@@ -194,7 +215,8 @@ export async function askTenantAssistantAI(
   } catch (err) {
     console.error("[AIService] Exception during tenant assistant response:", err);
     return {
-      answer: "Always conduct physical viewings and verify lease contracts before proceeding with tenancy payments.",
+      answer:
+        "Always conduct physical viewings and verify lease contracts before proceeding with tenancy payments.",
       suggestedQuestions: ["Are utilities billed separately?", "What is the lease notice period?"],
       disclaimer: "Guidance is informational only.",
       isFallback: true,

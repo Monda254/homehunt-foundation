@@ -9,8 +9,14 @@ import {
   getAllFeatureFlags,
   toggleFeatureFlag,
 } from "@/features/intelligence/feature-flags.service";
-import { getOpenDuplicateCandidates, updateDuplicateCandidateStatus } from "@/features/intelligence/duplicate-detection.service";
-import { getRentIntelligence, getSpatialDemandHeatmap } from "@/features/intelligence/market-insights.service";
+import {
+  getOpenDuplicateCandidates,
+  updateDuplicateCandidateStatus,
+} from "@/features/intelligence/duplicate-detection.service";
+import {
+  getRentIntelligence,
+  getSpatialDemandHeatmap,
+} from "@/features/intelligence/market-insights.service";
 import {
   Activity,
   AlertTriangle,
@@ -391,26 +397,42 @@ function AdminIntelligencePage() {
           {/* Rent Intelligence Summary */}
           <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4">
             <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2 border-b pb-3">
-              <TrendingUp className="h-5 w-5 text-primary" /> Market Rent Intelligence ({rentInsight?.county || "Nairobi"})
+              <TrendingUp className="h-5 w-5 text-primary" /> Market Rent Intelligence (
+              {rentInsight?.county || "Nairobi"})
             </h3>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 bg-secondary/30 rounded-xl border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Median Rent</span>
-                <p className="text-xl font-black text-foreground mt-1">KSh {rentInsight?.medianRent.toLocaleString()}</p>
-              </div>
-              <div className="p-3 bg-secondary/30 rounded-xl border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Average Rent</span>
-                <p className="text-xl font-black text-foreground mt-1">KSh {rentInsight?.averageRent.toLocaleString()}</p>
-              </div>
-              <div className="p-3 bg-secondary/30 rounded-xl border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Price Range</span>
-                <p className="text-sm font-bold text-foreground mt-1">
-                  KSh {rentInsight?.minRent.toLocaleString()} – {rentInsight?.maxRent.toLocaleString()}
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">
+                  Median Rent
+                </span>
+                <p className="text-xl font-black text-foreground mt-1">
+                  KSh {rentInsight?.medianRent.toLocaleString()}
                 </p>
               </div>
               <div className="p-3 bg-secondary/30 rounded-xl border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Spatial Clusters</span>
-                <p className="text-sm font-bold text-foreground mt-1">{spatialDemand?.length || 0} Active Zones</p>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">
+                  Average Rent
+                </span>
+                <p className="text-xl font-black text-foreground mt-1">
+                  KSh {rentInsight?.averageRent.toLocaleString()}
+                </p>
+              </div>
+              <div className="p-3 bg-secondary/30 rounded-xl border">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">
+                  Price Range
+                </span>
+                <p className="text-sm font-bold text-foreground mt-1">
+                  KSh {rentInsight?.minRent.toLocaleString()} –{" "}
+                  {rentInsight?.maxRent.toLocaleString()}
+                </p>
+              </div>
+              <div className="p-3 bg-secondary/30 rounded-xl border">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">
+                  Spatial Clusters
+                </span>
+                <p className="text-sm font-bold text-foreground mt-1">
+                  {spatialDemand?.length || 0} Active Zones
+                </p>
               </div>
             </div>
           </div>
@@ -418,15 +440,23 @@ function AdminIntelligencePage() {
           {/* Duplicate Listing Candidates */}
           <div className="bg-card border rounded-2xl p-6 shadow-sm space-y-4">
             <h3 className="font-display font-bold text-base text-foreground flex items-center gap-2 border-b pb-3">
-              <AlertTriangle className="h-5 w-5 text-yellow-600" /> Candidate Duplicate Listings ({duplicates?.length || 0})
+              <AlertTriangle className="h-5 w-5 text-yellow-600" /> Candidate Duplicate Listings (
+              {duplicates?.length || 0})
             </h3>
             {duplicates && duplicates.length > 0 ? (
               <div className="space-y-2 text-xs max-h-48 overflow-y-auto">
                 {duplicates.map((dup) => (
-                  <div key={dup.id} className="p-3 bg-secondary/20 rounded-xl border flex justify-between items-center">
+                  <div
+                    key={dup.id}
+                    className="p-3 bg-secondary/20 rounded-xl border flex justify-between items-center"
+                  >
                     <div>
-                      <span className="font-bold text-foreground block">{dup.listing1Title} vs {dup.listing2Title}</span>
-                      <span className="text-[10px] text-muted-foreground">{dup.reason} ({dup.similarityScore}% score)</span>
+                      <span className="font-bold text-foreground block">
+                        {dup.listing1Title} vs {dup.listing2Title}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {dup.reason} ({dup.similarityScore}% score)
+                      </span>
                     </div>
                     <span className="bg-yellow-500/10 text-yellow-700 font-bold px-2 py-0.5 rounded text-[10px]">
                       Candidate

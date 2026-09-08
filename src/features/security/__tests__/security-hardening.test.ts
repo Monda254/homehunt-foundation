@@ -41,9 +41,10 @@ vi.mock("@/integrations/supabase/client.server", () => {
       },
       storage: {
         from: vi.fn().mockImplementation(() => ({
-          createSignedUrl: vi
-            .fn()
-            .mockResolvedValue({ data: { signedUrl: "https://signedurl.com/private-doc" }, error: null }),
+          createSignedUrl: vi.fn().mockResolvedValue({
+            data: { signedUrl: "https://signedurl.com/private-doc" },
+            error: null,
+          }),
         })),
       },
     },

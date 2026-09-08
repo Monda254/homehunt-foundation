@@ -22,6 +22,7 @@ The platform measures user conversions along the following key milestones:
 ## Business Intelligence Metrics
 
 To understand dropout rates and improve platform performance, HomeHunt tracks aggregate, anonymized metrics:
+
 - Application start-to-submission completion rates.
 - Time-to-first-review and time-to-decision SLAs.
 - Document rejection rates to adjust form layout or upload instructions.

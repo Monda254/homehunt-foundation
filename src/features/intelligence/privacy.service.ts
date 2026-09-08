@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
@@ -49,7 +50,7 @@ export async function getUserPrivacyPreferences(userId: string): Promise<UserPri
 
 export async function updateUserPrivacyPreferences(
   userId: string,
-  prefs: Partial<Omit<UserPrivacyPreferences, "userId" | "updatedAt">>
+  prefs: Partial<Omit<UserPrivacyPreferences, "userId" | "updatedAt">>,
 ): Promise<boolean> {
   try {
     const payload = {

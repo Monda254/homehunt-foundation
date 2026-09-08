@@ -38,18 +38,19 @@ If a critical incident occurs immediately post-deployment:
 
 ## 4. Incident Response Severity Matrix
 
-| Severity | Definition | Target Resolution Time | Primary Actions |
-| :--- | :--- | :--- | :--- |
-| **P0 (Critical)** | Core outage, payment failure spike, data exposure, auth bypass. | `< 1 Hour` | 1. Trigger incident channel.<br>2. Rollback deployment.<br>3. Inspect `/api/v1/health`.<br>4. Run `checkSystemIntegrity()`. |
-| **P1 (High)** | Major feature broken (e.g. search, applications, viewings). | `< 4 Hours` | 1. Isolate failing route.<br>2. Review correlation logs.<br>3. Deploy targeted patch. |
-| **P2 (Medium)** | Degraded UX, notification delay, slow response time. | `< 24 Hours` | 1. Log bug.<br>2. Monitor DB query latencies.<br>3. Schedule fix. |
-| **P3 (Low)** | Non-critical UI alignment, cosmetic fix, minor typo. | Continuous | Standard sprint patch. |
+| Severity          | Definition                                                      | Target Resolution Time | Primary Actions                                                                                                             |
+| :---------------- | :-------------------------------------------------------------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| **P0 (Critical)** | Core outage, payment failure spike, data exposure, auth bypass. | `< 1 Hour`             | 1. Trigger incident channel.<br>2. Rollback deployment.<br>3. Inspect `/api/v1/health`.<br>4. Run `checkSystemIntegrity()`. |
+| **P1 (High)**     | Major feature broken (e.g. search, applications, viewings).     | `< 4 Hours`            | 1. Isolate failing route.<br>2. Review correlation logs.<br>3. Deploy targeted patch.                                       |
+| **P2 (Medium)**   | Degraded UX, notification delay, slow response time.            | `< 24 Hours`           | 1. Log bug.<br>2. Monitor DB query latencies.<br>3. Schedule fix.                                                           |
+| **P3 (Low)**      | Non-critical UI alignment, cosmetic fix, minor typo.            | Continuous             | Standard sprint patch.                                                                                                      |
 
 ---
 
 ## 5. Webhook & Payment Troubleshooting
 
 If M-Pesa callbacks or webhook notifications fail:
+
 1. Verify incoming payload correlation ID in logs (`service: homehunt-web`).
 2. Confirm endpoint authorization header matches signature.
 3. Check `rent_obligations` table status via admin dashboard to confirm transaction reference uniqueness.

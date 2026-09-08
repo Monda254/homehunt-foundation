@@ -1,10 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin as rawSupabaseAdmin } from "@/integrations/supabase/client.server";
 
 const supabaseAdmin = rawSupabaseAdmin as any;
 
 export interface TrustTimelineEvent {
   id: string;
-  stage: "PROPERTY_CREATED" | "CLAIMED" | "VERIFIED" | "LISTING_PUBLISHED" | "VIEWING_COMPLETED" | "APPLICATION_SUBMITTED" | "LEASE_SIGNED" | "PAYMENT_CONFIRMED" | "TENANCY_ACTIVATED";
+  stage:
+    | "PROPERTY_CREATED"
+    | "CLAIMED"
+    | "VERIFIED"
+    | "LISTING_PUBLISHED"
+    | "VIEWING_COMPLETED"
+    | "APPLICATION_SUBMITTED"
+    | "LEASE_SIGNED"
+    | "PAYMENT_CONFIRMED"
+    | "TENANCY_ACTIVATED";
   title: string;
   description: string;
   timestamp: string;

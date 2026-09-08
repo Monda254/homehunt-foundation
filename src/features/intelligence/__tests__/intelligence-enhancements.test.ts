@@ -34,7 +34,11 @@ vi.mock("@/integrations/supabase/client.server", () => {
 });
 
 import { getRentIntelligence, getSpatialDemandHeatmap } from "../market-insights.service";
-import { scanForDuplicateListings, getOpenDuplicateCandidates, updateDuplicateCandidateStatus } from "../duplicate-detection.service";
+import {
+  scanForDuplicateListings,
+  getOpenDuplicateCandidates,
+  updateDuplicateCandidateStatus,
+} from "../duplicate-detection.service";
 import { getPropertyTrustTimeline } from "../trust-graph.service";
 import { getUserPrivacyPreferences, updateUserPrivacyPreferences } from "../privacy.service";
 
@@ -49,9 +53,27 @@ describe("Phase 11 — Intelligence Layer Master Enhancements", () => {
       mockQueryResults = [
         {
           data: [
-            { rent_amount: 25000, town: "Kilimani", county: "Nairobi", bedrooms: 2, property_type: "Apartment" },
-            { rent_amount: 35000, town: "Kilimani", county: "Nairobi", bedrooms: 2, property_type: "Apartment" },
-            { rent_amount: 45000, town: "Kilimani", county: "Nairobi", bedrooms: 2, property_type: "Apartment" },
+            {
+              rent_amount: 25000,
+              town: "Kilimani",
+              county: "Nairobi",
+              bedrooms: 2,
+              property_type: "Apartment",
+            },
+            {
+              rent_amount: 35000,
+              town: "Kilimani",
+              county: "Nairobi",
+              bedrooms: 2,
+              property_type: "Apartment",
+            },
+            {
+              rent_amount: 45000,
+              town: "Kilimani",
+              county: "Nairobi",
+              bedrooms: 2,
+              property_type: "Apartment",
+            },
           ],
           error: null,
         },
@@ -70,7 +92,13 @@ describe("Phase 11 — Intelligence Layer Master Enhancements", () => {
       mockQueryResults = [
         {
           data: [
-            { id: "prop-1", town: "Kilimani", county: "Nairobi", latitude: -1.286, longitude: 36.817 },
+            {
+              id: "prop-1",
+              town: "Kilimani",
+              county: "Nairobi",
+              latitude: -1.286,
+              longitude: 36.817,
+            },
           ],
           error: null,
         },
@@ -88,13 +116,25 @@ describe("Phase 11 — Intelligence Layer Master Enhancements", () => {
       mockQueryResults = [
         // 1. Target listing query
         {
-          data: { id: "listing-1", title: "Luxury 2 Bedroom Apartment", rent_amount: 40000, town: "Nairobi", bedrooms: 2 },
+          data: {
+            id: "listing-1",
+            title: "Luxury 2 Bedroom Apartment",
+            rent_amount: 40000,
+            town: "Nairobi",
+            bedrooms: 2,
+          },
           error: null,
         },
         // 2. Comparison listings query
         {
           data: [
-            { id: "listing-2", title: "Luxury 2 Bedroom Apartment", rent_amount: 40000, town: "Nairobi", bedrooms: 2 },
+            {
+              id: "listing-2",
+              title: "Luxury 2 Bedroom Apartment",
+              rent_amount: 40000,
+              town: "Nairobi",
+              bedrooms: 2,
+            },
           ],
           error: null,
         },
@@ -122,7 +162,13 @@ describe("Phase 11 — Intelligence Layer Master Enhancements", () => {
       mockQueryResults = [
         // 1. Fetch property details
         {
-          data: { id: "prop-100", address: "Argwings Kodhek", town: "Nairobi", created_at: nowIso, verification_status: "VERIFIED" },
+          data: {
+            id: "prop-100",
+            address: "Argwings Kodhek",
+            town: "Nairobi",
+            created_at: nowIso,
+            verification_status: "VERIFIED",
+          },
           error: null,
         },
         // 2. Fetch listings for property
@@ -145,17 +191,13 @@ describe("Phase 11 — Intelligence Layer Master Enhancements", () => {
 
   describe("User Privacy & Opt-Out Preferences Engine", () => {
     it("fetches default privacy options and supports user consent toggles", async () => {
-      mockQueryResults = [
-        { data: null, error: null },
-      ];
+      mockQueryResults = [{ data: null, error: null }];
 
       const defaultPrefs = await getUserPrivacyPreferences("user-123");
       expect(defaultPrefs.enablePersonalization).toBe(true);
       expect(defaultPrefs.enableAiAssistance).toBe(true);
 
-      mockQueryResults = [
-        { data: null, error: null },
-      ];
+      mockQueryResults = [{ data: null, error: null }];
 
       const updated = await updateUserPrivacyPreferences("user-123", {
         enablePersonalization: false,
