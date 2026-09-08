@@ -228,19 +228,23 @@ export const getFavorites = createServerFn({ method: "GET" })
     // Resolve primary images for each favorite listing
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const listingIds = (data || []).map((f: any) => f.listing_id);
-    const { data: mediaRows } = await supabaseAdmin
-      .from("property_media")
-      .select("listing_id, url")
-      .in("listing_id", listingIds)
-      .eq("is_primary", true);
+    let mediaMap: Record<string, string> = {};
 
-    const mediaMap = (mediaRows || []).reduce(
-      (acc, row) => {
-        if (row.listing_id) acc[row.listing_id] = row.url;
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
+    if (listingIds.length > 0) {
+      const { data: mediaRows } = await supabaseAdmin
+        .from("property_media")
+        .select("listing_id, url")
+        .in("listing_id", listingIds)
+        .eq("is_primary", true);
+
+      mediaMap = (mediaRows || []).reduce(
+        (acc, row) => {
+          if (row.listing_id) acc[row.listing_id] = row.url;
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (data || []).map((fav: any) => ({

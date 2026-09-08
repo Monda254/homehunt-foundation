@@ -1369,6 +1369,10 @@ export const getPublicListings = createServerFn({ method: "GET" }).handler(async
 
   // Fetch primary images for each listing
   const listingIds = (data || []).map((l) => l.id);
+  if (listingIds.length === 0) {
+    return [];
+  }
+
   const { data: mediaRows } = await supabaseAdmin
     .from("property_media")
     .select("listing_id, url")
