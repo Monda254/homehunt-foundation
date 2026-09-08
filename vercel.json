@@ -1,6 +1,3 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".output/public",
-  "cleanUrls": true,
-  "framework": null
+  "buildCommand": "npm run build"
 }
