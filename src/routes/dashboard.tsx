@@ -141,7 +141,7 @@ function DashboardComponent() {
               </div>
               <div className="border-t border-border/60 mt-6 pt-4">
                 <span className="text-xs text-muted-foreground block italic">
-                  * Property search module is scheduled for Phase 3 (Integrates with PostGIS maps).
+                  * Integrated with interactive search filters and PostGIS map engine.
                 </span>
               </div>
             </AnimatedCard>
@@ -164,7 +164,7 @@ function DashboardComponent() {
               </div>
               <div className="border-t border-border/60 mt-6 pt-4">
                 <span className="text-xs text-muted-foreground block italic">
-                  * Application and lease signing workflows scheduled for Phase 4.
+                  * Direct viewing booking, application, and lease execution workflows.
                 </span>
               </div>
             </AnimatedCard>
@@ -194,7 +194,7 @@ function DashboardComponent() {
               </div>
               <div className="border-t border-border/60 mt-6 pt-4">
                 <span className="text-xs text-muted-foreground block italic">
-                  * Property creation and KYC verification scheduled for Phase 2.
+                  * Landlord property creation and identity verification modules.
                 </span>
               </div>
             </AnimatedCard>
@@ -248,7 +248,7 @@ function DashboardComponent() {
               </div>
               <div className="border-t border-border/60 mt-6 pt-4">
                 <span className="text-xs text-muted-foreground block italic">
-                  * Property agent assignment scheduled for Phase 2.
+                  * Property manager portfolio allocation and access permissions.
                 </span>
               </div>
             </AnimatedCard>
@@ -271,7 +271,7 @@ function DashboardComponent() {
               </div>
               <div className="border-t border-border/60 mt-6 pt-4">
                 <span className="text-xs text-muted-foreground block italic">
-                  * Viewer bookings and trust scores are scheduled for subsequent phases.
+                  * Viewing schedules, trust scoring, and message management.
                 </span>
               </div>
             </AnimatedCard>

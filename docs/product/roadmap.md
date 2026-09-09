@@ -1,16 +1,13 @@
 # HomeHunt Product Roadmap
 
-## Deployed Phases
+## Core Modules & Features
 
-- **Phase 0: Foundation**: Request IDs, Config, Health endpoints, Routing structures, Docker environment.
-- **Phase 1: Identity**: Users, Profiles, Sessions, RBAC Role-based access controls.
-- **Phase 2: Properties & Listings**: Properties, Units, Buildings, Media, Lifecycle states.
-- **Phase 3: Discovery & Search**: Search engine, autocomplete keywords, Leaflet interactive map coordinates fuzzing, filter sheet, saved searches, and favorites backend.
-- **Phase 4: Property Verification & Trust**: Physical inspection agent workflows, fraud prevention checks, trust badge activations, freshness revalidations.
-- **Phase 5: Intelligent Housing Matching**: Dynamic matching scores, onboarding questionnaire, preference adjustment forms, relaxation close matches.
-
-## Future Phases
-
-- **Phase 6: Tenancy Management**: Direct viewing schedulers, application submissions, digital lease executions.
-- **Phase 7: Spatial PostGIS overlays**: Polygon viewport searches, distance commute calculators.
-- **Phase 8: AI Integrations**: Natural language search parsing and LLM criteria extraction.
+- **Foundation & Infrastructure**: Request IDs, Config, Health endpoints, Routing structures, Docker environment.
+- **Identity & Access Control**: Users, Profiles, Sessions, RBAC Role-based access controls.
+- **Properties & Listings**: Properties, Units, Buildings, Media, Lifecycle states.
+- **Discovery & Search**: Search engine, autocomplete keywords, Leaflet interactive map coordinates fuzzing, filter sheet, saved searches, and favorites backend.
+- **Property Verification & Trust**: Physical inspection agent workflows, fraud prevention checks, trust badge activations, freshness revalidations.
+- **Intelligent Housing Matching**: Dynamic matching scores, onboarding questionnaire, preference adjustment forms, relaxation close matches.
+- **Tenancy Management**: Direct viewing schedulers, application submissions, digital lease executions.
+- **Spatial PostGIS Overlays**: Polygon viewport searches, distance commute calculators.
+- **AI Integrations**: Natural language search parsing and LLM criteria extraction.

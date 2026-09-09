@@ -137,7 +137,7 @@ function AdminIntelligencePage() {
                 Marketplace Intelligence Console
               </h1>
               <span className="bg-primary/10 text-primary text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-primary/20">
-                <Sparkles className="h-3 w-3" /> Phase 11 Layer
+                <Sparkles className="h-3 w-3" /> Intelligence Layer
               </span>
             </div>
             <p className="text-sm text-muted-foreground">

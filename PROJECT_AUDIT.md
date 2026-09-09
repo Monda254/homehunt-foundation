@@ -1,6 +1,4 @@
-# HomeHunt Project Audit & Health Report
-
-This report presents a comprehensive technical audit of the **HomeHunt** codebase, database schema, security models, test coverage, and architectural health across all implemented phases (Phase 0 through Phase 6).
+This report presents a comprehensive technical audit of the **HomeHunt** codebase, database schema, security models, test coverage, and architectural health across all implemented modules.
 
 ---
 
@@ -55,9 +53,9 @@ A live inspection of the database confirms that the database is fully reachable 
 
 ---
 
-## 3. Phase-by-Phase Technical Audit
+## 3. Subsystem & Module Technical Audit
 
-### Phase 0: Foundation & Architecture
+### Foundation & Architecture
 
 - **API Server Environment:** Nitro/Vite integration. exposing versioned API routes under `/api/v1/`.
 - **Global Error Handling:** Consistent API error response mappings (`src/core/errors/api-error.ts`) preventing trace leaks.
@@ -65,20 +63,20 @@ A live inspection of the database confirms that the database is fully reachable 
 - **Dependency Health Endpoint:** `/api/v1/health` and `/api/v1/health/database` query DB health.
 - **State Check:** **Fully Operational**.
 
-### Phase 1: Core Housing / User Identity (Auth, Profiles & RBAC)
+### Core Housing / User Identity (Auth, Profiles & RBAC)
 
 - **Role Model (RBAC):** Roles include `tenant`, `landlord`, `agent`, `property_manager`, `verifier`, `admin`, and `super_admin`.
 - **Sign-Up Flow Integration:** Supabase Auth triggers (`on_auth_user_created` trigger executing `handle_new_user()`) populate user profiles and assign default roles seamlessly.
 - **Account Lifecycles:** Supports status transitions (`PENDING_VERIFICATION`, `ACTIVE`, `SUSPENDED`, `DEACTIVATED`, `LOCKED`). Trigger `on_auth_user_updated` activates profiles upon email confirmation.
 - **State Check:** **Fully Operational**.
 
-### Phase 2: Property & Listing Management
+### Property & Listing Management
 
 - **Hierarchical Relational Mapping:** Correct normalization between `properties` -> `buildings` -> `units` -> `listings` with constraints.
 - **Concurrency & Validation:** Multi-party permissions (`property_parties`), schema length limits, and unique constraints (e.g. unit number uniqueness check ignoring archived records).
 - **State Check:** **Fully Operational**.
 
-### Phase 3: Discovery, Search, Filters & Map Integration
+### Discovery, Search, Filters & Map Integration
 
 - **Geospatial Boundaries:** Viewport filtering uses numerical bounds (`latitude` / `longitude` query coordinates) rendering markers dynamically via **Leaflet Map** component.
 - **Tenant Privacy (Fuzzing):** Stable coordinates fuzzing maps latitude and longitude coordinates with a stable offset of ~0.003 degrees (about 300 meters) to protect listing locations prior to booking viewings.
@@ -86,7 +84,7 @@ A live inspection of the database confirms that the database is fully reachable 
 - **PostGIS Roadmap:** Schema contains a path to migrate to `GEOGRAPHY(Point, 4326)` with GIST indexing and nearest-neighbor (`<->`) sorting (documented in `docs/architecture/geospatial-search.md`).
 - **State Check:** **Fully Operational**.
 
-### Phase 4: Trust, Verification & Moderation
+### Trust, Verification & Moderation
 
 - **Polymorphic Verification Engine:** Handles verification requests for profiles, properties, and listings under `verifications`.
 - **Sensitive Evidence Isolation:** Documents (IDs, Title Deeds) are stored in the private Supabase bucket `verification_evidence` with RLS rules enforcing owner-only uploads (scoped under `auth.uid()`) and verifier-only read privileges. Signed URLs are issued with a 15-minute expiration window.
@@ -94,7 +92,7 @@ A live inspection of the database confirms that the database is fully reachable 
 - **Freshness Revalidation:** Listings degrade to `STALE`/`REQUIRES_REVALIDATION` over time. Property managers can re-confirm listing freshness via `confirmListingFreshness` which resets the freshness window.
 - **State Check:** **Fully Operational**.
 
-### Phase 5: Intelligent Matching & Recommendations
+### Intelligent Matching & Recommendations
 
 - **Scoring Algorithm:** Standardizes user preferences into a normalized `0-100` compatibility score based on budget fit, exact location match (estate/neighborhood/town/county hierarchy), bedroom count, and must-have/preferred amenities.
 - **Priority Scaling:** Scales score dimensions by priority weights (`CRITICAL` = 40, `HIGH` = 25, `MEDIUM` = 15, `LOW` = 10).
@@ -102,7 +100,7 @@ A live inspection of the database confirms that the database is fully reachable 
 - **Bonuses:** Incorporates +3 points for verified listings and +2 points for active freshness.
 - **State Check:** **Fully Operational**.
 
-### Phase 6: Communication & Viewing Management
+### Communication & Viewing Management
 
 - **Seeker-Provider Chats:** Restricts conversations to seeker-provider relationships with RLS checks checking user role scopes. Prevents self-contact.
 - **Moderation Blocks:** Checks `blocks` table to block message insertion if a recipient has blocked the sender.

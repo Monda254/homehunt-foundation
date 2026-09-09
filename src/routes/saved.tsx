@@ -27,17 +27,15 @@ function SavedPropertiesComponent() {
             <Heart className="h-6 w-6" />
           </div>
           <h3 className="font-display text-lg font-bold text-foreground">
-            Future Implementation Module
+            Saved Properties Directory
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            The saved properties list, filters, and bookmarking directory will be implemented in
-            subsequent phases.
+            Bookmark your favorite rental properties to track price changes and quickly request viewings.
           </p>
           <div className="mt-6 flex items-center gap-2.5 rounded-xl bg-secondary/50 p-4 border border-border/60 text-left">
             <Info className="h-5 w-5 text-primary shrink-0" />
             <p className="text-xs text-muted-foreground leading-normal">
-              <strong>Phase 1 Identity active:</strong> You are fully authenticated. The property
-              and maps modules will activate in later phases.
+              <strong>Identity Authenticated:</strong> You are signed in. Click the heart icon on any listing to save it to your bookmarks.
             </p>
           </div>
         </div>

@@ -320,7 +320,7 @@ function NewPropertyComponent() {
                     htmlFor="prop-estate"
                     className="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
                   >
-                    Estate / Phase
+                    Estate / Block
                   </label>
                   <input
                     id="prop-estate"

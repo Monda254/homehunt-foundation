@@ -20,7 +20,7 @@ import {
   AlertCircle,
   Building,
   Compass,
-  ClipboardList,
+  PhoneCall,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -61,6 +61,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     { label: "Applications", to: "/applications", icon: FolderKanban },
     { label: "Viewings", to: "/viewings", icon: CalendarDays },
     { label: "Messages", to: "/messages", icon: MessageSquare },
+    { label: "Contact Us", to: "/contact", icon: PhoneCall },
     { label: "My Profile", to: "/profile", icon: User },
     { label: "Settings & Security", to: "/settings", icon: Settings },
   ];

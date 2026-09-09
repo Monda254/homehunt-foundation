@@ -138,9 +138,6 @@ function Index() {
             <span className="font-display text-2xl font-bold tracking-tight text-primary">
               Home<span className="text-accent">Hunt</span>
             </span>
-            <span className="hidden rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground md:inline-block border border-border">
-              Phase 6 Active
-            </span>
           </div>
 
           {/* Desktop Nav */}
@@ -170,6 +167,12 @@ function Index() {
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               For Landlords
+            </Link>
+            <Link
+              to="/contact"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Contact Us
             </Link>
           </nav>
 
@@ -252,6 +255,13 @@ function Index() {
                 className="text-left text-lg font-medium text-muted-foreground hover:text-primary"
               >
                 For Landlords
+              </Link>
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-left text-lg font-medium text-muted-foreground hover:text-primary"
+              >
+                Contact Us
               </Link>
             </div>
             <div className="flex flex-col gap-3 pt-2">
@@ -614,29 +624,38 @@ function Index() {
             <div className="absolute top-0 right-0 h-64 w-64 translate-x-20 translate-y-[-60px] rounded-full bg-accent/5 blur-3xl"></div>
             <div className="relative max-w-3xl">
               <span className="text-xs font-extrabold text-accent uppercase tracking-widest">
-                Architectural Status
+                About HomeHunt
               </span>
               <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl text-primary mt-2">
-                Phase 6 Active (Full-Stack Deployed)
+                Transforming Rental Housing in Kenya
               </h2>
-              <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-                We have fully deployed Phases 0 through 6: authentication, listing management,
-                discovery/search maps, trust verification, matching recommendations, and viewing
-                bookings & messaging.
-              </p>
+              <div className="mt-4 space-y-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+                <div>
+                  <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider text-accent">The Problem</h3>
+                  <p className="mt-1">
+                    Searching for rental housing in Kenya is fragmented and high-risk. Tenants routinely encounter deposit scams, non-existent or fake property listings, misleading photos, and upfront viewing fees charged by unverified middlemen.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider text-accent">The Solution</h3>
+                  <p className="mt-1">
+                    HomeHunt provides a scam-free, verified rental marketplace connecting seekers directly with validated landlords and property managers. Features include physical property verification, interactive spatial search maps, direct viewing bookings with zero middleman fees, and intelligent housing matching.
+                  </p>
+                </div>
+              </div>
               <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href="/api/v1/health"
-                  target="_blank"
+                <Link
+                  to="/homes"
+                  search={{ page: 1, limit: 20, sort: "RECOMMENDED", amenities: [] }}
                   className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/95 hover:shadow"
                 >
-                  Check System Health API <ArrowRight className="h-4 w-4" />
-                </a>
+                  Explore Verified Rentals <ArrowRight className="h-4 w-4" />
+                </Link>
                 <Link
                   to="/dashboard"
                   className="inline-flex items-center justify-center rounded-xl border border-input bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm hover:bg-secondary/40"
                 >
-                  View Monorepo Dashboard
+                  View Portal Dashboard
                 </Link>
               </div>
             </div>
@@ -660,11 +679,11 @@ function Index() {
         </div>
       </footer>
 
-      {/* Phase Info Modal Dialog */}
+      {/* Info Modal Dialog */}
       <AnimatedModal
         isOpen={!!activeModal}
         onClose={() => setActiveModal(null)}
-        title="Foundation Mode (Phase 0)"
+        title="Feature Notice"
       >
         <div className="flex gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
@@ -672,13 +691,11 @@ function Index() {
           </div>
           <div>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-              You triggered:{" "}
+              You selected:{" "}
               <strong className="text-foreground font-semibold">"{activeModal}"</strong>.
             </p>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              This feature belongs to a future implementation phase. We are currently establishing
-              the Phase 0 core architecture (database, routes, authentication skeleton). Live
-              business features will go online as subsequent stages deploy.
+              This feature module is active across our platform services. Explore verified property listings, booking viewings, and direct landlord communication.
             </p>
             <div className="mt-6 flex justify-end">
               <button

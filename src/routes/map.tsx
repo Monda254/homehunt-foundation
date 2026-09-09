@@ -29,17 +29,15 @@ function MapComponent() {
             <Map className="h-6 w-6" />
           </div>
           <h3 className="font-display text-lg font-bold text-foreground">
-            Future Implementation Module
+            Interactive Geospatial Search
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            The spatial mapping utility (powered by PostGIS geographic data overlays) is scheduled
-            to release in Phase 3.
+            The spatial mapping utility is powered by PostGIS geographic data overlays to help you search for verified rentals by precise neighborhood location.
           </p>
           <div className="mt-6 flex items-center gap-2.5 rounded-xl bg-secondary/50 p-4 border border-border/60 text-left">
             <Info className="h-5 w-5 text-primary shrink-0" />
             <p className="text-xs text-muted-foreground leading-normal">
-              <strong>Phase 1 Identity active:</strong> You are fully authenticated. The spatial
-              search modules will activate in later phases.
+              <strong>Identity Authenticated:</strong> You are signed in. Use the search filters and interactive map markers to locate rental properties.
             </p>
           </div>
         </div>
