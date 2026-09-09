@@ -30,12 +30,14 @@ function SavedPropertiesComponent() {
             Saved Properties Directory
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            Bookmark your favorite rental properties to track price changes and quickly request viewings.
+            Bookmark your favorite rental properties to track price changes and quickly request
+            viewings.
           </p>
           <div className="mt-6 flex items-center gap-2.5 rounded-xl bg-secondary/50 p-4 border border-border/60 text-left">
             <Info className="h-5 w-5 text-primary shrink-0" />
             <p className="text-xs text-muted-foreground leading-normal">
-              <strong>Identity Authenticated:</strong> You are signed in. Click the heart icon on any listing to save it to your bookmarks.
+              <strong>Identity Authenticated:</strong> You are signed in. Click the heart icon on
+              any listing to save it to your bookmarks.
             </p>
           </div>
         </div>

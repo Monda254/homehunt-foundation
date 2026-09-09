@@ -53,7 +53,8 @@ function ContactPage() {
   const contactData = {
     name: "Georgy Maina",
     phone: "0741407159",
-    whatsappUrl: "https://wa.me/254741407159?text=Hi%20Georgy%2C%20I%27m%20reaching%20out%20from%20HomeHunt.",
+    whatsappUrl:
+      "https://wa.me/254741407159?text=Hi%20Georgy%2C%20I%27m%20reaching%20out%20from%20HomeHunt.",
     email: "elvisgee735@gmail.com",
     mailtoUrl: "mailto:elvisgee735@gmail.com?subject=HomeHunt%20Inquiry",
     role: "Founder & Lead Developer",
@@ -94,12 +95,12 @@ function ContactPage() {
     // 2. Open email client prefilled with message details
     const subject = encodeURIComponent(`HomeHunt Inquiry from ${senderName.trim()}`);
     const body = encodeURIComponent(
-      `Hello Georgy,\n\nName: ${senderName.trim()}\nEmail: ${senderEmail.trim()}\n\nMessage:\n${messageText.trim()}\n\n-- Sent via HomeHunt Platform`
+      `Hello Georgy,\n\nName: ${senderName.trim()}\nEmail: ${senderEmail.trim()}\n\nMessage:\n${messageText.trim()}\n\n-- Sent via HomeHunt Platform`,
     );
     const mailtoUrl = `mailto:${contactData.email}?subject=${subject}&body=${body}`;
 
     toast.success("Opening your email client & message logged!");
-    
+
     setTimeout(() => {
       window.location.href = mailtoUrl;
       setIsSubmitting(false);
@@ -109,7 +110,7 @@ function ContactPage() {
   const handleWhatsAppMessage = () => {
     if (senderName.trim() || messageText.trim()) {
       const text = encodeURIComponent(
-        `Hi Georgy, my name is ${senderName.trim() || "a HomeHunt user"} (${senderEmail.trim() || "no email provided"}).\n\nMessage:\n${messageText.trim() || "I'd like to inquire about HomeHunt."}`
+        `Hi Georgy, my name is ${senderName.trim() || "a HomeHunt user"} (${senderEmail.trim() || "no email provided"}).\n\nMessage:\n${messageText.trim() || "I'd like to inquire about HomeHunt."}`,
       );
       window.open(`https://wa.me/254741407159?text=${text}`, "_blank");
     } else {
@@ -193,7 +194,8 @@ function ContactPage() {
                 Get in Touch with <span className="text-gradient-brand">Georgy</span>
               </h1>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                Have questions about HomeHunt properties, platform features, or partnerships? Reach out directly via WhatsApp or Email.
+                Have questions about HomeHunt properties, platform features, or partnerships? Reach
+                out directly via WhatsApp or Email.
               </p>
             </motion.div>
 
@@ -215,9 +217,7 @@ function ContactPage() {
                 <p className="mt-1 font-display text-xl font-bold text-foreground">
                   {contactData.name}
                 </p>
-                <p className="mt-1 text-xs font-medium text-accent">
-                  {contactData.role}
-                </p>
+                <p className="mt-1 text-xs font-medium text-accent">{contactData.role}</p>
                 <div className="mt-4 flex items-center gap-1.5 text-xs text-muted-foreground pt-3 border-t border-border/50">
                   <MapPin className="h-3.5 w-3.5 text-primary" /> {contactData.location}
                 </div>
@@ -291,7 +291,9 @@ function ContactPage() {
                   >
                     {contactData.email}
                   </a>
-                  <p className="mt-1 text-xs text-muted-foreground">Opens your default email client</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Opens your default email client
+                  </p>
                 </div>
 
                 <div className="mt-6 flex items-center gap-2 pt-3 border-t border-border/50">
@@ -329,7 +331,8 @@ function ContactPage() {
                     <MessageSquare className="h-5 w-5 text-primary" /> Send a Quick Message
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    Your message will be saved to the database and launched directly via Email or WhatsApp.
+                    Your message will be saved to the database and launched directly via Email or
+                    WhatsApp.
                   </p>
                 </div>
 
@@ -415,8 +418,6 @@ function ContactPage() {
                 </form>
               </div>
             </motion.div>
-
-
           </motion.div>
         </div>
       </main>

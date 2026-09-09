@@ -631,15 +631,24 @@ function Index() {
               </h2>
               <div className="mt-4 space-y-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
                 <div>
-                  <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider text-accent">The Problem</h3>
+                  <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider text-accent">
+                    The Problem
+                  </h3>
                   <p className="mt-1">
-                    Searching for rental housing in Kenya is fragmented and high-risk. Tenants routinely encounter deposit scams, non-existent or fake property listings, misleading photos, and upfront viewing fees charged by unverified middlemen.
+                    Searching for rental housing in Kenya is fragmented and high-risk. Tenants
+                    routinely encounter deposit scams, non-existent or fake property listings,
+                    misleading photos, and upfront viewing fees charged by unverified middlemen.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider text-accent">The Solution</h3>
+                  <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider text-accent">
+                    The Solution
+                  </h3>
                   <p className="mt-1">
-                    HomeHunt provides a scam-free, verified rental marketplace connecting seekers directly with validated landlords and property managers. Features include physical property verification, interactive spatial search maps, direct viewing bookings with zero middleman fees, and intelligent housing matching.
+                    HomeHunt provides a scam-free, verified rental marketplace connecting seekers
+                    directly with validated landlords and property managers. Features include
+                    physical property verification, interactive spatial search maps, direct viewing
+                    bookings with zero middleman fees, and intelligent housing matching.
                   </p>
                 </div>
               </div>
@@ -695,7 +704,8 @@ function Index() {
               <strong className="text-foreground font-semibold">"{activeModal}"</strong>.
             </p>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              This feature module is active across our platform services. Explore verified property listings, booking viewings, and direct landlord communication.
+              This feature module is active across our platform services. Explore verified property
+              listings, booking viewings, and direct landlord communication.
             </p>
             <div className="mt-6 flex justify-end">
               <button

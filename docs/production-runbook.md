@@ -3,6 +3,7 @@
 ## 1. Overview & Architecture
 
 HomeHunt is deployed as a unified full-stack web application powered by:
+
 - **Frontend / SSR Runtime**: TanStack Start + React 19 + Vite + Nitro Server Engine
 - **Backend Services**: Supabase (PostgreSQL + PostGIS, Auth, Storage)
 - **Payment Processing**: Safaricom Daraja M-Pesa API + Internal Double-Entry Ledger
@@ -47,6 +48,7 @@ SMS_PROVIDER_API_KEY=<africas-talking-api-key>
 ## 3. Production Deployment Protocol
 
 ### Step 1: Pre-Deployment Automated Quality Gate
+
 Execute local build and test verification before triggering deployment pipelines:
 
 ```bash
@@ -61,6 +63,7 @@ npm run build
 ```
 
 ### Step 2: Database Migration Strategy
+
 Run PostgreSQL schema migrations using Supabase CLI with Expand-Migrate-Contract methodology:
 
 ```bash
@@ -68,6 +71,7 @@ supabase db push --linked
 ```
 
 ### Step 3: Server Health & Readiness Probes
+
 Post-deployment, query health endpoints to verify container lifecycle and database connectivity:
 
 ```bash

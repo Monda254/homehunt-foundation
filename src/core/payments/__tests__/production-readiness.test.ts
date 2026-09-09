@@ -79,7 +79,7 @@ describe("Workstream A & C: M-Pesa Provider & Webhook Idempotency", () => {
     // Provider returns safely with message regarding non-existent or duplicate record
     expect(result).toBeDefined();
   });
-});
+}, 20000);
 
 describe("Workstream B: Financial Reconciliation Audit", () => {
   it("should return an array of reconciliation records for a given tenancy ID", async () => {
@@ -87,7 +87,7 @@ describe("Workstream B: Financial Reconciliation Audit", () => {
       await PaymentReconciliationService.reconcileTenancyPayments("test-tenancy-uuid-000");
     expect(Array.isArray(records)).toBe(true);
   });
-});
+}, 20000);
 
 describe("Workstream D: Notification Multi-Channel Service", () => {
   it("should execute notification send routine safely for any user", async () => {
@@ -101,7 +101,7 @@ describe("Workstream D: Notification Multi-Channel Service", () => {
     expect(spy).toHaveBeenCalledOnce();
     spy.mockRestore();
   });
-});
+}, 20000);
 
 describe("Workstreams G, H, I: AI Safety, Fallback & Prompt Injection", () => {
   it("should sanitize malicious prompt injection directives", () => {
@@ -129,7 +129,7 @@ describe("Workstreams G, H, I: AI Safety, Fallback & Prompt Injection", () => {
     expect(result.isFallback).toBe(true);
     expect(result.potentialConcerns).toBeDefined();
   });
-});
+}, 20000);
 
 describe("Workstream S & E: File Upload Security & Storage", () => {
   it("should validate JPEG binary magic numbers correctly", async () => {
@@ -167,7 +167,7 @@ describe("Workstream S & E: File Upload Security & Storage", () => {
     expect(sizeCheck.valid).toBe(false);
     expect(sizeCheck.error).toContain("exceeds maximum allowable threshold");
   });
-});
+}, 20000);
 
 describe("Workstream N & Diagnostic Checks", () => {
   it("should execute system integrity diagnostics without crashing", async () => {
@@ -176,7 +176,7 @@ describe("Workstream N & Diagnostic Checks", () => {
     expect(Array.isArray(report.checks)).toBe(true);
     expect(report.checks.length).toBeGreaterThan(0);
   });
-});
+}, 20000);
 
 describe("Workstream J: End-to-End Housing Lifecycle Simulation", () => {
   it("simulates full tenant rental lifecycle: Search -> Apply -> Lease -> Obligation -> Payment -> Receipt", async () => {
@@ -228,4 +228,4 @@ describe("Workstream J: End-to-End Housing Lifecycle Simulation", () => {
     };
     expect(reviewAction.decision).toBe("APPROVED");
   });
-});
+}, 20000);

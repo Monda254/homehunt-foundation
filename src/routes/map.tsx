@@ -32,12 +32,14 @@ function MapComponent() {
             Interactive Geospatial Search
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            The spatial mapping utility is powered by PostGIS geographic data overlays to help you search for verified rentals by precise neighborhood location.
+            The spatial mapping utility is powered by PostGIS geographic data overlays to help you
+            search for verified rentals by precise neighborhood location.
           </p>
           <div className="mt-6 flex items-center gap-2.5 rounded-xl bg-secondary/50 p-4 border border-border/60 text-left">
             <Info className="h-5 w-5 text-primary shrink-0" />
             <p className="text-xs text-muted-foreground leading-normal">
-              <strong>Identity Authenticated:</strong> You are signed in. Use the search filters and interactive map markers to locate rental properties.
+              <strong>Identity Authenticated:</strong> You are signed in. Use the search filters and
+              interactive map markers to locate rental properties.
             </p>
           </div>
         </div>
